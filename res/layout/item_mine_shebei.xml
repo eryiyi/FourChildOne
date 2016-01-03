@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+    <RelativeLayout android:layout_width="match_parent"
+                    android:background="@drawable/item_shebei"
+                    android:layout_height="75dp">
+        <TextView android:layout_width="wrap_content"
+                  android:text="设备 1"
+                  android:id="@+id/item_title"
+                  android:layout_marginLeft="65dp"
+                  android:textColor="@color/white"
+                  android:layout_marginTop="15dp"
+                  android:layout_height="wrap_content"/>
+        <TextView android:layout_width="wrap_content"
+                  android:text="型号：999999"
+                  android:layout_below="@+id/item_title"
+                  android:id="@+id/item_xinghao"
+                  android:layout_marginLeft="65dp"
+                  android:textColor="@color/white"
+                  android:layout_marginTop="8dp"
+                  android:layout_height="wrap_content"/>
+
+        <ImageView android:layout_width="45dp"
+                   android:layout_centerVertical="true"
+                   android:layout_alignParentRight="true"
+                   android:layout_marginRight="15dp"
+                   android:src="@drawable/item_shebie_delete"
+                   android:layout_height="45dp"/>
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="120dp"
+              android:background="@null"
+              android:layout_height="170dp">
+
+        <ImageView android:layout_width="110dp"
+                   android:padding="2dp"
+                   android:layout_centerHorizontal="true"
+                   android:src="@drawable/ad_pic_one"
+                   android:scaleType="centerCrop"
+                   android:id="@+id/item_pic"
+                   android:layout_height="100dp"/>
+
+    <TextView android:layout_width="wrap_content"
+              android:text="sfafdsfasdsdassssssfasfds"
+              android:layout_below="@+id/item_pic"
+              android:id="@+id/item_title"
+              android:padding="3dp"
+              android:textColor="@color/textColortwo"
+              android:textSize="12sp"
+              android:gravity="center|left"
+              android:layout_height="wrap_content"/>
+    <TextView android:layout_width="wrap_content"
+              android:text="￥360.00"
+              android:textSize="14sp"
+              android:id="@+id/sell_price"
+              android:textStyle="bold"
+              android:layout_below="@+id/item_title"
+              android:textColor="@color/red"
+              android:layout_height="wrap_content"/>
+    <TextView android:layout_width="wrap_content"
+              android:text="￥500.00"
+              android:id="@+id/price"
+              android:layout_below="@+id/sell_price"
+              android:textSize="12sp"
+              android:layout_height="wrap_content"/>
+    <ImageView android:layout_width="wrap_content"
+               android:src="@drawable/cart_mine"
+               android:id="@+id/item_cart"
+               android:layout_alignParentBottom="true"
+               android:layout_alignParentRight="true"
+               android:layout_height="wrap_content"/>
+</RelativeLayout>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:background="#fdeff3"
+              android:layout_width="match_parent"
+              android:layout_height="220dp">
+
+        <ImageView android:layout_width="match_parent"
+                   android:src="@drawable/banner2"
+                   android:id="@+id/mine_head_top"
+                   android:scaleType="centerCrop"
+                   android:layout_height="180dp"/>
+        <ImageView android:layout_width="60dp"
+                   android:src="@drawable/head"
+                   android:layout_alignParentBottom="true"
+                   android:layout_alignParentRight="true"
+                   android:layout_marginRight="8dp"
+                   android:id="@+id/mine_head"
+                   android:layout_marginBottom="15dp"
+                   android:scaleType="centerCrop"
+                   android:layout_height="60dp"/>
+        <TextView android:layout_width="wrap_content"
+                  android:text="八宝"
+                  android:id="@+id/mine_nickname"
+                  android:textStyle="bold"
+                  android:layout_marginRight="8dp"
+                  android:layout_alignParentBottom="true"
+                  android:textColor="@color/red"
+                  android:layout_marginBottom="50dp"
+                  android:layout_toLeftOf="@+id/mine_head"
+                  android:layout_height="wrap_content"/>
+
+</RelativeLayout>

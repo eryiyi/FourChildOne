@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">幼视宝</string>
+    <string name="Are_logged_out">正在退出</string>
+    <string name="get_data_error">获得数据失败</string>
+    <string name="money">￥</string>
+    <string name="cart_error_one">"请选择商品"</string>
+    <string name="qujiesuan">去结算</string>
+    <string name="no_data">暂无数据</string>
+    <string name="countPrices">￥</string>
+    <string name="add_cart_success">商品成功加入购物车</string>
+    <string name="add_cart_is">商品已经加入购物车</string>
+    <string name="zanweiyou">接口暂未有</string>
+    <string name="pull_to_refresh_pull_label" translatable="false">向下拉动可以刷新</string>
+    <string name="pull_to_refresh_release_label" translatable="false">松开可以刷新</string>
+    <string name="pull_to_refresh_refreshing_label" translatable="false">加载中&#8230;</string>
+    <string name="pull_to_refresh_tap_label" translatable="false">点击刷新</string>
+    <string name="item_count_adapter">共%1$s件商品</string>
+    <string name="item_money_adapter">合计：￥%1$.2f</string>
+
+    <string name="login_error_one_three">参数错误</string>
+    <string name="zhinegnxuanzhong">只能选中一条数据进行操作</string>
+    <string name="qingxianxuanzeshuyju">请先选中数据</string>
+    <string name="shegnchengdingdan">生成订单</string>
+    <string name="zhifudiingdan">支付订单</string>
+    <string name="quxiaodingdan">取消订单</string>
+    <string name="zuoifeidingdan">作废订单</string>
+    <string name="wanchegndingdan">完成订单</string>
+    <string name="caozuoshibai">操作失败</string>
+    <string name="bukaifapiao">不开发票</string>
+    <string name="kaifapiao">开发票</string>
+    <string name="goods_prices">￥%1$s</string>
+    <string name="create_time">下单时间:</string>
+    <string name="select_city_address">选择城市</string>
+    <string name="select_country">选择地区</string>
+    <string name="do_success">操作成功</string>
+    <string name="do_fail">操作失败</string>
+    <string name="mimabuyizhi">密码不一致</string>
+    <string name="shangweizhuce">您尚未注册</string>
+    <string name="xitongcuowu">系统错误</string>
+    <string name="pull_to_refresh">下拉可以刷新</string>
+    <string name="release_to_refresh">松开可以刷新</string>
+    <string name="lastUpdateTime">最近更新：%s</string>
+    <string name="load_full">已加载全部</string>
+    <string name="more">加载中</string>
+    <string name="is_dengluing">正在登陆...</string>
+
+
+</resources>

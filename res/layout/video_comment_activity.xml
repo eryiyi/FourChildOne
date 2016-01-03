@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:background="@drawable/back_main"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <RelativeLayout android:layout_width="match_parent"
+                    android:background="@color/red"
+                    android:layout_height="@dimen/height_top_bar">
+        <Button android:layout_width="wrap_content"
+                android:drawablePadding="8dp"
+                android:onClick="back"
+                android:background="@null"
+                android:textColor="@color/white"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:drawableLeft="@drawable/back_white"
+                android:layout_height="match_parent"/>
+        <TextView android:layout_width="wrap_content"
+                  android:text="视频评论"
+                  android:textSize="18sp"
+                  android:textColor="@color/white"
+                  android:layout_centerInParent="true"
+                  android:layout_height="wrap_content"/>
+        <ImageView android:layout_width="wrap_content"
+                   android:src="@drawable/share"
+                   android:padding="15dp"
+                   android:layout_centerVertical="true"
+                   android:layout_alignParentRight="true"
+                   android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+    <ListView android:layout_width="match_parent"
+              android:id="@+id/lstv"
+              android:layout_height="match_parent">
+    </ListView>
+
+</LinearLayout>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:background="#fdeff3"
+              android:padding="8dp"
+              android:layout_height="wrap_content">
+
+      <ImageView android:layout_width="50dp"
+                 android:id="@+id/head"
+                 android:src="@drawable/head"
+                 android:scaleType="centerCrop"
+                 android:layout_height="50dp"/>
+        <TextView android:layout_width="wrap_content"
+                  android:text="宝宝"
+                  android:layout_marginLeft="8dp"
+                  android:layout_toRightOf="@+id/head"
+                  android:textColor="@color/red"
+                  android:textSize="16sp"
+                  android:id="@+id/name"
+                  android:layout_height="wrap_content"/>
+        <TextView android:layout_width="match_parent"
+                  android:textColor="@color/textColor"
+                  android:layout_marginLeft="8dp"
+                  android:layout_below="@+id/name"
+                  android:textSize="14sp"
+                  android:id="@+id/content"
+                  android:layout_marginTop="3dp"
+                  android:layout_toRightOf="@+id/head"
+                  android:text="这是我的宝宝 哈哈  "
+                  android:layout_height="wrap_content"/>
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_below="@+id/content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="35dp"
+                    android:id="@+id/liner"
+                    android:layout_toRightOf="@+id/head"
+                    android:layout_marginLeft="8dp"
+                    android:layout_height="wrap_content">
+        <com.xiaogang.Mine.widget.PictureGridview
+                android:id="@+id/gridview_detail_picture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+                android:horizontalSpacing="4dip"
+                android:numColumns="3"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="4dip"
+                android:padding="4dip"/>
+    </RelativeLayout>
+    <TextView android:layout_width="wrap_content"
+              android:text="2小时前"
+              android:layout_toRightOf="@+id/head"
+              android:layout_marginLeft="8dp"
+              android:textColor="@color/textColortwo"
+              android:textSize="13sp"
+              android:layout_below="@+id/liner"
+              android:layout_height="wrap_content"/>
+
+    <ImageView android:layout_width="wrap_content"
+               android:src="@drawable/comment"
+               android:id="@+id/commentBtn"
+               android:layout_below="@+id/liner"
+               android:layout_alignParentRight="true"
+               android:layout_height="wrap_content"/>
+    <LinearLayout android:layout_width="140dp"
+                  android:id="@+id/comment_liner"
+                  android:orientation="horizontal"
+                  android:visibility="gone"
+                  android:layout_below="@+id/liner"
+                  android:layout_toLeftOf="@+id/commentBtn"
+                  android:background="@drawable/comment_bg"
+                  android:layout_height="25dp">
+        <ImageView android:layout_width="0dp"
+                   android:layout_weight="1"
+                   android:id="@+id/zanBtnImg"
+                   android:layout_gravity="center"
+                   android:src="@drawable/zan_btn"
+                   android:layout_height="12dp"/>
+        <ImageView android:layout_width="0dp"
+                   android:id="@+id/commentBtnImg"
+                   android:layout_gravity="center"
+                   android:src="@drawable/comment_btn"
+                   android:layout_weight="1"
+                   android:layout_height="12dp"/>
+    </LinearLayout>
+
+</RelativeLayout>

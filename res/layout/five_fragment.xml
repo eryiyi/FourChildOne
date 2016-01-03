@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:background="@drawable/back_main"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <RelativeLayout android:layout_width="match_parent"
+                    android:background="@color/red"
+                    android:layout_height="@dimen/height_top_bar">
+        <TextView android:layout_width="wrap_content"
+                  android:text="我"
+                  android:textSize="18sp"
+                  android:textColor="@color/white"
+                  android:layout_centerInParent="true"
+                  android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+
+    <com.xiaogang.Mine.widget.ReboundScrollView android:layout_width="match_parent"
+                                                android:layout_height="match_parent">
+        <LinearLayout android:layout_width="match_parent"
+                      android:orientation="vertical"
+                      android:layout_height="match_parent">
+            <RelativeLayout android:layout_width="match_parent"
+                            android:background="@color/white"
+                            android:padding="8dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_height="wrap_content">
+                <ImageView android:layout_width="60dp"
+                           android:scaleType="centerCrop"
+                           android:src="@drawable/head"
+                           android:id="@+id/mine_head"
+                           android:layout_height="60dp"/>
+                <TextView android:layout_width="wrap_content"
+                          android:text="亲亲宝宝"
+                          android:textSize="16sp"
+                          android:layout_marginLeft="8dp"
+                          android:layout_toRightOf="@+id/mine_head"
+                          android:textColor="@color/red"
+                          android:id="@+id/mine_nickname"
+                          android:layout_height="wrap_content"/>
+                <TextView android:layout_width="wrap_content"
+                          android:text="女 25岁"
+                          android:textSize="12sp"
+                          android:layout_marginLeft="15dp"
+                          android:id="@+id/mine_age"
+                          android:textColor="@color/textColor"
+                          android:layout_toRightOf="@+id/mine_nickname"
+                          android:layout_height="wrap_content"/>
+                <TextView android:layout_width="wrap_content"
+                          android:text="宝贝可爱 可爱宝贝"
+                          android:id="@+id/mine_sign"
+                          android:layout_marginLeft="8dp"
+                          android:layout_below="@+id/mine_nickname"
+                          android:textColor="@color/textColor"
+                          android:textSize="13sp"
+                          android:layout_marginTop="6dp"
+                          android:layout_toRightOf="@+id/mine_head"
+                          android:layout_height="wrap_content"/>
+            </RelativeLayout>
+
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:background="@color/white"
+                          android:layout_marginTop="15dp"
+                          android:orientation="vertical"
+                          android:layout_height="wrap_content">
+                <TextView android:layout_width="match_parent"
+                          android:text="视频评论"
+                          android:id="@+id/mine_video_comment"
+                          android:padding="15dp"
+                          android:textSize="14sp"
+                          android:drawableLeft="@drawable/mine_play"
+                          android:drawablePadding="15dp"
+                          android:textColor="@color/red"
+                          android:drawableRight="@drawable/red_in"
+                          android:layout_height="wrap_content"/>
+                <View android:layout_width="match_parent"
+                      android:background="@color/translucent_20"
+                      android:layout_height="0.1dp"></View>
+                <TextView android:layout_width="match_parent"
+                          android:text="我的设备"
+                          android:padding="15dp"
+                          android:id="@+id/mine_shebei"
+                          android:textSize="14sp"
+                          android:drawableLeft="@drawable/mine_phone"
+                          android:drawablePadding="15dp"
+                          android:textColor="@color/red"
+                          android:drawableRight="@drawable/red_in"
+                          android:layout_height="wrap_content"/>
+                <View android:layout_width="match_parent"
+                      android:background="@color/translucent_20"
+                      android:layout_height="0.1dp"></View>
+                <TextView android:layout_width="match_parent"
+                          android:text="我的关注"
+                          android:padding="15dp"
+                          android:id="@+id/mine_guanzhu"
+                          android:textSize="14sp"
+                          android:drawableLeft="@drawable/mine_guanzhu"
+                          android:drawablePadding="15dp"
+                          android:textColor="@color/red"
+                          android:drawableRight="@drawable/red_in"
+                          android:layout_height="wrap_content"/>
+                <View android:layout_width="match_parent"
+                      android:background="@color/translucent_20"
+                      android:layout_height="0.1dp"></View>
+                <RelativeLayout android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                    <TextView android:layout_width="wrap_content"
+                              android:text="清除缓存"
+                              android:id="@+id/mine_huancun"
+                              android:textColor="@color/red"
+                              android:padding="15dp"
+                              android:drawablePadding="15dp"
+                              android:drawableLeft="@drawable/mine_huancun"
+                              android:layout_height="wrap_content"/>
+                    <TextView android:layout_width="wrap_content"
+                              android:text="15.00M"
+                              android:layout_centerVertical="true"
+                              android:layout_marginRight="15dp"
+                              android:textColor="@color/red"
+                              android:layout_alignParentRight="true"
+                              android:layout_height="wrap_content"/>
+                </RelativeLayout>
+                <View android:layout_width="match_parent"
+                      android:background="@color/translucent_20"
+                      android:layout_height="0.1dp"></View>
+                <TextView android:layout_width="match_parent"
+                          android:text="安全中心"
+                          android:padding="15dp"
+                          android:id="@+id/mine_anquan"
+                          android:textSize="14sp"
+                          android:drawableLeft="@drawable/mine_security"
+                          android:drawablePadding="15dp"
+                          android:textColor="@color/red"
+                          android:drawableRight="@drawable/red_in"
+                          android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </LinearLayout>
+    </com.xiaogang.Mine.widget.ReboundScrollView>
+
+</LinearLayout>

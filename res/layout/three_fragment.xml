@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:background="#fdeff3"
+              android:id="@+id/main"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <RelativeLayout android:layout_width="match_parent"
+                    android:background="@color/red"
+                    android:layout_height="@dimen/height_top_bar">
+        <TextView android:layout_width="wrap_content"
+                  android:text="朋友圈"
+                  android:textSize="18sp"
+                  android:textColor="@color/white"
+                  android:layout_centerInParent="true"
+                  android:layout_height="wrap_content"/>
+        <ImageView android:layout_width="wrap_content"
+                   android:src="@drawable/photo"
+                   android:padding="15dp"
+                   android:id="@+id/photoBtn"
+                   android:layout_centerVertical="true"
+                   android:layout_alignParentRight="true"
+                   android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+    <com.xiaogang.Mine.widget.ContentListView
+            android:id="@+id/lstv"
+            android:background="#fdeff3"
+            android:layout_marginBottom="50dp"
+            android:layout_weight="1"
+            android:divider="#00d1d1d1"
+            android:dividerHeight="1dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+    </com.xiaogang.Mine.widget.ContentListView>
+
+</LinearLayout>

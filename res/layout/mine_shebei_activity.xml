@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:background="@drawable/back_main"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <RelativeLayout android:layout_width="match_parent"
+                    android:background="@color/red"
+                    android:layout_height="@dimen/height_top_bar">
+        <Button android:layout_width="wrap_content"
+                android:drawablePadding="8dp"
+                android:onClick="back"
+                android:background="@null"
+                android:textColor="@color/white"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:drawableLeft="@drawable/back_white"
+                android:layout_height="match_parent"/>
+        <TextView android:layout_width="wrap_content"
+                  android:text="我的设备"
+                  android:textSize="18sp"
+                  android:textColor="@color/white"
+                  android:layout_centerInParent="true"
+                  android:layout_height="wrap_content"/>
+        <ImageView android:layout_width="wrap_content"
+                   android:src="@drawable/share"
+                   android:padding="15dp"
+                   android:onClick="rightClick"
+                   android:layout_centerVertical="true"
+                   android:layout_alignParentRight="true"
+                   android:layout_height="wrap_content"/>
+    </RelativeLayout>
+    <View android:layout_width="match_parent"
+          android:background="@color/white"
+          android:layout_height="0.5dp"></View>
+    <LinearLayout android:layout_width="match_parent"
+                  android:orientation="horizontal"
+                  android:id="@+id/mine_line_top"
+                  android:background="@color/red"
+                  android:layout_height="wrap_content">
+        <TextView android:layout_width="0dp"
+                  android:layout_weight="1"
+                  android:text="首页"
+                  android:id="@+id/mine_shebei_index"
+                  android:textColor="@color/white"
+                  android:padding="8dp"
+                  android:gravity="center"
+                  android:layout_gravity="center"
+                  android:layout_height="wrap_content"/>
+        <ImageView android:layout_width="wrap_content"
+                   android:src="@drawable/line_white"
+                   android:layout_height="wrap_content"/>
+        <TextView android:layout_width="0dp"
+                  android:layout_weight="1"
+                  android:text="添加"
+                  android:id="@+id/mine_shebei_add"
+                  android:textColor="@color/white"
+                  android:padding="8dp"
+                  android:gravity="center"
+                  android:layout_gravity="center"
+                  android:layout_height="wrap_content"/>
+        <ImageView android:layout_width="wrap_content"
+                   android:src="@drawable/line_white"
+                   android:layout_height="wrap_content"/>
+        <TextView android:layout_width="0dp"
+                  android:layout_weight="1"
+                  android:text="刷新"
+                  android:id="@+id/mine_shebei_shuaxin"
+                  android:textColor="@color/white"
+                  android:padding="8dp"
+                  android:gravity="center"
+                  android:layout_gravity="center"
+                  android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+        <ImageView android:layout_width="80dp"
+                   android:src="@drawable/shebei"
+                   android:id="@+id/mine_no_result_img"
+                   android:layout_centerInParent="true"
+                   android:layout_height="80dp"/>
+        <TextView android:layout_width="match_parent"
+                  android:text="还没添加设备"
+                  android:layout_below="@+id/mine_no_result_img"
+                  android:textSize="16sp"
+                  android:padding="8dp"
+                  android:id="@+id/mine_no_result_text"
+                  android:gravity="center"
+                  android:textColor="@color/red"
+                  android:layout_height="wrap_content"/>
+        <ListView android:layout_width="match_parent"
+                  android:id="@+id/lstv"
+                  android:divider="#fdeff3"
+                  android:dividerHeight="10dp"
+                  android:layout_height="wrap_content">
+        </ListView>
+    </RelativeLayout>
+
+
+</LinearLayout>
