@@ -134,6 +134,7 @@
                           android:text="送至 重庆 渝北区 两路街道"
                           android:textColor="@color/textColor"
                           android:textSize="16sp"
+                          android:id="@+id/address"
                           android:layout_marginTop="6dp"
                           android:layout_marginLeft="15dp"
                           android:layout_below="@+id/price"
@@ -189,29 +190,35 @@
                       android:textColor="@color/red"
                       android:layout_height="wrap_content"/>
         </LinearLayout>
-        <LinearLayout android:layout_width="0dp"
+        <RelativeLayout android:layout_width="0dp"
                       android:layout_weight="1"
-                      android:gravity="center"
-                         android:orientation="vertical"
                          android:id="@+id/foot_mine_cart"
                          android:layout_marginLeft="15dp"
                          android:layout_toRightOf="@+id/foot_favour"
-                         android:layout_centerVertical="true"
-                         android:layout_height="match_parent">
+                         android:layout_height="wrap_content">
             <ImageView android:layout_width="wrap_content"
                        android:src="@drawable/foot_cart"
-                       android:layout_gravity="center"
+                       android:id="@+id/cart_img"
+                       android:layout_marginTop="6dp"
                        android:layout_height="wrap_content"/>
             <TextView android:layout_width="wrap_content"
                       android:text="购物车"
-                      android:layout_marginTop="3dp"
+                      android:layout_below="@+id/cart_img"
+                      android:layout_marginTop="2dp"
                       android:textColor="@color/red"
                       android:layout_height="wrap_content"/>
-        </LinearLayout>
+            <TextView android:layout_width="wrap_content"
+                      android:id="@+id/number"
+                      android:textColor="@color/white"
+                      android:background="@drawable/red_bg"
+                      android:layout_alignParentRight="true"
+                      android:layout_height="wrap_content"/>
+        </RelativeLayout>
 
         </LinearLayout>
         <ImageView android:layout_width="wrap_content"
                    android:src="@drawable/add_cart"
+                   android:onClick="addCart"
                    android:layout_alignParentRight="true"
                    android:layout_height="wrap_content"/>
     </LinearLayout>

@@ -12,6 +12,7 @@ import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.adpter.Pro_type_adapter;
+import com.xiaogang.Mine.mobule.CategoryObj;
 import com.xiaogang.Mine.mobule.GoodsTypeBig;
 import com.xiaogang.Mine.mobule.GoodsTypeSmall;
 
@@ -19,14 +20,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Fragment_pro_type extends Fragment {
-	private List<GoodsTypeSmall> list = new ArrayList<>();
 	private ImageView hint_img;
 	private GridView listView;
 	private Pro_type_adapter adapter;
-//	private GoodsTypeSmall type;
-//	private GoodsTypeBig typbige;
 	private ProgressBar progressBar;
-	private String typename;
+	private CategoryObj categoryObj;
+	ArrayList<CategoryObj> lists = new ArrayList<>();//这个是所有的类别
+	private List<CategoryObj> toolsList = new ArrayList<CategoryObj>();//这个是小类别
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -34,19 +34,19 @@ public class Fragment_pro_type extends Fragment {
 		progressBar=(ProgressBar) view.findViewById(R.id.progressBar);
 		hint_img=(ImageView) view.findViewById(R.id.hint_img);
 		listView = (GridView) view.findViewById(R.id.listView);
-//		typename=getArguments().getString("typename");
-//		typbige = getArguments().getParcelable("goodsTypeBig");
-//		list = typbige.getSon();
-		list.add(new GoodsTypeSmall());
-		list.add(new GoodsTypeSmall());
-		list.add(new GoodsTypeSmall());
-		list.add(new GoodsTypeSmall());
-		list.add(new GoodsTypeSmall());
-		list.add(new GoodsTypeSmall());
-		list.add(new GoodsTypeSmall());
-		((TextView)view.findViewById(R.id.toptype)).setText(typename);
+		categoryObj= (CategoryObj) getArguments().getSerializable("goodsTypeBig");
+		lists = (ArrayList<CategoryObj>) getArguments().getSerializable("lists");
+		if(lists != null){
+			for(CategoryObj categoryObj1: lists){
+				//取出所有符合该大类别的分类
+				if(categoryObj1.getUp_id().equals(categoryObj.getType_id())){
+					toolsList.add(categoryObj1);
+				}
+			}
+		}
+		((TextView)view.findViewById(R.id.toptype)).setText(categoryObj.getType_name());
 		GetTypeList();
-		adapter=new Pro_type_adapter(getActivity(), list);
+		adapter=new Pro_type_adapter(getActivity(), toolsList);
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override

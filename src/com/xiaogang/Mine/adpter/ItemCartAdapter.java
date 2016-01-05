@@ -71,38 +71,38 @@ public class ItemCartAdapter extends BaseAdapter {
         }else{
             holder = (ViewHolder) convertView.getTag();
         }
-//        final ShoppingCart typeBean = lists.get(position);
-//        if(typeBean != null){
-//            holder.item_cont.setText(typeBean.getGoods_name());
-//            holder.item_money.setText( typeBean.getSell_price());
-//            holder.item_num.setText( typeBean.getGoods_count());
-////            imageLoader.displayImage(InternetURL.INTERNAL_PIC + typeBean.getGoods_cover(), holder.item_pic, CarSmartApplication.options, animateFirstListener);
-//
-//            if("0".equals(typeBean.getIs_select())){
-//                holder.select_is.setImageResource(R.drawable.select_one);
-//            }else{
-//                holder.select_is.setImageResource(R.drawable.select_two);
-//            }
-//
-//            holder.select_is.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    onClickContentItemListener.onClickContentItem(position, 1, typeBean);
-//                }
-//            });
-//            holder.goods_add.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    onClickContentItemListener.onClickContentItem(position, 2, typeBean);
-//                }
-//            });
-//            holder.goods_jian.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    onClickContentItemListener.onClickContentItem(position, 3, typeBean);
-//                }
-//            });
-//        }
+        final ShoppingCart typeBean = lists.get(position);
+        if(typeBean != null){
+            holder.item_cont.setText(typeBean.getGoods_name());
+            holder.item_money.setText( typeBean.getSell_price());
+            holder.item_num.setText( typeBean.getGoods_count());
+//            imageLoader.displayImage(InternetURL.INTERNAL_PIC + typeBean.getGoods_cover(), holder.item_pic, CarSmartApplication.options, animateFirstListener);
+
+            if("0".equals(typeBean.getIs_select())){
+                holder.select_is.setImageResource(R.drawable.select_one);
+            }else{
+                holder.select_is.setImageResource(R.drawable.select_two);
+            }
+
+            holder.select_is.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onClickContentItemListener.onClickContentItem(position, 1, typeBean);
+                }
+            });
+            holder.goods_add.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onClickContentItemListener.onClickContentItem(position, 2, typeBean);
+                }
+            });
+            holder.goods_jian.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onClickContentItemListener.onClickContentItem(position, 3, typeBean);
+                }
+            });
+        }
         return convertView;
     }
     class ViewHolder {

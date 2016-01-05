@@ -3,18 +3,21 @@ package com.xiaogang.Mine.mobule;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.List;
+import java.io.Serializable;
 
 /**
- * Created by Administrator on 2015/8/1.
- *产品分类
- * 大类
- *  * "": "10",
- "": "家电",
- "": "0",
+ * Created by Administrator on 2016/1/4.
+ * "type_id": "10",
+ "type_name": "家电",
+ "shop_id": "0",
  "up_id": "0"
+
+ private String id;
+ private String name;
+ private List<GoodsTypeSmall> son;
+
  */
-public class GoodsTypeBig implements Parcelable {
+public class CategoryObj implements Parcelable,Serializable {
     private String type_id;
     private String type_name;
     private String shop_id;
@@ -52,8 +55,6 @@ public class GoodsTypeBig implements Parcelable {
         this.up_id = up_id;
     }
 
-
-
     @Override
     public int describeContents() {
         return 0;
@@ -63,5 +64,4 @@ public class GoodsTypeBig implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
 
     }
-
 }

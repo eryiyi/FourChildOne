@@ -33,6 +33,7 @@
     <EditText android:layout_width="match_parent"
               android:hint="密码"
               android:padding="8dp"
+              android:password="true"
               android:textSize="16sp"
               android:background="@drawable/login_input"
               android:layout_marginTop="20dp"

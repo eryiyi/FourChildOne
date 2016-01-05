@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.xiaogang.Mine.R;
+import com.xiaogang.Mine.mobule.CategoryObj;
 import com.xiaogang.Mine.mobule.GoodsTypeSmall;
 
 import java.util.List;
@@ -15,10 +16,10 @@ import java.util.List;
 public class Pro_type_adapter extends BaseAdapter {
 	// ∂®“ÂContext
 		private LayoutInflater mInflater;
-	    private List<GoodsTypeSmall> list;
+	    private List<CategoryObj> list;
 	    private Context context;
-	    private GoodsTypeSmall type;
-		public Pro_type_adapter(Context context, List<GoodsTypeSmall> list){
+	    private CategoryObj type;
+		public Pro_type_adapter(Context context, List<CategoryObj> list){
 			mInflater= LayoutInflater.from(context);
 			this.list=list;
 			this.context=context;
@@ -54,12 +55,12 @@ public class Pro_type_adapter extends BaseAdapter {
 			}else{
 				view=(MyView) convertView.getTag();
 			}
-//			if(list!=null&&list.size()>0)
-//			{
-//				type=list.get(position);
-//				view.name.setText(type.getName());
-////				view.icon.setBackgroundResource(R.drawable.diannao);
-//			}
+			if(list!=null&&list.size()>0)
+			{
+				type=list.get(position);
+				view.name.setText(type.getType_name());
+//				view.icon.setBackgroundResource(R.drawable.diannao);
+			}
 	        return convertView;
 		}
 

@@ -12,7 +12,8 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.xiaogang.Mine.R;
-import com.xiaogang.Mine.mobule.GoodsHot;
+import com.xiaogang.Mine.UniversityApplication;
+import com.xiaogang.Mine.mobule.ProducteObj;
 
 import java.util.List;
 
@@ -21,14 +22,14 @@ import java.util.List;
  */
 public class ItemNewsAdapter extends BaseAdapter {
     private ViewHolder holder;
-    private List<GoodsHot> lists;
+    private List<ProducteObj> lists;
     private Context mContect;
     Resources res;
 
     ImageLoader imageLoader = ImageLoader.getInstance();//图片加载类
     private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
 
-    public ItemNewsAdapter(List<GoodsHot> lists, Context mContect){
+    public ItemNewsAdapter(List<ProducteObj> lists, Context mContect){
         this.lists = lists;
         this.mContect = mContect;
     }
@@ -56,23 +57,24 @@ public class ItemNewsAdapter extends BaseAdapter {
             holder.item_pic = (ImageView) convertView.findViewById(R.id.item_pic);
             holder.item_cart = (ImageView) convertView.findViewById(R.id.item_cart);
             holder.sell_price = (TextView) convertView.findViewById(R.id.sell_price);
+            holder.price = (TextView) convertView.findViewById(R.id.price);
             holder.item_title = (TextView) convertView.findViewById(R.id.item_title);
 
             convertView.setTag(holder);
         }else{
             holder = (ViewHolder) convertView.getTag();
         }
-        final GoodsHot cell = lists.get(position);
-//        if(cell != null){
-//            String title = cell.getName()==null?"":cell.getName();
-//            if(title.length() > 13){
-//                title = title.substring(0,12) + "...";
-//            }
-//            holder.item_title.setText(title);
-//            holder.sell_price.setText( res.getString(R.string.money) + cell.getSell_price());
-//            holder.item_pic.setImageResource(cell.getImg());
-////            imageLoader.displayImage(InternetURL.INTERNAL_PIC + cell.getImg(), holder.item_index_foot_one_pic, UniversityApplication.options, animateFirstListener);
-//        }
+        final ProducteObj cell = lists.get(position);
+        if(cell != null){
+            String title = cell.getProduct_name()==null?"":cell.getProduct_name();
+            if(title.length() > 13){
+                title = title.substring(0,12) + "...";
+            }
+            holder.item_title.setText(title);
+            holder.price.setText("好评："+cell.getGood_rate()+"-" +(cell.getSale_num()==null?"0":cell.getSale_num())+"人");
+            holder.sell_price.setText(res.getString(R.string.money) + cell.getPrice_tuangou());
+            imageLoader.displayImage(cell.getProduct_pic(), holder.item_pic, UniversityApplication.options, animateFirstListener);
+        }
         return convertView;
     }
     class ViewHolder {
@@ -80,5 +82,6 @@ public class ItemNewsAdapter extends BaseAdapter {
         ImageView item_cart;
         TextView item_title;
         TextView sell_price;
+        TextView price;
     }
 }

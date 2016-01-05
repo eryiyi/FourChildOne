@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.xiaogang.Mine.R;
-import com.xiaogang.Mine.mobule.GoodsHot;
 import com.xiaogang.Mine.mobule.VideosObj;
 
 import java.util.List;

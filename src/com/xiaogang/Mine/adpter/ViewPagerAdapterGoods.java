@@ -11,7 +11,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.UniversityApplication;
-import com.xiaogang.Mine.mobule.AdSlide;
 import com.xiaogang.Mine.mobule.SlidePic;
 
 import java.util.List;
@@ -19,24 +18,24 @@ import java.util.List;
 /**
  * Created by Administrator on 2015/5/24.
  */
-public class ViewPagerAdapter extends PagerAdapter {
+public class ViewPagerAdapterGoods extends PagerAdapter {
     private ViewHolder holder;
     private OnClickContentItemListener onClickContentItemListener;
     ImageLoader imageLoader = ImageLoader.getInstance();//图片加载类
     private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
 
-    private List<SlidePic> mPaths;
+    private List<String> mPaths;
     private Context mContext;
 
     public void setOnClickContentItemListener(OnClickContentItemListener onClickContentItemListener) {
         this.onClickContentItemListener = onClickContentItemListener;
     }
 
-    public ViewPagerAdapter(Context cx) {
+    public ViewPagerAdapterGoods(Context cx) {
         mContext = cx;
     }
 
-    public void change(List<SlidePic> paths) {
+    public void change(List<String> paths) {
         mPaths = paths;
     }
 
@@ -62,14 +61,14 @@ public class ViewPagerAdapter extends PagerAdapter {
                 onClickContentItemListener.onClickContentItem(position, 1, null);
             }
         });
-        SlidePic slidePic = mPaths.get(position);
-        imageLoader.displayImage((slidePic.getPic() == null ? "" : slidePic.getPic()), holder.iv, UniversityApplication.options, animateFirstListener);
-        holder.iv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickContentItemListener.onClickContentItem(position, 0, null);
-            }
-        });
+        String slidePic = mPaths.get(position);
+        imageLoader.displayImage(slidePic, holder.iv, UniversityApplication.options, animateFirstListener);
+//        holder.iv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onClickContentItemListener.onClickContentItem(position, 0, null);
+//            }
+//        });
         ((ViewPager) container).addView(convertView, 0);
         return convertView;
     }

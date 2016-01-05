@@ -22,7 +22,6 @@ public class Orders implements Serializable{
     private String province;
     private String city;
     private String area;
-    private String address;
     private String mobile;
     private String payable_amount;
     private String real_amount;
@@ -63,7 +62,71 @@ public class Orders implements Serializable{
     private String goods_array;
     private String is_send;
     private String delivery_id;
-//    private List<GoodsDat> goodsData;
+    private String product_name ;
+    private String price  ;
+    private String number  ;
+    private String total  ;
+    private String state  ;
+    private String contact_name   ;
+    private String contact_mobile   ;
+    private String address  ;
+
+    public String getProduct_name() {
+        return product_name;
+    }
+
+    public void setProduct_name(String product_name) {
+        this.product_name = product_name;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public String getTotal() {
+        return total;
+    }
+
+    public void setTotal(String total) {
+        this.total = total;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getContact_name() {
+        return contact_name;
+    }
+
+    public void setContact_name(String contact_name) {
+        this.contact_name = contact_name;
+    }
+
+    public String getContact_mobile() {
+        return contact_mobile;
+    }
+
+    public void setContact_mobile(String contact_mobile) {
+        this.contact_mobile = contact_mobile;
+    }
+    //    private List<GoodsDat> goodsData;
 
 
     public String getTelephone() {

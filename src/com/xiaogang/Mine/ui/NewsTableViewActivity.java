@@ -1,16 +1,32 @@
 package com.xiaogang.Mine.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.adpter.ItemNewsAdapter;
 import com.xiaogang.Mine.base.BaseActivity;
-import com.xiaogang.Mine.mobule.GoodsHot;
+import com.xiaogang.Mine.base.InternetURL;
+import com.xiaogang.Mine.data.ProducteTypeObjData;
+import com.xiaogang.Mine.mobule.ProducteObj;
+import com.xiaogang.Mine.mobule.ProducteTypeObj;
+import com.xiaogang.Mine.mobule.ProducteTypeObjSmall;
+import com.xiaogang.Mine.util.StringUtil;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2015/12/17.
@@ -18,8 +34,9 @@ import java.util.List;
 public class NewsTableViewActivity extends BaseActivity implements View.OnClickListener {
     private ListView lstv;
     private ItemNewsAdapter adapter;
-    List<GoodsHot> lists = new ArrayList<GoodsHot>();
-
+    List<ProducteTypeObj> listTypePro= new ArrayList<ProducteTypeObj>();
+    List<ProducteObj> list =  new ArrayList<ProducteObj>();
+    ProducteTypeObj producteTypeObj;
     private String type;
     private TextView detail_title;
     @Override
@@ -34,30 +51,23 @@ public class NewsTableViewActivity extends BaseActivity implements View.OnClickL
             detail_title.setText("热卖专区");
         }
         initView();
+
+        getData();
     }
 
     void initView(){
-        lists.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_one));
-        lists.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_three));
-        lists.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_two));
-        lists.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_four));
-        lists.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_one));
-        lists.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_three));
-        lists.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_two));
-        lists.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_four));
-        lists.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_one));
-        lists.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_three));
-        lists.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_two));
-        lists.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_four));
-        lists.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_one));
-        lists.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_three));
-        lists.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_two));
-        lists.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_four));
-
         lstv = (ListView) this.findViewById(R.id.lstv);
-        adapter = new ItemNewsAdapter(lists, NewsTableViewActivity.this);
+        adapter = new ItemNewsAdapter(list, NewsTableViewActivity.this);
         lstv.setAdapter(adapter);
-
+        lstv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ProducteObj producteObj = list.get(position);
+                Intent detailView = new Intent(NewsTableViewActivity.this, DetailGoodsActivity.class);
+                detailView.putExtra("good", producteObj);
+                startActivity(detailView);
+            }
+        });
     }
 
     @Override
@@ -68,4 +78,61 @@ public class NewsTableViewActivity extends BaseActivity implements View.OnClickL
     public void back(View view){
         finish();
     }
+
+    private void getData() {
+        StringRequest request = new StringRequest(
+                Request.Method.GET,
+                InternetURL.GET_SHOP_PRODUCT_URL +"?access_token=" + getGson().fromJson(getSp().getString("access_token", ""), String.class)+"&type_id="+"1",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        if (StringUtil.isJson(s)) {
+                            try {
+                                JSONObject jo = new JSONObject(s);
+                                String code1 =  jo.getString("code");
+                                if(Integer.parseInt(code1) == 200){
+                                    ProducteTypeObjData data = getGson().fromJson(s, ProducteTypeObjData.class);
+                                   List<ProducteTypeObjSmall> producteTypeObjSmalls = data.getData().getProduct_types();
+                                    list.clear();
+                                    list.addAll(producteTypeObjSmalls.get(0).getProductes());
+                                    adapter.notifyDataSetChanged();
+                                }
+                            }catch (Exception e){
+
+                            }
+                        } else {
+                            Toast.makeText(NewsTableViewActivity.this, R.string.get_data_error, Toast.LENGTH_SHORT).show();
+                        }
+                        if (progressDialog != null) {
+                            progressDialog.dismiss();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        if (progressDialog != null) {
+                            progressDialog.dismiss();
+                        }
+                        Toast.makeText(NewsTableViewActivity.this, R.string.get_data_error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("action", "hot");
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+        getRequestQueue().add(request);
+    }
+
 }

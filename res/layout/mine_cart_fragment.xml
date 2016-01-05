@@ -52,7 +52,6 @@
     <LinearLayout android:layout_width="match_parent"
                   android:orientation="horizontal"
                   android:layout_alignParentBottom="true"
-                  android:background="@drawable/qujiesuan_white_bg"
                   android:layout_height="50dp">
         <RelativeLayout android:layout_width="wrap_content"
                         android:layout_weight="1"

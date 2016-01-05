@@ -22,28 +22,29 @@
                android:layout_marginTop="50dp"
                android:layout_height="wrap_content"/>
     <EditText android:layout_width="match_parent"
-              android:hint="账号"
-              android:padding="8dp"
-              android:textSize="16sp"
-              android:background="@drawable/login_input"
-              android:id="@+id/zhanghao"
-              android:layout_centerInParent="true"
-              android:textColorHint="@color/red"
-              android:layout_height="wrap_content"/>
-    <EditText android:layout_width="match_parent"
               android:hint="手机号"
               android:padding="8dp"
               android:textSize="16sp"
               android:background="@drawable/login_input"
-              android:layout_marginTop="20dp"
               android:id="@+id/mobile"
-             android:layout_below="@+id/zhanghao"
+              android:layout_centerInParent="true"
+              android:textColorHint="@color/red"
+              android:layout_height="wrap_content"/>
+    <EditText android:layout_width="match_parent"
+              android:hint="密码"
+              android:padding="8dp"
+              android:password="true"
+              android:textSize="16sp"
+              android:background="@drawable/login_input"
+              android:layout_marginTop="20dp"
+              android:id="@+id/password"
+             android:layout_below="@+id/mobile"
               android:textColorHint="@color/red"
               android:layout_height="wrap_content"/>
 
 
   <LinearLayout android:layout_width="match_parent"
-                android:layout_below="@+id/mobile"
+                android:layout_below="@+id/password"
                 android:layout_marginTop="20dp"
                 android:orientation="horizontal"
                 android:layout_height="wrap_content">
@@ -51,6 +52,7 @@
                 android:hint="输入验证码"
                 android:textSize="16sp"
                 android:gravity="center"
+                android:id="@+id/card"
                 android:textColorHint="@color/red"
                 android:layout_weight="1"
                 android:background="@drawable/reg_input"
@@ -59,6 +61,7 @@
                 android:layout_weight="1"
                 android:textColor="@color/white"
                 android:text="获得验证码"
+                android:id="@+id/btnCard"
                 android:background="@drawable/reg_red"
                 android:layout_height="wrap_content"/>
   </LinearLayout>

@@ -18,8 +18,24 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.xiaogang.Mine.base.BaseActivity;
+import com.xiaogang.Mine.base.InternetURL;
+import com.xiaogang.Mine.data.EmpData;
+import com.xiaogang.Mine.data.MemberObjData;
 import com.xiaogang.Mine.fragment.*;
+import com.xiaogang.Mine.mobule.MemberObj;
+import com.xiaogang.Mine.util.StringUtil;
+import com.xiaogang.Mine.widget.CustomProgressDialog;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected static final String TAG = "MainActivity";
@@ -47,6 +63,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private int index;
     // 当前fragment的index
     private int currentTabIndex = 0;
+    private MemberObj memberObj;
 
 
     @Override
@@ -59,6 +76,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         initView();
 
         switchFragment(R.id.foot_one);
+        progressDialog = new CustomProgressDialog(MainActivity.this , "正在加载中", R.anim.frame_paopao);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setCancelable(false);
+        progressDialog.setIndeterminate(true);
+        progressDialog.show();
+        getMember();
 
     }
 
@@ -217,5 +240,63 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         String st = getResources().getString(R.string.Are_logged_out);
         // 重新显示登陆页面
         finish();
+    }
+
+
+
+    void getMember(){
+        StringRequest request = new StringRequest(
+                Request.Method.GET,
+                InternetURL.GET_MEMBER_URL+"?access_token=" + getGson().fromJson(getSp().getString("access_token", ""), String.class),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        if (StringUtil.isJson(s)) {
+                            try {
+                                JSONObject jo = new JSONObject(s);
+                                String code =  jo.getString("code");
+                                if(Integer.parseInt(code) == 200){
+                                    MemberObjData data = getGson().fromJson(s, MemberObjData.class);
+                                    memberObj = data.getData();
+                                    save("sex", memberObj.getSex());
+                                    save("user_name", memberObj.getUser_name());
+                                    save("birthday", memberObj.getBirthday());
+                                    save("remark", memberObj.getRemark());
+                                }
+                                else{
+                                    Toast.makeText(MainActivity.this, jo.getString("msg"), Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        if (progressDialog != null) {
+                            progressDialog.dismiss();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        if (progressDialog != null) {
+                            progressDialog.dismiss();
+                        }
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+        getRequestQueue().add(request);
     }
 }

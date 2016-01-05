@@ -27,7 +27,7 @@ public class MineAnquanActivity extends BaseActivity implements View.OnClickList
                 startActivity(updatePwr);
                 break;
             case R.id.findPwr:
-                Intent findpwr = new Intent(MineAnquanActivity.this , MineFindPwrActivity.class);
+                Intent findpwr = new Intent(MineAnquanActivity.this , ForgetActivity.class);
                 startActivity(findpwr);
                 break;
 

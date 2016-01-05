@@ -46,10 +46,8 @@ public class MineCartActivity extends BaseActivity implements View.OnClickListen
         registerBoradcastReceiver();
         setContentView(R.layout.mine_cart_fragment);
         initView();
-
-            //取购物车信息
+        //取购物车信息
         getData();
-
     }
 
 
@@ -63,6 +61,7 @@ public class MineCartActivity extends BaseActivity implements View.OnClickListen
         qujiesuan.setOnClickListener(this);
 
         lstv = (ListView) this.findViewById(R.id.lstv);
+        this.findViewById(R.id.selectAll).setOnClickListener(this);
 
     }
 
@@ -88,6 +87,15 @@ public class MineCartActivity extends BaseActivity implements View.OnClickListen
                 }else{
                     Toast.makeText(MineCartActivity.this,R.string.cart_error_one, Toast.LENGTH_SHORT).show();
                 }
+                break;
+            case R.id.selectAll:
+                //全选
+                for(int i=0; i<lists.size() ;i++){
+                    ShoppingCart shoppingCart = lists.get(i);
+                    shoppingCart.setIs_select("1");
+                }
+                adapter.notifyDataSetChanged();
+                toCalculate();
                 break;
         }
     }
@@ -122,14 +130,7 @@ public class MineCartActivity extends BaseActivity implements View.OnClickListen
     void getData(){
         //取出数据,查询所有的购物车
         lists.clear();
-//        lists = DBHelper.getInstance(MineCartActivity.this).getShoppingList();
-        lists.add(new ShoppingCart("001", "001", "000", "name", "cover", "12.00", "1", "111111", "0"));
-        lists.add(new ShoppingCart("002", "002", "000", "name", "cover", "12.00", "1", "111111", "0"));
-        lists.add(new ShoppingCart("003", "003", "000", "name", "cover", "12.00", "1", "111111", "0"));
-        lists.add(new ShoppingCart("004", "004", "000", "name", "cover", "12.00", "1", "111111", "0"));
-        lists.add(new ShoppingCart("005", "005", "000", "name", "cover", "12.00", "1", "111111", "0"));
-        lists.add(new ShoppingCart("006", "006", "000", "name", "cover", "12.00", "1", "111111", "0"));
-        lists.add(new ShoppingCart("007", "007", "000", "name", "cover", "12.00", "1", "111111", "0"));
+        lists = DBHelper.getInstance(MineCartActivity.this).getShoppingList();
         //购物车
         adapter = new ItemCartAdapter(lists, MineCartActivity.this);
         lstv.setAdapter(adapter);

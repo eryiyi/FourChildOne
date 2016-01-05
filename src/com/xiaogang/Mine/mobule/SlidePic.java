@@ -5,49 +5,50 @@ package com.xiaogang.Mine.mobule;
  * 三张图片
  */
 public class SlidePic {
-//    private String urlpic;
-//
-//    public String getUrlpic() {
-//        return urlpic;
-//    }
-//
-//    public void setUrlpic(String urlpic) {
-//        this.urlpic = urlpic;
-//    }
-    private String url1;
-    private String url2;
-    private String url3;
-    private String url4;
 
-    public String getUrl4() {
-        return url4;
+    private String id;
+    private String community_id;
+    private String title;
+    private String href_url;
+    private String pic;
+
+    public String getId() {
+        return id;
     }
 
-    public void setUrl4(String url4) {
-        this.url4 = url4;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getUrl1() {
-        return url1;
+    public String getCommunity_id() {
+        return community_id;
     }
 
-    public void setUrl1(String url1) {
-        this.url1 = url1;
+    public void setCommunity_id(String community_id) {
+        this.community_id = community_id;
     }
 
-    public String getUrl2() {
-        return url2;
+    public String getTitle() {
+        return title;
     }
 
-    public void setUrl2(String url2) {
-        this.url2 = url2;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getUrl3() {
-        return url3;
+    public String getHref_url() {
+        return href_url;
     }
 
-    public void setUrl3(String url3) {
-        this.url3 = url3;
+    public void setHref_url(String href_url) {
+        this.href_url = href_url;
+    }
+
+    public String getPic() {
+        return pic;
+    }
+
+    public void setPic(String pic) {
+        this.pic = pic;
     }
 }

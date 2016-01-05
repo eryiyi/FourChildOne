@@ -14,6 +14,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.xiaogang.Mine.R;
@@ -22,17 +27,23 @@ import com.xiaogang.Mine.adpter.ItemHotAdapter;
 import com.xiaogang.Mine.adpter.OnClickContentItemListener;
 import com.xiaogang.Mine.adpter.ViewPagerAdapter;
 import com.xiaogang.Mine.base.BaseFragment;
+import com.xiaogang.Mine.base.InternetURL;
 import com.xiaogang.Mine.dao.DBHelper;
 import com.xiaogang.Mine.dao.ShoppingCart;
+import com.xiaogang.Mine.data.SlideDATA;
 import com.xiaogang.Mine.mobule.AdSlide;
 import com.xiaogang.Mine.mobule.GoodsHot;
+import com.xiaogang.Mine.mobule.SlidePic;
 import com.xiaogang.Mine.ui.*;
 import com.xiaogang.Mine.util.Constants;
 import com.xiaogang.Mine.util.DateUtil;
 import com.xiaogang.Mine.util.StringUtil;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  */
@@ -48,7 +59,7 @@ public class OneFragment extends BaseFragment implements View.OnClickListener ,O
     private ImageView dot, dots[];
     private Runnable runnable;
     private int autoChangeTime = 5000;
-    private List<AdSlide> lists = new ArrayList<AdSlide>();
+    private List<SlidePic> lists = new ArrayList<SlidePic>();
 
     View view;
 
@@ -71,42 +82,35 @@ public class OneFragment extends BaseFragment implements View.OnClickListener ,O
         res = getActivity().getResources();
         initView(view);
         setGridView();
-//        initData();
-//        getHots();
-        lists.add(new AdSlide(R.drawable.banner));
-        lists.add(new AdSlide(R.drawable.banner1));
-        lists.add(new AdSlide(R.drawable.banner2));
-        lists.add(new AdSlide(R.drawable.banner3));
-        lists.add(new AdSlide(R.drawable.banner4));
-        lists.add(new AdSlide(R.drawable.banner5));
-        lists.add(new AdSlide(R.drawable.banner6));
-        lists.add(new AdSlide(R.drawable.banner7));
+        getAd();
 
         initViewPager();
+
+        getHots();
         return view;
     }
 
     private void initView(View view) {
 
-        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_one));
-        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_three));
-        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_two));
-        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_four));
-        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.ad_pic_one));
-        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_one));
-        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_three));
-        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_two));
-        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_four));
-        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.ad_pic_one));
-
-        listHots.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_one));
-        listHots.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_three));
-        listHots.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_two));
-        listHots.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_four));
-        listHots.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_one));
-        listHots.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_three));
-        listHots.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_two));
-        listHots.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_four));
+//        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_one));
+//        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_three));
+//        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_two));
+//        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_four));
+//        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.ad_pic_one));
+//        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_one));
+//        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_three));
+//        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_two));
+//        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_four));
+//        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.ad_pic_one));
+//
+//        listHots.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_one));
+//        listHots.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_three));
+//        listHots.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_two));
+//        listHots.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_four));
+//        listHots.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_one));
+//        listHots.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_three));
+//        listHots.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_two));
+//        listHots.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_four));
 
         view.findViewById(R.id.index_type_liner_one).setOnClickListener(this);
         view.findViewById(R.id.index_type_liner_two).setOnClickListener(this);
@@ -117,64 +121,59 @@ public class OneFragment extends BaseFragment implements View.OnClickListener ,O
     }
 
 
-//    /**
-//     * 获取幻灯片
-//     */
-//    private void initData() {
-//        StringRequest request = new StringRequest(
-//                Request.Method.POST,
-//                InternetURL.SLIDENEWS_URL,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String s) {
-//                        if (StringUtil.isJson(s)) {
-//                            try {
-//                                JSONObject jo = new JSONObject(s);
-//                                String code1 =  jo.getString("code");
-//                                if(Integer.parseInt(code1) == 200){
-//                                    SlideDATA data = getGson().fromJson(s, SlideDATA.class);
-//                                    slidePic = data.getData();
-//                                    if(slidePic != null){
-////                                        listpics.add(slidePic.getUrl1());
-////                                        listpics.add(slidePic.getUrl2());
-////                                        listpics.add(slidePic.getUrl3());
-//                                    }
-////                                    initViewPager();
-//                                }
-//                            }catch (Exception e){
-//                                e.printStackTrace();
-//                            }
-//                        } else {
-//                            Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError volleyError) {
-//                        Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//        ) {
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                Map<String, String> params = new HashMap<String, String>();
-//                params.put("action", "show");
-//                return params;
-//            }
-//
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                Map<String, String> params = new HashMap<String, String>();
-//                params.put("Content-Type", "application/x-www-form-urlencoded");
-//                return params;
-//            }
-//        };
-//        getRequestQueue().add(request);
-//    }
+    /**
+     * 获取幻灯片
+     */
+    private void getAd() {
+        StringRequest request = new StringRequest(
+                Request.Method.GET,
+                InternetURL.GET_AD_URL +"?access_token="+ getGson().fromJson(getSp().getString("access_token", ""), String.class),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        if (StringUtil.isJson(s)) {
+                            try {
+                                JSONObject jo = new JSONObject(s);
+                                String code1 =  jo.getString("code");
+                                if(Integer.parseInt(code1) == 200){
+                                    SlideDATA data = getGson().fromJson(s, SlideDATA.class);
+                                    lists.clear();
+                                    lists.addAll(data.getData());
+                                    initViewPager();
+                                }
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        } else {
+                            Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("action", "show");
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+        getRequestQueue().add(request);
+    }
 
     private void initViewPager() {
-
         adapter = new ViewPagerAdapter(getActivity());
         adapter.change(lists);
         adapter.setOnClickContentItemListener(this);
@@ -298,9 +297,17 @@ public class OneFragment extends BaseFragment implements View.OnClickListener ,O
 
     };
 
+    SlidePic slidePic;
     @Override
     public void onClickContentItem(int position, int flag, Object object) {
-
+        slidePic = lists.get(position);
+        switch (flag){
+            case 0:
+                Intent webView = new Intent(getActivity(), WebViewActivity.class);
+                webView.putExtra("strurl", slidePic.getHref_url());
+                startActivity(webView);
+                break;
+        }
     }
 
 
@@ -308,18 +315,18 @@ public class OneFragment extends BaseFragment implements View.OnClickListener ,O
     /**
      * 获取热门商品
      */
-//    private void getHots() {
-//        StringRequest request = new StringRequest(
-//                Request.Method.POST,
-//                InternetURL.GOODS_HOT_URL,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String s) {
-//                        if (StringUtil.isJson(s)) {
-//                            try {
-//                                JSONObject jo = new JSONObject(s);
-//                                String code1 =  jo.getString("code");
-//                                if(Integer.parseInt(code1) == 200){
+    private void getHots() {
+        StringRequest request = new StringRequest(
+                Request.Method.GET,
+                InternetURL.GET_SHOP_INDEX_URL +"?access_token=" + getGson().fromJson(getSp().getString("access_token", ""), String.class),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        if (StringUtil.isJson(s)) {
+                            try {
+                                JSONObject jo = new JSONObject(s);
+                                String code1 =  jo.getString("code");
+                                if(Integer.parseInt(code1) == 200){
 //                                    GoodsHotDATA data = getGson().fromJson(s, GoodsHotDATA.class);
 //                                    if (data.getCode() == 200) {
 //                                        listHots.clear();
@@ -328,44 +335,44 @@ public class OneFragment extends BaseFragment implements View.OnClickListener ,O
 //                                    } else {
 //                                        Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
 //                                    }
-//                                }
-//                            }catch (Exception e){
-//
-//                            }
-//                        } else {
-//                            Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
-//                        }
-//                        if (progressDialog != null) {
-//                            progressDialog.dismiss();
-//                        }
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError volleyError) {
-//                        if (progressDialog != null) {
-//                            progressDialog.dismiss();
-//                        }
-//                        Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//        ) {
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                Map<String, String> params = new HashMap<String, String>();
-//                params.put("action", "hot");
-//                return params;
-//            }
-//
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                Map<String, String> params = new HashMap<String, String>();
-//                params.put("Content-Type", "application/x-www-form-urlencoded");
-//                return params;
-//            }
-//        };
-//        getRequestQueue().add(request);
-//    }
+                                }
+                            }catch (Exception e){
+
+                            }
+                        } else {
+                            Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
+                        }
+                        if (progressDialog != null) {
+                            progressDialog.dismiss();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        if (progressDialog != null) {
+                            progressDialog.dismiss();
+                        }
+                        Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("action", "hot");
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+        getRequestQueue().add(request);
+    }
 
     public void onClick(View view) {
         switch (view.getId()){
