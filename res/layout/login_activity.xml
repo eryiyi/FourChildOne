@@ -17,13 +17,14 @@
               android:layout_height="wrap_content"/>
     <ImageView android:layout_width="match_parent"
                android:layout_below="@+id/top"
-               android:src="@drawable/logo"
+               android:src="@drawable/ic_launcher"
                android:id="@+id/logo"
                android:layout_marginTop="50dp"
                android:layout_height="wrap_content"/>
     <EditText android:layout_width="match_parent"
               android:hint="账号"
               android:padding="8dp"
+              android:text="13181038186"
               android:textSize="16sp"
               android:background="@drawable/login_input"
               android:id="@+id/mobile"
@@ -34,6 +35,7 @@
               android:hint="密码"
               android:padding="8dp"
               android:password="true"
+              android:text="222222"
               android:textSize="16sp"
               android:background="@drawable/login_input"
               android:layout_marginTop="20dp"
