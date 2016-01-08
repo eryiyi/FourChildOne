@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  */
-public class TwoFragment extends BaseFragment implements View.OnClickListener ,OnClickContentItemListener{
+public class TwoFragment extends BaseFragment implements View.OnClickListener {
 
     private ListView lstv;
     private ItemVideosAdapter adapter;
@@ -44,7 +44,6 @@ public class TwoFragment extends BaseFragment implements View.OnClickListener ,O
         }
         lstv = (ListView) view.findViewById(R.id.lstv);
         adapter = new ItemVideosAdapter(lists, getActivity());
-        adapter.setOnClickContentItemListener(this);
         lstv.setAdapter(adapter);
     }
 
@@ -54,44 +53,6 @@ public class TwoFragment extends BaseFragment implements View.OnClickListener ,O
 
         }
     }
-    VideosObj videosObj;
-    @Override
-    public void onClickContentItem(int position, int flag, Object object) {
-        switch (flag){
-            case 1:
-                //播放按钮
-                String videoUrl = "http://7xlyf1.com2.z0.glb.qiniucdn.com/042bc2df740c4b6a822467644c275811";
-                Intent intent = new Intent(getActivity(), VideoPlayerActivity2.class);
-                VideoPlayer video = new VideoPlayer(videoUrl);
-                intent.putExtra(Constants.EXTRA_LAYOUT, "0");
-                intent.putExtra(VideoPlayer.class.getName(), video);
-                startActivity(intent);
-                break;
-            case 10:
-                //
-                videosObj = lists.get(position);
-                for(VideosObj videosObj1 : lists){
-                    if(videosObj1.getId().equals(videosObj.getId())){
-                        //当前点击的哪一个
-                        if("1".equals(videosObj.getIs_select())){
-                            videosObj1.setIs_select("0");
-                        }else {
-                            videosObj1.setIs_select("1");
-                        }
-                    }else {
-                        videosObj1.setIs_select("0");
-                    }
-                }
-                adapter.notifyDataSetChanged();
-                break;
-            case 2:
-                //赞
-                videosObj = lists.get(position);
-                break;
-            case 3:
-                //评论
-                videosObj = lists.get(position);
-                break;
-        }
-    }
+
+
 }
