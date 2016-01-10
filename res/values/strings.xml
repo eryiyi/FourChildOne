@@ -386,4 +386,9 @@
     <string name="pull_to_refresh_refreshing_label" translatable="false">加载中&#8230;</string>
     <string name="pull_to_refresh_tap_label" translatable="false">点击刷新</string>
     <string name="album_all">All Photos</string>
+
+    <string name="device_is_added">%s设备已添加</string>
+    <string name="device_not_exist">设备不存在</string>
+    <string name="sms_verify_bind_error">该appkey下已绑定重复的的userId或phone！</string>
+
 </resources>

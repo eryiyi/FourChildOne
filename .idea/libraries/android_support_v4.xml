@@ -18,6 +18,9 @@
       <root url="jar://$PROJECT_DIR$/libs/httpmime-4.3.5.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/httpcore-4.3.2.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/EZOpenSDK.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/gcm.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/jmdns-3.4.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/zxing.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

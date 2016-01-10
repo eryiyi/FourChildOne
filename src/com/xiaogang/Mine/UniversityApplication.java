@@ -18,6 +18,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.videogo.constant.Config;
+import com.videogo.openapi.EZOpenSDK;
+import com.xiaogang.Mine.yingshi.CustomExceptionHandler;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -61,6 +64,8 @@ public class UniversityApplication extends Application {
 //    public static  Double lat;
 //    public static  Double lng;
 
+    public static String APP_KEY = "aaffb8b381ad41889df1590f4d870485"; // 2015/10/29
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -84,6 +89,11 @@ public class UniversityApplication extends Application {
 //        mMyLocationListener = new MyLocationListener();
 //        mLocationClient.registerLocationListener(mMyLocationListener);
 //        mVibrator =(Vibrator)getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
+
+        Config.LOGGING = true;
+        EZOpenSDK.initLib(this, APP_KEY, "");
+        // EZOpenSDK.getInstance().setAccessToken("at.dmtlxyp47nejsckiai1pdwzsdvxmo7jp-8ofxo9vacz-1s48ov1-p3r36v0vj");
+        Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(this));
     }
 
 

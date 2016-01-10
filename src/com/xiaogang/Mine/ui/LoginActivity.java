@@ -46,12 +46,9 @@ import java.util.Map;
  * 登陆
  */
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
-
-
     private EditText mobile;
     private EditText password;
 
-    //huanxin
     private boolean progressShow;
 
     @Override
@@ -165,7 +162,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         getRequestQueue().add(request);
     }
 
-
     public void saveAccount(Emp emp) {
         // 登陆成功，保存用户名密码
         save("uid", emp.getUid());
@@ -179,7 +175,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         save("lat", emp.getLat());
         save("password", password.getText().toString());
     }
-
 
     void getAccessToken(){
         StringRequest request = new StringRequest(
@@ -257,18 +252,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             return;
         }
 
-        progressShow = true;
-        final ProgressDialog pd = new ProgressDialog(LoginActivity.this);
-        pd.setCanceledOnTouchOutside(false);
-        pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
-
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                progressShow = false;
-            }
-        });
-        pd.setMessage(getString(R.string.Is_landing));
-        pd.show();
+//        progressShow = true;
+//        final ProgressDialog pd = new ProgressDialog(LoginActivity.this);
+//        pd.setCanceledOnTouchOutside(false);
+//        pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+//
+//            @Override
+//            public void onCancel(DialogInterface dialog) {
+//                progressShow = false;
+//            }
+//        });
+//        pd.setMessage(getString(R.string.Is_landing));
+//        pd.show();
 
         final long start = System.currentTimeMillis();
         // 调用sdk登陆方法登陆聊天服务器
@@ -295,7 +290,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     // 取好友或者群聊失败，不让进入主页面
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            pd.dismiss();
+//                            pd.dismiss();
                             DemoHXSDKHelper.getInstance().logout(true,null);
                             Toast.makeText(getApplicationContext(), R.string.login_failure_failed, Toast.LENGTH_SHORT).show();
                         }
@@ -308,9 +303,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 if (!updatenick) {
                     Log.e("LoginActivity", "update current user nick fail");
                 }
-                if (!LoginActivity.this.isFinishing() && pd.isShowing()) {
-                    pd.dismiss();
-                }
+//                if (!LoginActivity.this.isFinishing() && pd.isShowing()) {
+//                    pd.dismiss();
+//                }
                 // 进入主页面
 //                Intent intent = new Intent(LoginActivity.this,
 //                        com.easemob.chatuidemo.activity.MainActivity.class);
@@ -331,7 +326,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 }
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        pd.dismiss();
+//                        pd.dismiss();
                         Toast.makeText(getApplicationContext(), getString(R.string.Login_failed) + message,
                                 Toast.LENGTH_SHORT).show();
                     }

@@ -33,10 +33,33 @@
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <permission android:name="com.easemob.chatuidemo.permission.C2D_MESSAGE"
+    <permission android:name="com.xiaogang.Mine.permission.C2D_MESSAGE"
                 android:protectionLevel="signature" />
     <uses-permission android:name="com.easemob.chatuidemo.permission.C2D_MESSAGE" />
 
+
+    <uses-permission android:name="android.permission.RESTART_PACKAGES" />
+    <uses-permission android:name="android.permission.WRITE_OWNER_DATA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+
+    <!-- zxing -->
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <!-- GCM requires a Google account. -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+
+    <!-- Creates a custom permission so only this app can receive its messages. NOTE: APP_PACKAGE.permission.C2D_MESSAGE -->
+    <!--<permission-->
+            <!--android:name="com.videogo.open.permission.C2D_MESSAGE"-->
+            <!--android:protectionLevel="signature" />-->
+    <!-- This app has permission to register and receive data message. -->
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="com.videogo.open.permission.C2D_MESSAGE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
 
     <supports-screens
             android:anyDensity="true"
@@ -392,6 +415,59 @@
         <meta-data android:name="EASEMOB_APPKEY"  android:value="826321978#fourchild" />
         <!-- 声明sdk所需的service SDK核心功能-->
         <service android:name="com.easemob.chat.EMChatService" />
+
+
+
+
+        <!--萤石-->
+        <receiver
+                android:name="com.xiaogang.Mine.yingshi.EzvizBroadcastReceiver"
+                android:exported="false" >
+            <intent-filter>
+                <action android:name="com.videogo.action.ADD_DEVICE_SUCCESS_ACTION" />
+                <action android:name="com.videogo.action.OAUTH_SUCCESS_ACTION" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="com.videogo.androidpn.NOTIFICATION_RECEIVED_ACTION" />
+            </intent-filter>
+        </receiver>
+
+        <service
+                android:name="com.videogo.androidpn.NotificationService"
+                android:enabled="true"
+                android:exported="false"
+                android:label="NotificationService" >
+            <intent-filter android:priority="1000" >
+                <action android:name="com.videogo.androidpn.NotificationService" />
+            </intent-filter>
+        </service>
+
+        <service
+                android:name="com.videogo.androidpn.GCMService"
+                android:enabled="true"
+                android:exported="false"
+                android:label="GCMService" >
+            <intent-filter>
+                <action android:name="com.videogo.androidpn.GCMService" />
+            </intent-filter>
+        </service>
+
+        <receiver
+                android:name="com.google.android.gcm.GCMBroadcastReceiver"
+                android:exported="false"
+                android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+
+                <!-- Receives the actual messages. -->
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <!-- Receives the registration id. -->
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <category android:name="com.videogo.open" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name="com.xiaogang.Mine.yingshi.GCMIntentService" />
+
 
     </application>
 </manifest>
