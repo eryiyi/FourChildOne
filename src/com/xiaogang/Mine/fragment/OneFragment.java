@@ -30,10 +30,9 @@ import com.xiaogang.Mine.base.BaseFragment;
 import com.xiaogang.Mine.base.InternetURL;
 import com.xiaogang.Mine.dao.DBHelper;
 import com.xiaogang.Mine.dao.ShoppingCart;
+import com.xiaogang.Mine.data.IndexData;
 import com.xiaogang.Mine.data.SlideDATA;
-import com.xiaogang.Mine.mobule.AdSlide;
-import com.xiaogang.Mine.mobule.GoodsHot;
-import com.xiaogang.Mine.mobule.SlidePic;
+import com.xiaogang.Mine.mobule.*;
 import com.xiaogang.Mine.ui.*;
 import com.xiaogang.Mine.util.Constants;
 import com.xiaogang.Mine.util.DateUtil;
@@ -68,8 +67,8 @@ public class OneFragment extends BaseFragment implements View.OnClickListener ,O
 
     private ItemHotAdapter adpterNews;
     private ItemHotAdapter adpterHot;
-    private List<GoodsHot> listNews = new ArrayList<>();
-    private List<GoodsHot> listHots = new ArrayList<>();
+    private List<ProducteObj> listNews = new ArrayList<ProducteObj>();
+    private List<ProducteObj> listHots = new ArrayList<ProducteObj>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,37 +80,12 @@ public class OneFragment extends BaseFragment implements View.OnClickListener ,O
         view = inflater.inflate(R.layout.one_fragment, null);
         res = getActivity().getResources();
         initView(view);
-        setGridView();
+
         getAd();
-
-        initViewPager();
-
-        getHots();
         return view;
     }
 
     private void initView(View view) {
-
-//        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_one));
-//        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_three));
-//        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_two));
-//        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_four));
-//        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.ad_pic_one));
-//        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_one));
-//        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_three));
-//        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_two));
-//        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_four));
-//        listNews.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.ad_pic_one));
-//
-//        listHots.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_one));
-//        listHots.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_three));
-//        listHots.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_two));
-//        listHots.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_four));
-//        listHots.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_one));
-//        listHots.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_three));
-//        listHots.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_two));
-//        listHots.add(new GoodsHot("", "【新品】爱卡呀宝宝婴儿安全座椅", "360", "500", R.drawable.item_four));
-
         view.findViewById(R.id.index_type_liner_one).setOnClickListener(this);
         view.findViewById(R.id.index_type_liner_two).setOnClickListener(this);
         view.findViewById(R.id.index_type_liner_three).setOnClickListener(this);
@@ -122,12 +96,12 @@ public class OneFragment extends BaseFragment implements View.OnClickListener ,O
 
 
     /**
-     * 获取幻灯片
+     * 获取首页
      */
     private void getAd() {
         StringRequest request = new StringRequest(
                 Request.Method.GET,
-                InternetURL.GET_AD_URL +"?access_token="+ getGson().fromJson(getSp().getString("access_token", ""), String.class),
+                InternetURL.GET_SHOP_INDEX_URL +"?access_token=" + getGson().fromJson(getSp().getString("access_token", ""), String.class),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
@@ -136,10 +110,27 @@ public class OneFragment extends BaseFragment implements View.OnClickListener ,O
                                 JSONObject jo = new JSONObject(s);
                                 String code1 =  jo.getString("code");
                                 if(Integer.parseInt(code1) == 200){
-                                    SlideDATA data = getGson().fromJson(s, SlideDATA.class);
-                                    lists.clear();
-                                    lists.addAll(data.getData());
-                                    initViewPager();
+                                    IndexData data = getGson().fromJson(s, IndexData.class);
+                                    IndexObj indexObj = data.getData();
+                                    if(indexObj != null){
+                                        if(indexObj.getAds() != null){
+                                            lists.clear();
+                                            lists.addAll(indexObj.getAds());
+                                            initViewPager();
+                                        }
+                                        if(indexObj.getNews() != null){
+                                            listNews.clear();
+                                            listNews.addAll(indexObj.getNews());
+//                                            adpterNews.notifyDataSetChanged();
+                                        }
+                                        if(indexObj.getHot() != null){
+                                            listHots.clear();
+                                            listHots.addAll(indexObj.getHot());
+//                                            adpterHot.notifyDataSetChanged();
+                                        }
+                                        setGridView();
+                                    }
+
                                 }
                             }catch (Exception e){
                                 e.printStackTrace();
@@ -315,64 +306,64 @@ public class OneFragment extends BaseFragment implements View.OnClickListener ,O
     /**
      * 获取热门商品
      */
-    private void getHots() {
-        StringRequest request = new StringRequest(
-                Request.Method.GET,
-                InternetURL.GET_SHOP_INDEX_URL +"?access_token=" + getGson().fromJson(getSp().getString("access_token", ""), String.class),
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String s) {
-                        if (StringUtil.isJson(s)) {
-                            try {
-                                JSONObject jo = new JSONObject(s);
-                                String code1 =  jo.getString("code");
-                                if(Integer.parseInt(code1) == 200){
-//                                    GoodsHotDATA data = getGson().fromJson(s, GoodsHotDATA.class);
-//                                    if (data.getCode() == 200) {
-//                                        listHots.clear();
-//                                        listHots = data.getData();
-//                                        setGridView();
-//                                    } else {
-//                                        Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
-//                                    }
-                                }
-                            }catch (Exception e){
-
-                            }
-                        } else {
-                            Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
-                        }
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
-                        }
-                        Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
-                    }
-                }
-        ) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("action", "hot");
-                return params;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/x-www-form-urlencoded");
-                return params;
-            }
-        };
-        getRequestQueue().add(request);
-    }
+//    private void getHots() {
+//        StringRequest request = new StringRequest(
+//                Request.Method.GET,
+//                InternetURL.GET_SHOP_INDEX_URL +"?access_token=" + getGson().fromJson(getSp().getString("access_token", ""), String.class),
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String s) {
+//                        if (StringUtil.isJson(s)) {
+//                            try {
+//                                JSONObject jo = new JSONObject(s);
+//                                String code1 =  jo.getString("code");
+//                                if(Integer.parseInt(code1) == 200){
+////                                    GoodsHotDATA data = getGson().fromJson(s, GoodsHotDATA.class);
+////                                    if (data.getCode() == 200) {
+////                                        listHots.clear();
+////                                        listHots = data.getData();
+////                                        setGridView();
+////                                    } else {
+////                                        Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
+////                                    }
+//                                }
+//                            }catch (Exception e){
+//
+//                            }
+//                        } else {
+//                            Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
+//                        }
+//                        if (progressDialog != null) {
+//                            progressDialog.dismiss();
+//                        }
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError volleyError) {
+//                        if (progressDialog != null) {
+//                            progressDialog.dismiss();
+//                        }
+//                        Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//        ) {
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                Map<String, String> params = new HashMap<String, String>();
+//                params.put("action", "hot");
+//                return params;
+//            }
+//
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                Map<String, String> params = new HashMap<String, String>();
+//                params.put("Content-Type", "application/x-www-form-urlencoded");
+//                return params;
+//            }
+//        };
+//        getRequestQueue().add(request);
+//    }
 
     public void onClick(View view) {
         switch (view.getId()){
@@ -453,7 +444,7 @@ public class OneFragment extends BaseFragment implements View.OnClickListener ,O
         grid_one.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                GoodsHot good = listNews.get(position);
+                ProducteObj good = listNews.get(position);
                 Intent detailView = new Intent(getActivity(), DetailGoodsActivity.class);
                 detailView.putExtra("good", good);
                 startActivity(detailView);
@@ -462,7 +453,7 @@ public class OneFragment extends BaseFragment implements View.OnClickListener ,O
         grid_two.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                GoodsHot good = listHots.get(position);
+                ProducteObj good = listHots.get(position);
                 Intent detailView = new Intent(getActivity(), DetailGoodsActivity.class);
                 detailView.putExtra("good", good);
                 startActivity(detailView);

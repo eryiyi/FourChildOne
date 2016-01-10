@@ -31,7 +31,7 @@ public class InternetURL {
     //12分类列表
     public static final String GET_TYPE_URL = INTERNAL + "json.php/product.api-types";
     //13商城主页
-    public static final String GET_SHOP_INDEX_URL = INTERNAL + "json.php/shop.api-shop";
+    public static final String GET_SHOP_INDEX_URL = INTERNAL + "json.php/shop.api-index";
     //14商品列表
     public static final String GET_SHOP_PRODUCT_URL = INTERNAL + "json.php/product.api-productList";
     //15产品详情

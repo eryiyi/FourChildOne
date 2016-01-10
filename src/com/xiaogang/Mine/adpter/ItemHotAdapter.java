@@ -15,6 +15,7 @@ import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.UniversityApplication;
 import com.xiaogang.Mine.base.InternetURL;
 import com.xiaogang.Mine.mobule.GoodsHot;
+import com.xiaogang.Mine.mobule.ProducteObj;
 import com.xiaogang.Mine.util.StringUtil;
 
 import java.text.DecimalFormat;
@@ -25,14 +26,14 @@ import java.util.List;
  */
 public class ItemHotAdapter extends BaseAdapter {
     private ViewHolder holder;
-    private List<GoodsHot> lists;
+    private List<ProducteObj> lists;
     private Context mContect;
     Resources res;
 
     ImageLoader imageLoader = ImageLoader.getInstance();//图片加载类
     private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
 
-    public ItemHotAdapter(List<GoodsHot> lists, Context mContect){
+    public ItemHotAdapter(List<ProducteObj> lists, Context mContect){
         this.lists = lists;
         this.mContect = mContect;
     }
@@ -67,18 +68,18 @@ public class ItemHotAdapter extends BaseAdapter {
         }else{
             holder = (ViewHolder) convertView.getTag();
         }
-        final GoodsHot cell = lists.get(position);
+        final ProducteObj cell = lists.get(position);
         if(cell != null){
-            String title = cell.getName()==null?"":cell.getName();
+            String title = cell.getProduct_name()==null?"":cell.getProduct_name();
             if(title.length() > 13){
                 title = title.substring(0,12) + "...";
             }
             holder.item_title.setText(title);
-            holder.sell_price.setText( res.getString(R.string.money) + cell.getSell_price());
+            holder.sell_price.setText( res.getString(R.string.money) + cell.getPrice_tuangou());
             holder.price.setText( res.getString(R.string.money) + cell.getPrice());
             holder.price.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG);
-            holder.item_pic.setImageResource(cell.getImg());
-//            imageLoader.displayImage(InternetURL.INTERNAL_PIC + cell.getImg(), holder.item_index_foot_one_pic, UniversityApplication.options, animateFirstListener);
+//            holder.item_pic.setImageResource(cell.getImg());
+            imageLoader.displayImage( cell.getProduct_pic(), holder.item_pic, UniversityApplication.options, animateFirstListener);
         }
         return convertView;
     }

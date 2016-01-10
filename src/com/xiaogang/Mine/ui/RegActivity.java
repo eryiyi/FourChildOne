@@ -14,7 +14,11 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.easemob.EMError;
+import com.easemob.chat.EMChatManager;
+import com.easemob.exceptions.EaseMobException;
 import com.xiaogang.Mine.R;
+import com.xiaogang.Mine.UniversityApplication;
 import com.xiaogang.Mine.base.ActivityTack;
 import com.xiaogang.Mine.base.BaseActivity;
 import com.xiaogang.Mine.base.InternetURL;
@@ -112,7 +116,7 @@ public class RegActivity extends BaseActivity implements View.OnClickListener {
                                 JSONObject jo = new JSONObject(s);
                                 String code =  jo.getString("code");
                                 if(Integer.parseInt(code) == 200) {
-                                    Toast.makeText(RegActivity.this, jo.getString("msg"), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(RegActivity.this, "发送验证码成功，请注意查收", Toast.LENGTH_SHORT).show();
                                 }else {
                                     Toast.makeText(RegActivity.this, jo.getString("msg") , Toast.LENGTH_SHORT).show();
                                 }
@@ -120,7 +124,7 @@ public class RegActivity extends BaseActivity implements View.OnClickListener {
                                 e.printStackTrace();
                             }
                         } else {
-                            Toast.makeText(RegActivity.this, R.string.get_cart_error, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegActivity.this, "获得数据失败", Toast.LENGTH_SHORT).show();
                         }
                         if (progressDialog != null) {
                             progressDialog.dismiss();
@@ -173,9 +177,15 @@ public class RegActivity extends BaseActivity implements View.OnClickListener {
     }
 
     void reg(){
+        final String hx_id =  System.currentTimeMillis()+"" +mobile.getText().toString();
         StringRequest request = new StringRequest(
                 Request.Method.GET,
-                InternetURL.REG_URL +"?user_name="+mobile.getText().toString() +"&password="+password.getText().toString() +"&code="+card.getText().toString() ,
+                InternetURL.REG_URL
+                        +"?user_name="+mobile.getText().toString()
+                        +"&password="+password.getText().toString()
+                        +"&code="+card.getText().toString()
+                        +"&hx_id="+hx_id
+                ,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
@@ -185,9 +195,9 @@ public class RegActivity extends BaseActivity implements View.OnClickListener {
                                 String code =  jo.getString("code");
                                 if(Integer.parseInt(code) == 200) {
                                     Toast.makeText(RegActivity.this, jo.getString("msg") , Toast.LENGTH_SHORT).show();
-                                    ActivityTack.getInstanse().popUntilActivity(LoginActivity.class);
                                     //huanxin
-//                                    register();
+                                    register(hx_id);
+                                    ActivityTack.getInstanse().popUntilActivity(LoginActivity.class);
                                 }else {
                                     Toast.makeText(RegActivity.this, jo.getString("msg") , Toast.LENGTH_SHORT).show();
                                 }
@@ -227,5 +237,64 @@ public class RegActivity extends BaseActivity implements View.OnClickListener {
         };
         getRequestQueue().add(request);
     }
+
+    /**
+     * 注册
+     *
+     */
+    public void register(String hx_id) {
+        final String username = hx_id;
+        if (TextUtils.isEmpty(username)) {
+            Toast.makeText(this, getResources().getString(R.string.User_name_cannot_be_empty), Toast.LENGTH_SHORT).show();
+            mobile.requestFocus();
+            return;
+        }
+
+        if (!TextUtils.isEmpty(username)) {
+            final ProgressDialog pd = new ProgressDialog(this);
+            pd.setMessage(getResources().getString(R.string.Is_the_registered));
+            pd.show();
+
+            new Thread(new Runnable() {
+                public void run() {
+                    try {
+                        // 调用sdk注册方法
+                        EMChatManager.getInstance().createAccountOnServer(username, "123456");
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                if (!RegActivity.this.isFinishing())
+                                    pd.dismiss();
+                                // 保存用户名
+                                UniversityApplication.getInstance().setUserName(username);
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.Registered_successfully), Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                        });
+                    } catch (final EaseMobException e) {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                if (!RegActivity.this.isFinishing())
+                                    pd.dismiss();
+                                int errorCode=e.getErrorCode();
+                                if(errorCode== EMError.NONETWORK_ERROR){
+                                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_anomalies), Toast.LENGTH_SHORT).show();
+                                }else if(errorCode == EMError.USER_ALREADY_EXISTS){
+                                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.User_already_exists), Toast.LENGTH_SHORT).show();
+                                }else if(errorCode == EMError.UNAUTHORIZED){
+                                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.registration_failed_without_permission), Toast.LENGTH_SHORT).show();
+                                }else if(errorCode == EMError.ILLEGAL_USER_NAME){
+                                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.illegal_user_name),Toast.LENGTH_SHORT).show();
+                                }else{
+                                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.Registration_failed) + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }
+                }
+            }).start();
+
+        }
+    }
+
 
 }

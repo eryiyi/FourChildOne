@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.easemob.applib.controller.HXSDKHelper;
 import com.google.gson.Gson;
 import com.xiaogang.Mine.UniversityApplication;
 import com.xiaogang.Mine.upload.MultiPartStringRequest;
@@ -20,7 +21,6 @@ import com.xiaogang.Mine.widget.CustomProgressDialog;
 import java.io.File;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
-
 /**
  * Created by liuzwei on 2014/11/11.
  */
@@ -79,6 +79,18 @@ public class BaseActivity extends FragmentActivity{
                 .commit();
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // onresume时，取消notification显示
+        HXSDKHelper.getInstance().getNotifier().reset();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
 
 
     /**

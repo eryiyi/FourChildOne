@@ -3,6 +3,11 @@ package com.xiaogang.Mine.mobule;
 /**
  * Created by Administrator on 2015/7/31.
  * 三张图片
+ * "id": "5",
+ "community_id": "0",
+ "pic": "http://yey.xqb668.com//Uploads/2016-01-08/568f676f2fe92.png",
+ "href_url": "http://www.baidu.com",
+ "title": "百度首页"
  */
 public class SlidePic {
 

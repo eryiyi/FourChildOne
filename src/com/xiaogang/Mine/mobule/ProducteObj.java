@@ -4,11 +4,33 @@ import java.io.Serializable;
 
 /**
  * Created by Administrator on 2016/1/4.
+ *   "product_id": "9",
+ "product_name": "鱼香肉丝饭",
+ "school_id": "1",
+ "shop_id": "17",
+ "type_id": "7",
+ "type1id": " ",
+ "product_pic": "http://yey.xqb668.com//Uploads/2016-01-09/56908f0322be8.jpg",
+ "buy_numbers": "0",
+ "is_discount": "1",
+ "is_tuangou": " ",
+ "price_tuangou": "10.00",
+ "price": "1000.00",
+ "info": "<p>12:39:28afdasfdasdf</p>",
+ "discount": "9",
+ "tuangou_numbers": " ",
+ "unit": "副",
+ "dateline": "1452314605",
+ "is_open": "1",
+ "delivery_type": "3",
+ "pay_type": " ",
+ "sale_num": " ",
+ "good_rate": " "
  */
 public class ProducteObj implements Serializable {
     private String product_id;
     private String product_name;
-    private String community_id;
+    private String school_id;
     private String shop_id;
     private String type_id;
     private String type1id;
@@ -45,12 +67,12 @@ public class ProducteObj implements Serializable {
         this.product_name = product_name;
     }
 
-    public String getCommunity_id() {
-        return community_id;
+    public String getSchool_id() {
+        return school_id;
     }
 
-    public void setCommunity_id(String community_id) {
-        this.community_id = community_id;
+    public void setSchool_id(String school_id) {
+        this.school_id = school_id;
     }
 
     public String getShop_id() {
