@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:background="#fdeff3"
+              android:background="@drawable/zhuye_item_select"
               android:padding="8dp"
               android:layout_height="wrap_content">
 
@@ -47,6 +47,15 @@
                 android:stretchMode="columnWidth"
                 android:verticalSpacing="4dip"
                 android:padding="4dip"/>
+        <ImageView android:layout_width="match_parent"
+                   android:src="@drawable/pic_none"
+                   android:id="@+id/video_pic"
+                   android:layout_height="200dp"/>
+        <ImageView android:layout_width="wrap_content"
+                   android:layout_centerInParent="true"
+                   android:src="@drawable/play"
+                   android:id="@+id/video_play"
+                   android:layout_height="wrap_content"/>
     </RelativeLayout>
     <TextView android:layout_width="wrap_content"
               android:text="2小时前"
@@ -54,12 +63,14 @@
               android:layout_marginLeft="8dp"
               android:textColor="@color/textColortwo"
               android:textSize="13sp"
+              android:id="@+id/dateline"
               android:layout_below="@+id/liner"
               android:layout_height="wrap_content"/>
 
     <ImageView android:layout_width="wrap_content"
                android:src="@drawable/comment"
                android:id="@+id/commentBtn"
+               android:padding="8dp"
                android:layout_below="@+id/liner"
                android:layout_alignParentRight="true"
                android:layout_height="wrap_content"/>

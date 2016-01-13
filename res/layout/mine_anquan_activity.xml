@@ -56,6 +56,7 @@
                   android:text="退出账号"
                   android:layout_alignParentBottom="true"
                   android:gravity="center"
+                  android:id="@+id/tuichu"
                   android:background="@drawable/qiute_bg"
                   android:textColor="@color/white"
                   android:layout_height="wrap_content"/>

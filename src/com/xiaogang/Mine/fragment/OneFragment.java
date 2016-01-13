@@ -1,6 +1,7 @@
 package com.xiaogang.Mine.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -37,6 +38,7 @@ import com.xiaogang.Mine.ui.*;
 import com.xiaogang.Mine.util.Constants;
 import com.xiaogang.Mine.util.DateUtil;
 import com.xiaogang.Mine.util.StringUtil;
+import com.xiaogang.Mine.widget.CustomProgressDialog;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -80,7 +82,11 @@ public class OneFragment extends BaseFragment implements View.OnClickListener ,O
         view = inflater.inflate(R.layout.one_fragment, null);
         res = getActivity().getResources();
         initView(view);
-
+        progressDialog = new CustomProgressDialog(getActivity() , "正在加载", R.anim.frame_paopao);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setCancelable(false);
+        progressDialog.setIndeterminate(true);
+        progressDialog.show();
         getAd();
         return view;
     }
@@ -138,11 +144,17 @@ public class OneFragment extends BaseFragment implements View.OnClickListener ,O
                         } else {
                             Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
                         }
+                        if(progressDialog != null){
+                            progressDialog.dismiss();
+                        }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
+                        if(progressDialog != null){
+                            progressDialog.dismiss();
+                        }
                         Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
                     }
                 }

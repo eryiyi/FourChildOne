@@ -7,6 +7,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.base.BaseActivity;
+import com.xiaogang.Mine.base.InternetURL;
 import com.xiaogang.Mine.galleryweidget.BasePagerAdapter;
 import com.xiaogang.Mine.galleryweidget.GalleryViewPager;
 import com.xiaogang.Mine.galleryweidget.UrlPagerAdapter;
@@ -56,8 +57,8 @@ public class GalleryUrlActivity extends BaseActivity {
 
     public void download(View view) {
         int i = mViewPager.getCurrentItem();
-        getLxThread().execute(new PicUtil(imageUrls[i]));
-        String fileName = PicUtil.getImagePath(imageUrls[i]);
+        getLxThread().execute(new PicUtil( imageUrls[i]));
+        String fileName = PicUtil.getImagePath( imageUrls[i]);
         Toast.makeText(this, "已保存至" + fileName, Toast.LENGTH_SHORT).show();
     }
 }

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:background="@color/gray_two"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/top"
+            android:id="@+id/top_liner"
+            android:padding="5dp"
+            android:background="@color/red"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="5dp"
+            >
+        <ImageView android:layout_width="25dp"
+                   android:layout_alignParentLeft="true"
+                   android:layout_centerVertical="true"
+                   android:id="@+id/back"
+                   android:onClick="back"
+                   android:layout_marginLeft="5dp"
+                   android:layout_marginRight="5dp"
+                   android:src="@drawable/back"
+                   android:layout_height="25dp"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="3dp"
+                android:text="发票选择"
+                android:textColor="@color/white"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:id="@+id/top_cont"
+                />
+
+    </RelativeLayout>
+    <LinearLayout android:layout_width="match_parent"
+                  android:orientation="horizontal"
+                  android:id="@+id/select_one_liner"
+                  android:layout_height="wrap_content">
+
+        <TextView android:layout_width="wrap_content"
+                  android:text="不要发票"
+                  android:layout_weight="1"
+                  android:textColor="@color/black"
+                  android:padding="12sp"
+                  android:layout_height="wrap_content"/>
+        <ImageView android:layout_width="wrap_content"
+                   android:src="@drawable/select_one"
+                   android:layout_marginRight="10dp"
+                   android:id="@+id/select_one"
+                   android:layout_gravity="center_vertical"
+                   android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:orientation="horizontal"
+                  android:id="@+id/select_two_liner"
+                  android:layout_height="wrap_content">
+
+        <TextView android:layout_width="wrap_content"
+                  android:text="要发票"
+                  android:layout_weight="1"
+                  android:textColor="@color/black"
+                  android:padding="12sp"
+                  android:layout_height="wrap_content"/>
+        <ImageView android:layout_width="wrap_content"
+                   android:src="@drawable/select_two"
+                   android:id="@+id/select_two"
+                   android:layout_marginRight="10dp"
+                   android:layout_gravity="center_vertical"
+                   android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <EditText
+            android:id="@+id/invoice_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="35dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginBottom="10dp"
+            android:paddingLeft="5dp"
+            android:textSize="14sp"
+            android:paddingRight="5dp"
+            android:paddingBottom="10dp"
+            android:padding="15dp"
+            android:gravity="top"
+            android:background="@drawable/et_bule_bg"
+            android:hint="发票抬头"/>
+
+    <Button android:layout_width="match_parent"
+            android:text="确定"
+            android:onClick="sure"
+            android:padding="12sp"
+            android:textColor="@color/white"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/red_color"
+            android:layout_height="wrap_content"/>
+
+</LinearLayout>

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:background="@color/gray_two"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <RelativeLayout android:layout_width="match_parent"
+                    android:background="@color/red"
+                    android:id="@+id/top_liner"
+                    android:layout_height="@dimen/top">
+        <ImageView android:layout_width="25dp"
+                   android:layout_alignParentLeft="true"
+                   android:layout_centerVertical="true"
+                   android:id="@+id/back"
+                   android:layout_marginLeft="10dp"
+                   android:src="@drawable/back"
+                   android:layout_height="25dp"/>
+        <TextView android:layout_width="wrap_content"
+                  android:text="收货地址"
+                  android:textColor="@color/white"
+                  android:textSize="18sp"
+                  android:layout_centerInParent="true"
+                  android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="0.3dp"
+            android:background="@color/dark_gray"
+            ></View>
+
+    <com.xg.PropertyApp.widget.ReboundScrollView android:layout_width="match_parent"
+                                                 android:layout_height="match_parent">
+
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_weight="1"
+                  android:focusable="true"
+                  android:focusableInTouchMode="true"
+                  android:padding="8dp"
+                  android:orientation="vertical"
+                  android:layout_height="wrap_content">
+
+        <EditText
+                android:id="@+id/nickname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="50dp"
+                android:textSize="14sp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:paddingTop="10dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="10dp"
+                android:padding="15dp"
+                android:background="@drawable/et_bule_bg"
+                android:hint="收货人姓名"/>
+        <EditText
+                android:id="@+id/telephone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="50dp"
+                android:textSize="14sp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginBottom="10dp"
+                android:paddingTop="10dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="10dp"
+                android:padding="15dp"
+                android:background="@drawable/et_bule_bg"
+                android:hint="电话"/>
+        <EditText
+                android:id="@+id/mobile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="50dp"
+                android:textSize="14sp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginBottom="10dp"
+                android:paddingTop="10dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="10dp"
+                android:padding="15dp"
+                android:background="@drawable/et_bule_bg"
+                android:hint="手机"/>
+        <LinearLayout android:layout_width="match_parent"
+                      android:orientation="horizontal"
+                      android:layout_height="wrap_content">
+            <com.xg.PropertyApp.widget.CustomerSpinner
+                    android:background="@color/white"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="7px"
+                    android:id="@+id/province"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="60px">
+
+            </com.xg.PropertyApp.widget.CustomerSpinner>
+
+            <com.xg.PropertyApp.widget.CustomerSpinner
+                    android:background="@color/white"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="7px"
+                    android:id="@+id/city"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="60px">
+
+            </com.xg.PropertyApp.widget.CustomerSpinner>
+
+            <com.xg.PropertyApp.widget.CustomerSpinner
+                    android:background="@color/white"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="7px"
+                    android:id="@+id/country"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="60px">
+
+            </com.xg.PropertyApp.widget.CustomerSpinner>
+
+        </LinearLayout>
+
+
+        <EditText
+                android:id="@+id/address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="50dp"
+                android:textSize="14sp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="10dp"
+                android:paddingTop="10dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="10dp"
+                android:padding="15dp"
+                android:background="@drawable/et_bule_bg"
+                android:hint="详细地址"/>
+        <EditText
+                android:id="@+id/codeyb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="50dp"
+                android:textSize="14sp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="10dp"
+                android:paddingTop="10dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="10dp"
+                android:padding="15dp"
+                android:background="@drawable/et_bule_bg"
+                android:hint="邮编"/>
+        <LinearLayout android:layout_width="match_parent"
+                      android:orientation="horizontal"
+                      android:layout_height="wrap_content">
+            <TextView android:layout_width="wrap_content"
+                      android:text="*设置为默认收货地址"
+                      android:layout_weight="1"
+                      android:textColor="@color/black_text_color"
+                      android:textSize="16sp"
+                      android:layout_height="wrap_content"/>
+
+            <CheckBox android:layout_width="wrap_content"
+                      android:id="@+id/checkbox"
+                      android:layout_below="@+id/view_line_four"
+                      android:layout_alignParentRight="true"
+                      android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <Button android:layout_width="match_parent"
+                android:layout_marginLeft="20dp"
+                android:text="确定"
+                android:layout_marginTop="20dp"
+                android:id="@+id/sure"
+                android:textColor="@color/white"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/button_selector_red_one"
+                android:layout_height="45dp"/>
+    </LinearLayout>
+    </com.xg.PropertyApp.widget.ReboundScrollView>
+
+</LinearLayout>

@@ -1,10 +1,11 @@
 package com.xiaogang.Mine.fragment;
 
+import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.xiaogang.Mine.R;
@@ -19,63 +26,62 @@ import com.xiaogang.Mine.adpter.AnimateFirstDisplayListener;
 import com.xiaogang.Mine.adpter.ItemRecordsAdapter;
 import com.xiaogang.Mine.adpter.OnClickContentItemListener;
 import com.xiaogang.Mine.base.BaseFragment;
-import com.xiaogang.Mine.mobule.VideosObj;
+import com.xiaogang.Mine.base.InternetURL;
+import com.xiaogang.Mine.data.RecordObjData;
+import com.xiaogang.Mine.mobule.RecordObj;
+import com.xiaogang.Mine.ui.PublishPicActivity;
+import com.xiaogang.Mine.util.Constants;
+import com.xiaogang.Mine.util.StringUtil;
 import com.xiaogang.Mine.widget.ContentListView;
+import com.xiaogang.Mine.widget.CustomProgressDialog;
 import com.xiaogang.Mine.widget.SelectPhoPopWindow;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 搜索
  */
 public class ThreeFragment extends BaseFragment implements View.OnClickListener,ContentListView.OnRefreshListener,
         ContentListView.OnLoadListener,OnClickContentItemListener {
-
     private ContentListView lstv;
     private ItemRecordsAdapter adapter;
-    List<VideosObj> lists = new ArrayList<>();
+    List<RecordObj> lists = new ArrayList<RecordObj>();
     private ImageView photoBtn;
-
     private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
     ImageLoader imageLoader = ImageLoader.getInstance();//图片加载类
-
-
     private RelativeLayout commentLayout;//头部
     private int pageIndex = 1;
-
-
     private SelectPhoPopWindow deleteWindow;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        registerBoradcastReceiver();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.three_fragment, null);
         initView(view);
-
-
+        progressDialog = new CustomProgressDialog(getActivity() , "正在加载", R.anim.frame_paopao);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setCancelable(false);
+        progressDialog.setIndeterminate(true);
+        progressDialog.show();
         loadData(ContentListView.REFRESH);
         return view;
     }
 
     private void initView(View view) {
-        for(int i=0;i<20;i++){
-            lists.add(new VideosObj(String.valueOf(i),"0"));
-        }
         lstv = (ContentListView) view.findViewById(R.id.lstv);
         adapter = new ItemRecordsAdapter(lists, getActivity());
-
-
-
         commentLayout = (RelativeLayout) LayoutInflater.from(getActivity()).inflate(R.layout.three_top, null);
         lstv.addHeaderView(commentLayout);//添加头部
-
         lstv.setAdapter(adapter);
         lstv.setOnRefreshListener(this);
         lstv.setOnLoadListener(this);
@@ -103,110 +109,110 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
         }
     }
 
-
-
     private void loadData(final int currentid) {
-//        String uri = InternetURL.EXCHANGE_REPLY_ARTICLE_URL + "?exchange_id="+goods.getExchange_id();
-//        StringRequest request = new StringRequest(
-//                Request.Method.GET,
-//                uri,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String s) {
-//                        detail_lstv.onRefreshComplete();
-//                        detail_lstv.onLoadComplete();
-//                        if (StringUtil.isJson(s)) {
-//                            try {
-//                                JSONObject jo = new JSONObject(s);
-//                                String code =  jo.getString("code");
-//                                if(Integer.parseInt(code) == 1){
-//                                    GoodsCommentData data = getGson().fromJson(s, GoodsCommentData.class);
-//                                    if (data.getCode() == 1 && data.getData()!=null) {
-//                                        if (ContentListView.REFRESH == currentid) {
-//                                            listComment.clear();
-//                                            listComment.addAll(data.getData());
-//                                            detail_lstv.setResultSize(data.getData().size());
-//                                            adapter.notifyDataSetChanged();
-//                                        }
-//                                        if (ContentListView.LOAD == currentid) {
-//                                            listComment.clear();
-//                                            listComment.addAll(data.getData());
-//                                            detail_lstv.setResultSize(data.getData().size());
-//                                            adapter.notifyDataSetChanged();
-//                                        }
-//                                    }else {
-//                                        if (ContentListView.REFRESH == currentid) {
-//                                            listComment.clear();
-//                                            detail_lstv.setResultSize(0);
-//                                            adapter.notifyDataSetChanged();
-//                                        }
-//                                        if (ContentListView.LOAD == currentid) {
-//                                            listComment.clear();
-//                                            detail_lstv.setResultSize(0);
-//                                            adapter.notifyDataSetChanged();
-//                                        }
-//                                    }
-//                                }
-//                                else {
-//                                    if (ContentListView.REFRESH == currentid) {
-//                                        listComment.clear();
-//                                        detail_lstv.setResultSize(0);
-//                                        adapter.notifyDataSetChanged();
-//                                    }
-//                                    if (ContentListView.LOAD == currentid) {
-//                                        listComment.clear();
-//                                        detail_lstv.setResultSize(0);
-//                                        adapter.notifyDataSetChanged();
-//                                    }
-//                                    Toast.makeText(DetailGoodsActivity.this, R.string.get_data_error, Toast.LENGTH_SHORT).show();
-//                                }
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
-//                        } else {
-//                            if (ContentListView.REFRESH == currentid) {
-//                                listComment.clear();
-//                                detail_lstv.setResultSize(0);
-//                                adapter.notifyDataSetChanged();
-//                            }
-//                            if (ContentListView.LOAD == currentid) {
-//                                listComment.clear();
-//                                detail_lstv.setResultSize(0);
-//                                adapter.notifyDataSetChanged();
-//                            }
-//                            Toast.makeText(DetailGoodsActivity.this, R.string.get_data_error, Toast.LENGTH_SHORT).show();
-//                        }
-//                        if (progressDialog != null) {
-//                            progressDialog.dismiss();
-//                        }
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError volleyError) {
-//                        detail_lstv.onRefreshComplete();
-//                        detail_lstv.onLoadComplete();
-//                        if (progressDialog != null) {
-//                            progressDialog.dismiss();
-//                        }
-//                        Toast.makeText(DetailGoodsActivity.this, R.string.get_data_error, Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//        ) {
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                Map<String, String> params = new HashMap<String, String>();
-//                return params;
-//            }
-//
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                Map<String, String> params = new HashMap<String, String>();
-//                params.put("Content-Type", "application/x-www-form-urlencoded");
-//                return params;
-//            }
-//        };
-//        getRequestQueue().add(request);
+        String uri = InternetURL.LIST_RECORD_URL
+                + "?uid="+ getGson().fromJson(getSp().getString("uid", ""), String.class)
+                +"&pageIndex="+pageIndex+"&pageSize=20";
+        StringRequest request = new StringRequest(
+                Request.Method.GET,
+                uri,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        lstv.onRefreshComplete();
+                        lstv.onLoadComplete();
+                        if (StringUtil.isJson(s)) {
+                            try {
+                                JSONObject jo = new JSONObject(s);
+                                String code =  jo.getString("code");
+                                if(Integer.parseInt(code) == 200){
+                                    RecordObjData data = getGson().fromJson(s, RecordObjData.class);
+                                    if (Integer.parseInt(code)==200 && data.getData()!=null) {
+                                        if (ContentListView.REFRESH == currentid) {
+                                            lists.clear();
+                                            lists.addAll(data.getData());
+                                            lstv.setResultSize(data.getData().size());
+                                            adapter.notifyDataSetChanged();
+                                        }
+                                        if (ContentListView.LOAD == currentid) {
+                                            lists.clear();
+                                            lists.addAll(data.getData());
+                                            lstv.setResultSize(data.getData().size());
+                                            adapter.notifyDataSetChanged();
+                                        }
+                                    }else {
+                                        if (ContentListView.REFRESH == currentid) {
+                                            lists.clear();
+                                            lstv.setResultSize(0);
+                                            adapter.notifyDataSetChanged();
+                                        }
+                                        if (ContentListView.LOAD == currentid) {
+                                            lists.clear();
+                                            lstv.setResultSize(0);
+                                            adapter.notifyDataSetChanged();
+                                        }
+                                    }
+                                }
+                                else {
+                                    if (ContentListView.REFRESH == currentid) {
+                                        lists.clear();
+                                        lstv.setResultSize(0);
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                    if (ContentListView.LOAD == currentid) {
+                                        lists.clear();
+                                        lstv.setResultSize(0);
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                    Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            if (ContentListView.REFRESH == currentid) {
+                                lists.clear();
+                                lstv.setResultSize(0);
+                                adapter.notifyDataSetChanged();
+                            }
+                            if (ContentListView.LOAD == currentid) {
+                                lists.clear();
+                                lstv.setResultSize(0);
+                                adapter.notifyDataSetChanged();
+                            }
+                            Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
+                        }
+                        if (progressDialog != null) {
+                            progressDialog.dismiss();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        lstv.onRefreshComplete();
+                        lstv.onLoadComplete();
+                        if (progressDialog != null) {
+                            progressDialog.dismiss();
+                        }
+                        Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+        getRequestQueue().add(request);
     }
 
     @Override
@@ -220,9 +226,6 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
         pageIndex = 1;
         loadData(ContentListView.REFRESH);
     }
-
-
-
 
     // 选择相册，相机
     private void ShowPickDialog() {
@@ -238,27 +241,28 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
             deleteWindow.dismiss();
             switch (v.getId()) {
                 case R.id.picture: {
-                    Intent camera = new Intent(
-                            MediaStore.ACTION_IMAGE_CAPTURE);
-                    //下面这句指定调用相机拍照后的照片存储的路径
-                    camera.putExtra(MediaStore.EXTRA_OUTPUT, Uri
-                            .fromFile(new File(Environment
-                                    .getExternalStorageDirectory(),
-                                    "ppCover.jpg")));
-                    startActivityForResult(camera, 2);
+                    Intent wenzi = new Intent(getActivity(), PublishPicActivity.class);
+                    wenzi.putExtra(Constants.SELECT_PHOTOORPIIC, "1");
+                    startActivity(wenzi);
                 }
                 break;
                 case R.id.mapstorage: {
-                    Intent mapstorage = new Intent(Intent.ACTION_PICK, null);
-                    mapstorage.setDataAndType(
-                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                            "image/*");
-                    startActivityForResult(mapstorage, 1);
+                    Intent wenzi = new Intent(getActivity(), PublishPicActivity.class);
+                    wenzi.putExtra(Constants.SELECT_PHOTOORPIIC, "2");
+                    startActivity(wenzi);
                 }
                 break;
                 case R.id.video:
                 {
                     //视频
+                }
+                    break;
+                case R.id.wenzi:
+                {
+                    //文字
+                    Intent wenzi = new Intent(getActivity(), PublishPicActivity.class);
+                    wenzi.putExtra(Constants.SELECT_PHOTOORPIIC, "0");
+                    startActivity(wenzi);
                 }
                     break;
                 default:
@@ -267,7 +271,7 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
         }
     };
 
-    VideosObj videosObj ;
+    RecordObj videosObj ;
     @Override
     public void onClickContentItem(int position, int flag, Object object) {
         videosObj = lists.get(position);
@@ -275,7 +279,7 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
             case 10:
                 //
 
-                for(VideosObj videosObj1 : lists){
+                for(RecordObj videosObj1 : lists){
                     if(videosObj1.getId().equals(videosObj.getId())){
                         //当前点击的哪一个
                         if("1".equals(videosObj.getIs_select())){
@@ -296,5 +300,32 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
                 //评论
                 break;
         }
+    }
+
+
+    //广播接收动作
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if(action.equals(Constants.SEND_INDEX_SUCCESS)){
+                pageIndex = 1;
+                loadData(ContentListView.REFRESH);
+            }
+        }
+    };
+
+    //注册广播
+    public void registerBoradcastReceiver() {
+        IntentFilter myIntentFilter = new IntentFilter();
+        myIntentFilter.addAction(Constants.SEND_INDEX_SUCCESS);
+        //注册广播
+        getActivity().registerReceiver(mBroadcastReceiver, myIntentFilter);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().unregisterReceiver(mBroadcastReceiver);
     }
 }

@@ -18,7 +18,7 @@ import com.xiaogang.Mine.R;
  * 类的功能、说明写在此处.
  */
 public class SelectPhoPopWindow extends PopupWindow {
-    private TextView video, cancel, mapstorage,picture;
+    private TextView video, cancel, mapstorage,picture,wenzi;
     private View mMenuView;
 
     public SelectPhoPopWindow(Activity context, View.OnClickListener itemsOnClick) {
@@ -26,6 +26,7 @@ public class SelectPhoPopWindow extends PopupWindow {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mMenuView = inflater.inflate(R.layout.item_dialog_camera, null);
+        wenzi = (TextView) mMenuView.findViewById(R.id.wenzi);
         video = (TextView) mMenuView.findViewById(R.id.video);
         picture = (TextView) mMenuView.findViewById(R.id.picture);
         cancel = (TextView) mMenuView.findViewById(R.id.cancel);
@@ -41,6 +42,7 @@ public class SelectPhoPopWindow extends PopupWindow {
         //设置按钮监听
         video.setOnClickListener(itemsOnClick);
         picture.setOnClickListener(itemsOnClick);
+        wenzi.setOnClickListener(itemsOnClick);
         mapstorage.setOnClickListener(itemsOnClick);
 
         //设置SelectPicPopupWindow的View

@@ -50,6 +50,15 @@ public class ProducteObj implements Serializable {
     private String delivery_type;
     private String sale_num;
     private String good_rate;
+    private String tel;
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
 
     public String getProduct_id() {
         return product_id;

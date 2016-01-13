@@ -31,6 +31,7 @@ import com.xiaogang.Mine.base.InternetURL;
 import com.xiaogang.Mine.data.AccessTokenData;
 import com.xiaogang.Mine.data.EmpData;
 import com.xiaogang.Mine.mobule.Emp;
+import com.xiaogang.Mine.util.HttpUtils;
 import com.xiaogang.Mine.util.StringUtil;
 import com.xiaogang.Mine.widget.CustomProgressDialog;
 import org.json.JSONException;
@@ -50,6 +51,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private EditText password;
 
     private boolean progressShow;
+    boolean isMobileNet, isWifiNet;
+    ProgressDialog pd = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +65,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if(!StringUtil.isNullOrEmpty(getGson().fromJson(getSp().getString("password", ""), String.class))){
             password.setText(getGson().fromJson(getSp().getString("password", ""), String.class));
         }
+        if(!StringUtil.isNullOrEmpty(getGson().fromJson(getSp().getString("mobile", ""), String.class)) &&!StringUtil.isNullOrEmpty(getGson().fromJson(getSp().getString("password", ""), String.class))){
+            loginData();
+        }
     }
 
     @Override
     public void onClick(View v) {
+        try {
+            isMobileNet = HttpUtils.isMobileDataEnable(getApplicationContext());
+            isWifiNet = HttpUtils.isWifiDataEnable(getApplicationContext());
+            if (!isMobileNet && !isWifiNet) {
+                Toast.makeText(this, "当前网络连接不可用", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         switch (v.getId()){
             case R.id.btn:
                 //登陆
@@ -77,11 +93,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     showMsg(LoginActivity.this, "请输入密码");
                     return;
                 }
-                progressDialog = new CustomProgressDialog(LoginActivity.this , "正在加载中", R.anim.frame_paopao);
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                progressDialog.setCancelable(false);
-                progressDialog.setIndeterminate(true);
-                progressDialog.show();
+//                progressDialog = new CustomProgressDialog(LoginActivity.this , "正在加载中", R.anim.frame_paopao);
+//                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+//                progressDialog.setCancelable(false);
+//                progressDialog.setIndeterminate(true);
+//                progressDialog.show();
+                progressShow = true;
+                pd = new ProgressDialog(LoginActivity.this);
+                pd.setCanceledOnTouchOutside(false);
+                pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        progressShow = false;
+                    }
+                });
+                pd.setMessage(getString(R.string.Is_landing));
+                pd.show();
                 loginData();
                 break;
             case R.id.forget:
@@ -233,16 +261,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         getRequestQueue().add(request);
     }
 
-
-
     //huanxin
-
     public void login(final String currentUsername ,final String currentPassword) {
         if (!CommonUtils.isNetWorkConnected(this)) {
             Toast.makeText(this, R.string.network_isnot_available, Toast.LENGTH_SHORT).show();
             return;
         }
-
         if (TextUtils.isEmpty(currentUsername)) {
             Toast.makeText(this, R.string.User_name_cannot_be_empty, Toast.LENGTH_SHORT).show();
             return;
@@ -251,24 +275,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             Toast.makeText(this, R.string.Password_cannot_be_empty, Toast.LENGTH_SHORT).show();
             return;
         }
-
-//        progressShow = true;
-//        final ProgressDialog pd = new ProgressDialog(LoginActivity.this);
-//        pd.setCanceledOnTouchOutside(false);
-//        pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
-//
-//            @Override
-//            public void onCancel(DialogInterface dialog) {
-//                progressShow = false;
-//            }
-//        });
-//        pd.setMessage(getString(R.string.Is_landing));
-//        pd.show();
-
         final long start = System.currentTimeMillis();
         // 调用sdk登陆方法登陆聊天服务器
         EMChatManager.getInstance().login(currentUsername, currentPassword, new EMCallBack() {
-
             @Override
             public void onSuccess() {
                 if (!progressShow) {
@@ -277,7 +286,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 // 登陆成功，保存用户名密码
                 UniversityApplication.getInstance().setUserName(currentUsername);
                 UniversityApplication.getInstance().setPassword(currentPassword);
-
                 try {
                     // ** 第一次登录或者之前logout后再登录，加载所有本地群和回话
                     // ** manually load all local groups and
@@ -303,14 +311,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 if (!updatenick) {
                     Log.e("LoginActivity", "update current user nick fail");
                 }
-//                if (!LoginActivity.this.isFinishing() && pd.isShowing()) {
-//                    pd.dismiss();
-//                }
+                if (!LoginActivity.this.isFinishing() && pd.isShowing()) {
+                    pd.dismiss();
+                }
                 // 进入主页面
 //                Intent intent = new Intent(LoginActivity.this,
 //                        com.easemob.chatuidemo.activity.MainActivity.class);
 //                startActivity(intent);
-
                 Intent mainView = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(mainView);
             }
@@ -318,7 +325,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             @Override
             public void onProgress(int progress, String status) {
             }
-
             @Override
             public void onError(final int code, final String message) {
                 if (!progressShow) {
@@ -326,7 +332,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 }
                 runOnUiThread(new Runnable() {
                     public void run() {
-//                        pd.dismiss();
+                        pd.dismiss();
                         Toast.makeText(getApplicationContext(), getString(R.string.Login_failed) + message,
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -354,12 +360,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         userlist.put(Constant.GROUP_USERNAME, groupUser);
 
         // 添加"Robot"
-//        User robotUser = new User();
-//        String strRobot = getResources().getString(R.string.robot_chat);
-//        robotUser.setUsername(Constant.CHAT_ROBOT);
-//        robotUser.setNick(strRobot);
-//        robotUser.setHeader("");
-//        userlist.put(Constant.CHAT_ROBOT, robotUser);
+        User robotUser = new User();
+        String strRobot = getResources().getString(R.string.robot_chat);
+        robotUser.setUsername(Constant.CHAT_ROBOT);
+        robotUser.setNick(strRobot);
+        robotUser.setHeader("");
+        userlist.put(Constant.CHAT_ROBOT, robotUser);
 
         // 存入内存
         ((DemoHXSDKHelper) HXSDKHelper.getInstance()).setContactList(userlist);

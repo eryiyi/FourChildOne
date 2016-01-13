@@ -228,10 +228,12 @@ public class ContactlistFragment extends Fragment implements View.OnClickListene
 				} else if(Constant.CHAT_ROOM.equals(username)){
 					//进入聊天室列表页面
 				    startActivity(new Intent(getActivity(), PublicChatRoomsActivity.class));
-				}else if(Constant.CHAT_ROBOT.equals(username)){
-					//进入Robot列表页面
-					startActivity(new Intent(getActivity(), RobotsActivity.class));
-				}else {
+				}
+//				else if(Constant.CHAT_ROBOT.equals(username)){
+//					//进入Robot列表页面
+//					startActivity(new Intent(getActivity(), RobotsActivity.class));
+//				}
+				else {
 					// demo中直接进入聊天页面，实际一般是进入用户详情页
 					startActivity(new Intent(getActivity(), ChatActivity.class).putExtra("userId", adapter.getItem(position).getUsername()));
 				}
@@ -461,7 +463,7 @@ public class ContactlistFragment extends Fragment implements View.OnClickListene
 			if (!entry.getKey().equals(Constant.NEW_FRIENDS_USERNAME)
 			        && !entry.getKey().equals(Constant.GROUP_USERNAME)
 			        && !entry.getKey().equals(Constant.CHAT_ROOM)
-					&& !entry.getKey().equals(Constant.CHAT_ROBOT)
+//					&& !entry.getKey().equals(Constant.CHAT_ROBOT)
 					&& !blackList.contains(entry.getKey()))
 				contactList.add(entry.getValue());
 		}

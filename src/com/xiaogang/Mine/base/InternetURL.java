@@ -44,8 +44,17 @@ public class InternetURL {
     public static final String LIST_ORDER_URL = INTERNAL + "json.php/order.api-orderlist";
     //19我的关注
     public static final String MINE_GUANZHU_URL = INTERNAL + "json.php/member.api-myfollow";
+    //朋友圈发布
+    public static final String ADD_RECORD_URL = INTERNAL + "index/ServiceJson/pypush";
+    //朋友圈首页
+    public static final String LIST_RECORD_URL = INTERNAL + "index/ServiceJson/pylist";
+    //朋友圈喜爱操作
+    public static final String ADD_FAVOUR_RECORD_URL = INTERNAL + "json.php/member.api-myfollow";
+    //朋友圈评论
+    public static final String ADD_COMMENT_RECORD_URL = INTERNAL + "index/ServiceJson/tocomment";
+    public static final String FIND_MEMBER_URL = INTERNAL + "json.php/friends.api-searchByName";
     //
-//    public static final String MINE_GUANZHU_URL = INTERNAL + "json.php/member.api-myfollow";
+//    public static final String ADD_COMMENT_RECORD_URL = INTERNAL + "index/ServiceJson/tocomment";
 
 
 }

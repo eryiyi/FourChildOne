@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:id="@+id/main"
+              android:background="@drawable/back_main"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <!-- head开始 -->
+    <RelativeLayout
+            android:layout_width="fill_parent"
+            android:background="@color/red"
+            android:layout_height="@dimen/height_top_bar">
+
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dip"
+                    android:text="发说说"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"/>
+        </LinearLayout>
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:id="@+id/publis_pic_back"
+                android:paddingLeft="15dp"
+                android:src="@drawable/back"
+                android:paddingRight="10dp"/>
+
+        <TextView
+                android:id="@+id/publish_pic_run"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:layout_marginRight="10dp"
+                android:text="发布"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+    <!-- head结束 -->
+    <LinearLayout android:layout_width="match_parent"
+                  android:orientation="vertical"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1">
+         <LinearLayout android:layout_width="match_parent"
+                      android:orientation="vertical"
+                      android:layout_weight="1"
+                      android:layout_height="wrap_content">
+            <RelativeLayout android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                <EditText
+                        android:id="@+id/face_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="80dp"
+                        android:maxHeight="200dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:paddingBottom="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/et_bule_bg"
+                        android:textSize="16sp"
+                        android:gravity="top"
+                        android:hint="说点儿什么吧......"
+                        android:padding="10dp"
+                        android:textColor="#ff000000"/>
+            </RelativeLayout>
+
+            <com.xiaogang.Mine.widget.NoScrollGridView
+                    android:id="@+id/publish_moopd_gridview_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:listSelector="@drawable/selector_pressed_gray"
+                    android:horizontalSpacing="5dip"
+                    android:numColumns="4"
+                    android:padding="10dip"
+                    android:verticalSpacing="5dip"/>
+        </LinearLayout>
+
+        <ImageButton
+                android:id="@+id/add_pic"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_toRightOf="@+id/send_btn_face_normal"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dip"
+                android:background="@drawable/icons_others_addpic"
+                />
+
+    </LinearLayout>
+
+</LinearLayout>

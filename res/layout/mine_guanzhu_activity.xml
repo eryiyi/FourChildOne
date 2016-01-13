@@ -47,12 +47,18 @@
                   android:gravity="center"
                   android:textColor="@color/red"
                   android:layout_height="wrap_content"/>
-        <ListView android:layout_width="match_parent"
-                  android:id="@+id/lstv"
-                  android:divider="#fdeff3"
-                  android:dividerHeight="10dp"
-                  android:layout_height="wrap_content">
-        </ListView>
+        <com.xiaogang.Mine.library.PullToRefreshListView
+                android:id="@+id/lstv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:cacheColorHint="#00000000"
+                android:divider="@color/divider_color"
+                android:dividerHeight="10dp"
+                android:fadingEdge="none"
+                android:fastScrollEnabled="false"
+                android:footerDividersEnabled="false"
+                android:headerDividersEnabled="false"
+                android:smoothScrollbar="true"/>
     </RelativeLayout>
 
 

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -56,7 +57,6 @@ public class DetailGoodsActivity extends BaseActivity  implements View.OnClickLi
     private TextView sumry;
     private TextView number;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +87,7 @@ public class DetailGoodsActivity extends BaseActivity  implements View.OnClickLi
         address = (TextView) this.findViewById(R.id.address);
         number = (TextView) this.findViewById(R.id.number);
         this.findViewById(R.id.foot_mine_cart).setOnClickListener(this);
+        this.findViewById(R.id.foot_tel).setOnClickListener(this);
     }
 
     @Override
@@ -95,6 +96,15 @@ public class DetailGoodsActivity extends BaseActivity  implements View.OnClickLi
             case R.id.foot_mine_cart:
                 Intent mineCart = new Intent(DetailGoodsActivity.this, MineCartActivity.class);
                 startActivity(mineCart);
+                break;
+            case R.id.foot_tel:
+            {
+                //电话：
+                if(!StringUtil.isNullOrEmpty(goodsHot.getTel())){
+                    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + goodsHot.getTel()));
+                    startActivity(intent);
+                }
+            }
                 break;
         }
     }

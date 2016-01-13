@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.UniversityApplication;
+import com.xiaogang.Mine.base.InternetURL;
 
 /**
  * author: ${zhanghailong}
@@ -51,13 +52,9 @@ public class ImageGridViewAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         }
         // 将图片显示任务增加到执行池，图片将被显示到ImageView当轮到此ImageView
-//        String img_url = imageUrls[position];
-//        if(img_url.indexOf("7xlyf1.com2.z0.glb.qiniucdn.com") > 0){
-//            //图片保存到七牛上了，有缩率图
-//            img_url = img_url + "-yasuoone";
-//        }
-//        imageLoader.displayImage(img_url, imageView, UniversityApplication.options);
-        imageView.setImageResource(R.drawable.item_four);
+        String img_url = imageUrls[position];
+        imageLoader.displayImage(img_url, imageView, UniversityApplication.options);
+//        imageView.setImageResource(R.drawable.item_four);
         return imageView;
     }
     

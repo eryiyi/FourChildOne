@@ -26,19 +26,15 @@ import java.util.List;
  * Created by Administrator on 2015/10/12.
  */
 public class MineCartActivity extends BaseActivity implements View.OnClickListener,OnClickContentItemListener {
-
     private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
     ImageLoader imageLoader = ImageLoader.getInstance();//图片加载类
-
     private ListView lstv;
     private ItemCartAdapter adapter;
     private List<ShoppingCart> lists = new ArrayList<>();
-
     private TextView heji;
     private TextView qujiesuan;
-
+    private ImageView selectAll;
     Resources res;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,20 +46,17 @@ public class MineCartActivity extends BaseActivity implements View.OnClickListen
         getData();
     }
 
-
     public void back(View view){finish();}
 
-
     private void initView() {
+        selectAll = (ImageView) this.findViewById(R.id.selectAll);
         heji = (TextView) this.findViewById(R.id.heji);
         qujiesuan = (TextView) this.findViewById(R.id.qujiesuan);
-
         qujiesuan.setOnClickListener(this);
-
         lstv = (ListView) this.findViewById(R.id.lstv);
         this.findViewById(R.id.selectAll).setOnClickListener(this);
-
     }
+    private int tmpSelect = 0;
 
     public void onClick(View view) {
         switch (view.getId())
@@ -78,9 +71,9 @@ public class MineCartActivity extends BaseActivity implements View.OnClickListen
                         }
                     }
                     if(arrayList != null && arrayList.size() > 0){
-//                        Intent orderMakeView = new Intent(MineCartActivity.this, OrderMakeActivity.class);
-//                        orderMakeView.putExtra("listsgoods",arrayList);
-//                        startActivity(orderMakeView);
+                        Intent orderMakeView = new Intent(MineCartActivity.this, OrderMakeActivity.class);
+                        orderMakeView.putExtra("listsgoods",arrayList);
+                        startActivity(orderMakeView);
                     }else{
                         Toast.makeText(MineCartActivity.this,R.string.cart_error_one, Toast.LENGTH_SHORT).show();
                     }
@@ -90,9 +83,20 @@ public class MineCartActivity extends BaseActivity implements View.OnClickListen
                 break;
             case R.id.selectAll:
                 //全选
-                for(int i=0; i<lists.size() ;i++){
-                    ShoppingCart shoppingCart = lists.get(i);
-                    shoppingCart.setIs_select("1");
+                if(tmpSelect == 0){
+                    tmpSelect = 1;
+                    selectAll.setImageResource(R.drawable.select_two);
+                    for(int i=0; i<lists.size() ;i++){
+                        ShoppingCart shoppingCart = lists.get(i);
+                        shoppingCart.setIs_select("1");
+                    }
+                }else {
+                    tmpSelect = 0;
+                    selectAll.setImageResource(R.drawable.select_one);
+                    for(int i=0; i<lists.size() ;i++){
+                        ShoppingCart shoppingCart = lists.get(i);
+                        shoppingCart.setIs_select("0");
+                    }
                 }
                 adapter.notifyDataSetChanged();
                 toCalculate();

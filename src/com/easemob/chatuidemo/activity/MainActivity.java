@@ -160,10 +160,6 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		groupChangeListener = new MyGroupChangeListener();
 		// 注册群聊相关的listener
         EMGroupManager.getInstance().addGroupChangeListener(groupChangeListener);
-		
-		
-		//内部测试方法，请忽略
-		registerInternalDebugReceiver();
 	}
 
 
@@ -1014,40 +1010,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			showAccountRemovedDialog();
 		}
 	}
-	
-	/**
-	 * 内部测试代码，开发者请忽略
-	 */
-	private void registerInternalDebugReceiver() {
-	    internalDebugReceiver = new BroadcastReceiver() {
-            
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                DemoHXSDKHelper.getInstance().logout(true,new EMCallBack() {
-                    
-                    @Override
-                    public void onSuccess() {
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                // 重新显示登陆页面
-                                finish();
-                                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                                
-                            }
-                        });
-                    }
-                    
-                    @Override
-                    public void onProgress(int progress, String status) {}
-                    
-                    @Override
-                    public void onError(int code, String message) {}
-                });
-            }
-        };
-        IntentFilter filter = new IntentFilter(getPackageName() + ".em_internal_debug");
-        registerReceiver(internalDebugReceiver, filter);
-    }
+
 
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
