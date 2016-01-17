@@ -13,7 +13,6 @@ import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.UniversityApplication;
 import com.xiaogang.Mine.base.InternetURL;
 import com.xiaogang.Mine.mobule.RecordObj;
-import com.xiaogang.Mine.mobule.VideosObj;
 import com.xiaogang.Mine.ui.GalleryUrlActivity;
 import com.xiaogang.Mine.util.Constants;
 
@@ -118,6 +117,13 @@ public class ItemRecordsAdapter extends BaseAdapter {
                     holder.gridview_detail_picture.setVisibility(View.GONE);
                     holder.video_pic.setVisibility(View.VISIBLE);
                     holder.video_play.setVisibility(View.VISIBLE);
+                    //视频播放器
+                    holder.video_play.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            onClickContentItemListener.onClickContentItem(position, 5, null);
+                        }
+                    });
                     imageLoader.displayImage( cell.getUrl(), holder.video_pic, UniversityApplication.options, animateFirstListener);
                     break;
             }

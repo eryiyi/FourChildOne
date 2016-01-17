@@ -7,7 +7,7 @@
               android:layout_height="match_parent">
     <RelativeLayout android:layout_width="match_parent"
                     android:id="@+id/top_liner"
-                    android:background="@color/red"
+                    android:background="@drawable/foot_back"
                     android:layout_height="@dimen/top">
         <TextView android:layout_width="wrap_content"
                   android:text="确认订单"

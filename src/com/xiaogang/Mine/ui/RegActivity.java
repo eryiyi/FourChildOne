@@ -25,7 +25,6 @@ import com.xiaogang.Mine.base.InternetURL;
 import com.xiaogang.Mine.data.EmpData;
 import com.xiaogang.Mine.mobule.Emp;
 import com.xiaogang.Mine.util.StringUtil;
-import com.xiaogang.Mine.widget.CustomProgressDialog;
 import org.json.JSONException;
 import org.json.JSONObject;
 

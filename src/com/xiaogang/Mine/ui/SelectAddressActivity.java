@@ -145,7 +145,6 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("uid", getGson().fromJson(getSp().getString("uid", ""), String.class));
                 return params;
             }
 

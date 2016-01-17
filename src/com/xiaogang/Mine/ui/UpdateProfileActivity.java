@@ -302,7 +302,7 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
                                 JSONObject jo = new JSONObject(s);
                                 String code =  jo.getString("code");
                                 if(Integer.parseInt(code) == 200){
-                                    Toast.makeText(UpdateProfileActivity.this, jo.getString("msg"), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(UpdateProfileActivity.this, "更新成功", Toast.LENGTH_SHORT).show();
                                     if(!StringUtil.isNullOrEmpty(picStr)){
                                         save("cover", picStr);
                                     }

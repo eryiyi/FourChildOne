@@ -18,6 +18,7 @@ import com.xiaogang.Mine.mobule.AddressObj;
 import com.xiaogang.Mine.util.StringUtil;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -96,11 +97,22 @@ public class MineAddressUpdateActivity extends BaseActivity implements View.OnCl
     }
     //保存收货地址
     public void saveAddress(){
+        String addressStr = add_address_two.getText().toString() ;
+        String nicknameStr = update_name.getText().toString() ;
+        String telephoneStr = add_phone.getText().toString() ;
+        try {
+            addressStr = URLEncoder.encode(addressStr, "UTF-8");
+            nicknameStr = URLEncoder.encode(nicknameStr, "UTF-8");
+            telephoneStr = URLEncoder.encode(telephoneStr, "UTF-8");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         String uri = InternetURL.ADDRESS_ADD_UPDATE_URL
                 +"?access_token=" + getGson().fromJson(getSp().getString("access_token", ""), String.class)
-                +"&address="+add_address_two.getText().toString()
-                +"&contact_name="+update_name.getText().toString()
-                +"&contact_mobile="+add_phone.getText().toString()
+                +"&address="+ addressStr
+                +"&contact_name="+ nicknameStr
+                +"&contact_mobile="+ telephoneStr
                 +"&id="+ goodsAddress.getId()
                 +"&op="+"1";
         StringRequest request = new StringRequest(

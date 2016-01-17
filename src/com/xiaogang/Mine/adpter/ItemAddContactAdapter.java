@@ -11,11 +11,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.UniversityApplication;
-import com.xiaogang.Mine.base.InternetURL;
 import com.xiaogang.Mine.mobule.MemberObj;
 
 
-import java.lang.reflect.Member;
 import java.util.List;
 
 /**

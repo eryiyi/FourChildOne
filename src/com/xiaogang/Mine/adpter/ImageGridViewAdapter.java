@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.UniversityApplication;
-import com.xiaogang.Mine.base.InternetURL;
 
 /**
  * author: ${zhanghailong}

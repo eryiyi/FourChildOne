@@ -11,10 +11,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.xiaogang.Mine.R;
-import com.xiaogang.Mine.UniversityApplication;
-import com.xiaogang.Mine.base.InternetURL;
 import com.xiaogang.Mine.mobule.Orders;
-import com.xiaogang.Mine.util.RelativeDateFormat;
 
 import java.util.List;
 

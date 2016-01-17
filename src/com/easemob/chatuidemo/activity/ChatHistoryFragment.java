@@ -58,7 +58,6 @@ import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.adapter.ChatHistoryAdapter;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.chatuidemo.domain.User;
-import com.xiaogang.Mine.MainActivity;
 import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.UniversityApplication;
 

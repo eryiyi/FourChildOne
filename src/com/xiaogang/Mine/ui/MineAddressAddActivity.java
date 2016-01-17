@@ -21,6 +21,7 @@ import com.xiaogang.Mine.util.StringUtil;
 import com.xiaogang.Mine.widget.CustomerSpinner;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -405,11 +406,24 @@ public class MineAddressAddActivity extends BaseActivity implements View.OnClick
     }
 
     public void setAddress(){
+        String addressStr = address.getText().toString() ;
+        String nicknameStr = nickname.getText().toString() ;
+        String telephoneStr = telephone.getText().toString() ;
+        try {
+            addressStr = URLEncoder.encode(addressStr, "UTF-8");
+            nicknameStr = URLEncoder.encode(nicknameStr, "UTF-8");
+            telephoneStr = URLEncoder.encode(telephoneStr, "UTF-8");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
         String uri = InternetURL.ADDRESS_ADD_UPDATE_URL
                 +"?access_token=" + getGson().fromJson(getSp().getString("access_token", ""), String.class)
-                +"&address="+address.getText().toString()
-                +"&contact_name="+nickname.getText().toString()
-                +"&contact_mobile="+telephone.getText().toString();
+
+                +"&address="+ addressStr
+                +"&contact_name="+ nicknameStr
+                +"&contact_mobile="+ telephoneStr;
         StringRequest request = new StringRequest(
                 Request.Method.GET,
                 uri,

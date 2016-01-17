@@ -32,7 +32,6 @@ import com.easemob.chat.EMContactManager;
 
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.xiaogang.Mine.R;
-import com.xiaogang.Mine.UniversityApplication;
 import com.xiaogang.Mine.adpter.ItemAddContactAdapter;
 import com.xiaogang.Mine.adpter.OnClickContentItemListener;
 import com.xiaogang.Mine.base.BaseActivity;

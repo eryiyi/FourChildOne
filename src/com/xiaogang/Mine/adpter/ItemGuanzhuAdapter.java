@@ -2,7 +2,6 @@ package com.xiaogang.Mine.adpter;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +12,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.UniversityApplication;
-import com.xiaogang.Mine.mobule.GoodsHot;
 import com.xiaogang.Mine.mobule.ProducteObj;
 import com.xiaogang.Mine.util.RelativeDateFormat;
-import com.xiaogang.Mine.util.StringUtil;
 
 import java.util.List;
 

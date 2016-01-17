@@ -1,13 +1,15 @@
 package com.xiaogang.Mine;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.os.Environment;
 import android.util.LruCache;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.baidu.frontia.FrontiaApplication;
 import com.easemob.EMCallBack;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.domain.User;
@@ -21,7 +23,11 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.videogo.constant.Config;
 import com.videogo.openapi.EZOpenSDK;
 import com.xiaogang.Mine.yingshi.CustomExceptionHandler;
+import com.yixia.camera.VCamera;
+import com.yixia.camera.demo.service.AssertService;
+import com.yixia.camera.util.DeviceUtils;
 
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +40,7 @@ import java.util.concurrent.Executors;
  * Time: 17:04
  * 类的功能、说明写在此处.
  */
-public class UniversityApplication extends Application {
+public class UniversityApplication extends FrontiaApplication {
     // 运用list来保存们每一个activity是关键
     private List<Activity> mList = new LinkedList<Activity>();
     private ExecutorService lxThread;
@@ -81,6 +87,30 @@ public class UniversityApplication extends Application {
         imageLoader = new com.android.volley.toolbox.ImageLoader(requestQueue, new BitmapCache());
         initImageLoader(this);
         hxSDKHelper.onInit(applicationContext);
+
+
+        // 设置拍摄视频缓存路径
+        File dcim = Environment
+                .getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+        if (DeviceUtils.isZte()) {
+            if (dcim.exists()) {
+                VCamera.setVideoCachePath(dcim + "/Lxpaopao/");
+            } else {
+                VCamera.setVideoCachePath(dcim.getPath().replace("/sdcard/",
+                        "/sdcard-ext/")
+                        + "/Lxpaopao/");
+            }
+        } else {
+            VCamera.setVideoCachePath(dcim + "/Lxpaopao/");
+        }
+        // 开启log输出,ffmpeg输出到logcat
+        VCamera.setDebugMode(true);
+        // 初始化拍摄SDK，必须
+        VCamera.initialize(this);
+
+        // 解压assert里面的文件
+        startService(new Intent(this, AssertService.class));
+
         // 在使用 SDK 各组间之前初始化 context 信息，传入 ApplicationContext
 //        SDKInitializer.initialize(this);
 
@@ -90,10 +120,10 @@ public class UniversityApplication extends Application {
 //        mLocationClient.registerLocationListener(mMyLocationListener);
 //        mVibrator =(Vibrator)getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
 
-        Config.LOGGING = true;
-        EZOpenSDK.initLib(this, APP_KEY, "");
-        // EZOpenSDK.getInstance().setAccessToken("at.dmtlxyp47nejsckiai1pdwzsdvxmo7jp-8ofxo9vacz-1s48ov1-p3r36v0vj");
-        Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(this));
+//        Config.LOGGING = true;
+//        EZOpenSDK.initLib(this, APP_KEY, "");
+//        // EZOpenSDK.getInstance().setAccessToken("at.dmtlxyp47nejsckiai1pdwzsdvxmo7jp-8ofxo9vacz-1s48ov1-p3r36v0vj");
+//        Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(this));
     }
 
 

@@ -216,7 +216,7 @@ public class PublishPicActivity extends BaseActivity implements View.OnClickList
                                     String code1 = jo.getString("code");
                                     if (Integer.parseInt(code1) == 200) {
                                         listpic.add(jo.getString("url"));
-                                        if (listpic.size() == (dataList.size() - tmplist.size() - 1) && listpic.size() > 0) {
+                                        if (listpic.size() == (dataList.size() - tmplist.size()) && listpic.size() > 0) {
                                             publishAll();
                                         }
                                     } else {
@@ -293,6 +293,11 @@ public class PublishPicActivity extends BaseActivity implements View.OnClickList
     //发布
     private void publishMood() {
         final String contentStr = et_sendmessage.getText().toString();
+//        String uri = InternetURL.ADD_RECORD_URL + "?uid=" + getGson().fromJson(getSp().getString("uid", ""), String.class)
+//                +"&type=" +"0"
+//                +"&content=" + contentStr
+//                +"&url="+ ""
+//                ;
         StringRequest request = new StringRequest(
                 Request.Method.POST,
                 InternetURL.ADD_RECORD_URL,
@@ -307,7 +312,6 @@ public class PublishPicActivity extends BaseActivity implements View.OnClickList
                                     Toast.makeText(PublishPicActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
                                     //调用广播，刷新主页
                                     Intent intent1 = new Intent(Constants.SEND_INDEX_SUCCESS);
-//                                    intent1.putExtra("addRecord", data.getData());
                                     sendBroadcast(intent1);
                                     finish();
                                 }
@@ -333,9 +337,9 @@ public class PublishPicActivity extends BaseActivity implements View.OnClickList
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
+                params.put("uid", getGson().fromJson(getSp().getString("uid", ""), String.class));
                 params.put("type", "0");
                 params.put("content", contentStr);
-                params.put("uid", getGson().fromJson(getSp().getString("uid", ""), String.class));
                 params.put("url", "");
                 return params;
             }
@@ -360,6 +364,11 @@ public class PublishPicActivity extends BaseActivity implements View.OnClickList
                 filePath.append(",");
             }
         }
+//        String uri = InternetURL.ADD_RECORD_URL + "?uid=" + getGson().fromJson(getSp().getString("uid", ""), String.class)
+//                +"&type=" +"1"
+//                +"&content=" + contentStr
+//                +"&url="+ String.valueOf(filePath)
+//                ;
         StringRequest request = new StringRequest(
                 Request.Method.POST,
                 InternetURL.ADD_RECORD_URL,
@@ -400,9 +409,9 @@ public class PublishPicActivity extends BaseActivity implements View.OnClickList
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
+                params.put("uid",getGson().fromJson(getSp().getString("uid", ""), String.class));
                 params.put("type", "1");
                 params.put("content", contentStr);
-                params.put("uid", getGson().fromJson(getSp().getString("uid", ""), String.class));
                 params.put("url", String.valueOf(filePath));
                 return params;
             }

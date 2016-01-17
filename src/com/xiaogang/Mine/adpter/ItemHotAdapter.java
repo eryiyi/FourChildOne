@@ -13,12 +13,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.UniversityApplication;
-import com.xiaogang.Mine.base.InternetURL;
-import com.xiaogang.Mine.mobule.GoodsHot;
 import com.xiaogang.Mine.mobule.ProducteObj;
-import com.xiaogang.Mine.util.StringUtil;
 
-import java.text.DecimalFormat;
 import java.util.List;
 
 /**

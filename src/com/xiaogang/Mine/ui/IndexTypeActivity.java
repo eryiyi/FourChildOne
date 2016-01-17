@@ -269,7 +269,7 @@ public class IndexTypeActivity extends BaseActivity implements View.OnClickListe
     private void getBigType() {
         StringRequest request = new StringRequest(
                 Request.Method.GET,
-                InternetURL.GET_TYPE_URL,
+                InternetURL.GET_TYPE_URL +"?access_token=" + getGson().fromJson(getSp().getString("access_token", ""), String.class),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {

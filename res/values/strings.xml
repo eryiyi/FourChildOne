@@ -403,5 +403,8 @@
     <string name="shangweizhuce">您尚未注册</string>
     <string name="xitongcuowu">系统错误</string>
 
+    <string name="file_is_error">"文件为空"</string>
+
+    <string name="video_error">"请先录制视频"</string>
 
 </resources>

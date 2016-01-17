@@ -29,12 +29,15 @@ import com.xiaogang.Mine.base.BaseFragment;
 import com.xiaogang.Mine.base.InternetURL;
 import com.xiaogang.Mine.data.RecordObjData;
 import com.xiaogang.Mine.mobule.RecordObj;
+import com.xiaogang.Mine.mobule.VideoPlayer;
 import com.xiaogang.Mine.ui.PublishPicActivity;
+import com.xiaogang.Mine.ui.VideoPlayerActivity2;
 import com.xiaogang.Mine.util.Constants;
 import com.xiaogang.Mine.util.StringUtil;
 import com.xiaogang.Mine.widget.ContentListView;
 import com.xiaogang.Mine.widget.CustomProgressDialog;
 import com.xiaogang.Mine.widget.SelectPhoPopWindow;
+import com.yixia.camera.demo.ui.record.MediaRecorderActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -108,6 +111,7 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
     private void loadData(final int currentid) {
         String uri = InternetURL.LIST_RECORD_URL
                 + "?uid="+ getGson().fromJson(getSp().getString("uid", ""), String.class)
+//                + "?uid="+ "113"
                 +"&pageIndex="+pageIndex+"&pageSize=20";
         StringRequest request = new StringRequest(
                 Request.Method.GET,
@@ -251,6 +255,10 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
                 case R.id.video:
                 {
                     //视频
+                    save(Constants.PK_ADD_VIDEO_TYPE, "0");
+                    Intent intent = new Intent(getActivity(), MediaRecorderActivity.class);
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
                 }
                     break;
                 case R.id.wenzi:
@@ -294,6 +302,17 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
                 break;
             case 3:
                 //评论
+                break;
+            case 5:
+                //视频点击
+            {
+                String videoUrl = videosObj.getUrl();
+                Intent intent = new Intent(getActivity(), VideoPlayerActivity2.class);
+                VideoPlayer video = new VideoPlayer(videoUrl);
+                intent.putExtra(Constants.EXTRA_LAYOUT, "0");
+                intent.putExtra(VideoPlayer.class.getName(), video);
+                startActivity(intent);
+            }
                 break;
         }
     }

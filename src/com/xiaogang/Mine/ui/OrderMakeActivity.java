@@ -24,6 +24,7 @@ import com.xiaogang.Mine.base.InternetURL;
 import com.xiaogang.Mine.dao.DBHelper;
 import com.xiaogang.Mine.dao.ShoppingCart;
 import com.xiaogang.Mine.data.OrderDATA;
+import com.xiaogang.Mine.data.ShoppingAddressDATA;
 import com.xiaogang.Mine.mobule.AddressObj;
 import com.xiaogang.Mine.mobule.Order;
 import com.xiaogang.Mine.mobule.OrdersForm;
@@ -199,6 +200,13 @@ public class OrderMakeActivity extends BaseActivity implements View.OnClickListe
     public void back(View view){
         finish();
     }
+
+
+    private String product_ids;
+    private String prices;
+    private String numbers;
+    private String total;
+
     @Override
     public void onClick(View view) {
         switch (view.getId())
@@ -233,13 +241,17 @@ public class OrderMakeActivity extends BaseActivity implements View.OnClickListe
 
                 if(lists != null){
                     for(ShoppingCart shoppingCart:lists){
-                        listOrders.put(shoppingCart.getGoods_id(), shoppingCart.getGoods_count());
+                        product_ids  +=shoppingCart.getGoods_id() +",";
+                        prices  +=shoppingCart.getSell_price() +",";
+                        numbers  +=shoppingCart.getGoods_count() +",";
+
+//                        listOrders.put(shoppingCart.getGoods_id(), shoppingCart.getGoods_count());
                     }
                 }
                 order_sure.setClickable(false);
 //                pay();//调用支付接口
-                SGform.setList(listOrders);
-                if(listOrders!=null && listOrders.size() > 0){
+//                SGform.setList(listOrders);
+                if(product_ids!=null && !StringUtil.isNullOrEmpty(product_ids) && !",".equals(product_ids)){
                     setOrder();
                 }
                 break;
@@ -328,68 +340,69 @@ public class OrderMakeActivity extends BaseActivity implements View.OnClickListe
 
     void getAddress(){
         //获得默认收货地址
-//        StringRequest request = new StringRequest(
-//                Request.Method.POST,
-//                InternetURL.ADDRESS_DEFAULT_COUNTRY,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String s) {
-//                        if (StringUtil.isJson(s)) {
-//                            try {
-//                                JSONObject jo = new JSONObject(s);
-//                                String code1 =  jo.getString("code");
-//                                if(Integer.parseInt(code1) == 1){
-//                                    ShoppingAddressDATA data = getGson().fromJson(s, ShoppingAddressDATA.class);
-//                                    if (data.getCode() == 1) {
-//                                        if(data.getData()!=null && data.getData().size()>0){
-//                                            goodsAddress = data.getData().get(0);
-//                                            initAddress();
-//                                            if(goodsAddress != null && !StringUtil.isNullOrEmpty(goodsAddress.getAccept_name())){
-//                                                no_address.setVisibility(View.GONE);
-//                                            }else {
-//                                                no_address.setVisibility(View.VISIBLE);
-//                                            }
-//
-//                                        }
-//                                    } else {
-//                                        Toast.makeText(OrderMakeActivity.this, data.getMsg(), Toast.LENGTH_SHORT).show();
-//                                    }
-//                                }
-//                            }catch (Exception e){
-//                                e.printStackTrace();
-//                            }
-//
-//                        } else {
-//                            Toast.makeText(OrderMakeActivity.this, R.string.get_data_error, Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError volleyError) {
-//                        Toast.makeText(OrderMakeActivity.this, R.string.get_data_error, Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//        ) {
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                Map<String, String> params = new HashMap<String, String>();
-//                params.put("uid", getGson().fromJson(getSp().getString("uid", ""), String.class));
-//                return params;
-//            }
-//
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                Map<String, String> params = new HashMap<String, String>();
-//                params.put("Content-Type", "application/x-www-form-urlencoded");
-//                return params;
-//            }
-//        };
-//        getRequestQueue().add(request);
+        String uri = InternetURL.ADDRESS_LIST_URL +"?access_token="+  getGson().fromJson(getSp().getString("access_token", ""), String.class);
+        StringRequest request = new StringRequest(
+                Request.Method.GET,
+                uri,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        if (StringUtil.isJson(s)) {
+                            try {
+                                JSONObject jo = new JSONObject(s);
+                                String code1 =  jo.getString("code");
+                                if(Integer.parseInt(code1) == 200){
+                                    ShoppingAddressDATA data = getGson().fromJson(s, ShoppingAddressDATA.class);
+                                    if(data != null && data.getData() != null){
+                                        List<AddressObj> list = data.getData();
+                                        if(list != null && list.size()>0){
+                                            goodsAddress = list.get(0);
+                                            initAddress();
+                                        }
+                                    }
+                                }
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+
+
+                        } else {
+                            Toast.makeText(OrderMakeActivity.this, R.string.get_data_error, Toast.LENGTH_SHORT).show();
+                        }
+                        if (progressDialog != null) {
+                            progressDialog.dismiss();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        if (progressDialog != null) {
+                            progressDialog.dismiss();
+                        }
+                        Toast.makeText(OrderMakeActivity.this, R.string.get_data_error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+        getRequestQueue().add(request);
     }
 
     //实例化收货地址
     void initAddress(){
+        no_address.setVisibility(View.GONE);
         order_nickname.setText(goodsAddress.getContact_name()==null?"":goodsAddress.getContact_name());
         order_phone.setText(goodsAddress.getContact_mobile()==null?"":goodsAddress.getContact_mobile());
         order_address.setText((goodsAddress.getAddress()==null?"":goodsAddress.getAddress()));
@@ -423,9 +436,23 @@ public class OrderMakeActivity extends BaseActivity implements View.OnClickListe
 
     //生成订单
     void setOrder(){
+        Double doublePrices = 0.0;
+        for(int i=0; i<lists.size() ;i++){
+            ShoppingCart shoppingCart = lists.get(i);
+            if(shoppingCart.getIs_select() .equals("0")){
+                //默认是选中的
+                doublePrices = doublePrices + Double.parseDouble(shoppingCart.getSell_price()) * Double.parseDouble(shoppingCart.getGoods_count());
+            }
+        }
         StringRequest request = new StringRequest(
-                Request.Method.POST,
-                InternetURL.SET_ORDER_URL,
+                Request.Method.GET,
+                InternetURL.SET_ORDER_URL +"?access_token" + getGson().fromJson(getSp().getString("access_token", ""), String.class)
+                +"&uid=" +  getGson().fromJson(getSp().getString("uid", ""), String.class)
+                +"&product_ids=" + product_ids
+                +"&prices=" + prices
+                +"&numbers=" +numbers
+                +"&total=" +doublePrices.toString()
+                ,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
@@ -433,20 +460,20 @@ public class OrderMakeActivity extends BaseActivity implements View.OnClickListe
                             try {
                                 JSONObject jo = new JSONObject(s);
                                 String code1 =  jo.getString("code");
-                                if(Integer.parseInt(code1) == 1){
-                                    OrderDATA data = getGson().fromJson(s, OrderDATA.class);
-                                        //清空购物车
-                                        DBHelper.getInstance(OrderMakeActivity.this).removeAll();
-                                        Intent intentSend = new Intent("cart_success");
-                                        OrderMakeActivity.this.sendBroadcast(intentSend);
-                                        //如果是在线支付，去支付
-                                        if("11".equals(pay_method)){
-                                            pay(data.getData());
-                                        }else {
-                                            Toast.makeText(OrderMakeActivity.this, "生成订单成功",
-                                                    Toast.LENGTH_SHORT).show();
-                                            finish();
-                                        }
+                                if(Integer.parseInt(code1) == 200){
+//                                    OrderDATA data = getGson().fromJson(s, OrderDATA.class);
+//                                        //清空购物车
+//                                        DBHelper.getInstance(OrderMakeActivity.this).removeAll();
+//                                        Intent intentSend = new Intent("cart_success");
+//                                        OrderMakeActivity.this.sendBroadcast(intentSend);
+//                                        //如果是在线支付，去支付
+//                                        if("11".equals(pay_method)){
+//                                            pay(data.getData());
+//                                        }else {
+//                                            Toast.makeText(OrderMakeActivity.this, "生成订单成功",
+//                                                    Toast.LENGTH_SHORT).show();
+//                                            finish();
+//                                        }
 //                                        Intent intent = new Intent(OrderMakeActivity.this, OrderSuccessActivity.class);
 //                                        intent.putExtra("order",data.getData());
 //                                        startActivity(intent);
@@ -473,7 +500,10 @@ public class OrderMakeActivity extends BaseActivity implements View.OnClickListe
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
+                params.put("access_token", getGson().fromJson(getSp().getString("access_token", ""), String.class));
                 params.put("uid", getGson().fromJson(getSp().getString("uid", ""), String.class));
+
+
                 params.put("jsonStr", new Gson().toJson(listOrders));
                 params.put("pay_method", pay_method);
                 params.put("invoice", (invoice==null?"":invoice));
