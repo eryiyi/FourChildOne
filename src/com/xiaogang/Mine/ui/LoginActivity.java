@@ -93,11 +93,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     showMsg(LoginActivity.this, "请输入密码");
                     return;
                 }
-//                progressDialog = new CustomProgressDialog(LoginActivity.this , "正在加载中", R.anim.frame_paopao);
-//                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-//                progressDialog.setCancelable(false);
-//                progressDialog.setIndeterminate(true);
-//                progressDialog.show();
                 progressShow = true;
                 pd = new ProgressDialog(LoginActivity.this);
                 pd.setCanceledOnTouchOutside(false);
@@ -150,7 +145,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                     EmpData data = getGson().fromJson(s, EmpData.class);
                                     emp = data.getData();
                                     saveAccount(data.getData());
-                                    getAccessToken();
+//                                    Intent main = new Intent(LoginActivity.this, MainActivity.class);
+//                                    startActivity(main);
+                                    login(emp.getUser_name(), emp.getPassword());
+//                                    getAccessToken();
                                 }
                                 else{
                                     Toast.makeText(LoginActivity.this, jo.getString("msg"), Toast.LENGTH_SHORT).show();
@@ -192,6 +190,29 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     public void saveAccount(Emp emp) {
         // 登陆成功，保存用户名密码
+        save("access_token", emp.getAccess_token());
+        save("qq_openid", emp.getQq_openid());
+        save("weixin_openid", emp.getWeixin_openid());
+        save("birthday", emp.getBirthday());
+        save("sex", emp.getSex());
+        save("remark", emp.getRemark());
+        save("student_name", emp.getStudent_name());
+        save("open", emp.getOpen());
+        save("create_time", emp.getCreate_time());
+        save("is_logined", emp.getIs_logined());
+        save("token", emp.getToken());
+        save("scode", emp.getScode());
+        save("group_id", emp.getGroup_id());
+        save("dept", emp.getDept());
+        save("m_cover", emp.getM_cover());
+        save("f_cover", emp.getF_cover());
+        save("school_id", emp.getSchool_id());
+        save("class_id", emp.getClass_id());
+        save("rule1_name", emp.getRule1_name());
+        save("rule2_name", emp.getRule2_name());
+        save("age", emp.getAge());
+        save("email", emp.getEmail());
+        save("user_name", emp.getUser_name());
         save("uid", emp.getUid());
         save("mobile", emp.getMobile());
         save("address", emp.getAddress());
@@ -202,6 +223,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         save("lng", emp.getLng());
         save("lat", emp.getLat());
         save("password", password.getText().toString());
+        save("password_hx", emp.getPassword());
     }
 
     void getAccessToken(){

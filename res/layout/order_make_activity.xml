@@ -67,7 +67,7 @@
 
             <TextView android:layout_width="wrap_content"
                       android:layout_centerInParent="true"
-                      android:text="暂无收货地址"
+                      android:text="点此选择收货地址"
                       android:padding="8dp"
                       android:id="@+id/no_address"
                       android:textColor="@color/black"

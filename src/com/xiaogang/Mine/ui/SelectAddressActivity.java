@@ -18,7 +18,8 @@ import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.adpter.ItemMineAddressAdapter;
 import com.xiaogang.Mine.base.BaseActivity;
 import com.xiaogang.Mine.base.InternetURL;
-import com.xiaogang.Mine.mobule.ShoppingAddress;
+import com.xiaogang.Mine.data.ShoppingAddressDATA;
+import com.xiaogang.Mine.mobule.AddressObj;
 import com.xiaogang.Mine.util.StringUtil;
 import org.json.JSONObject;
 
@@ -36,7 +37,7 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
     private TextView no_goods;
     private ListView lstv;
     private ItemMineAddressAdapter adapter;
-    private List<ShoppingAddress> lists  = new ArrayList<ShoppingAddress>();
+    private List<AddressObj> lists  = new ArrayList<AddressObj>();
     private TextView add;
     private ProgressDialog progressDialog;
     private String address_id;
@@ -70,7 +71,7 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
         lstv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                ShoppingAddress goodsAddress = lists.get(i);
+                AddressObj goodsAddress = lists.get(i);
                 Intent intent = new Intent(SelectAddressActivity.this, OrderMakeActivity.class);
                 intent.putExtra("select_address", goodsAddress);
                 setResult(RESULT_OK,intent);
@@ -94,71 +95,68 @@ public class SelectAddressActivity extends BaseActivity implements View.OnClickL
     }
     void getData(){
         //获得收货地址列表
-//        StringRequest request = new StringRequest(
-//                Request.Method.POST,
-//                InternetURL.ADDRESS_GET_COUNTRY,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String s) {
-//                        if (StringUtil.isJson(s)) {
-//                            try {
-//                                JSONObject jo = new JSONObject(s);
-//                                String code1 =  jo.getString("code");
-//                                if(Integer.parseInt(code1) == 1){
-//                                    ShoppingAddressDATA data = getGson().fromJson(s, ShoppingAddressDATA.class);
-//                                    if (data.getCode() == 1) {
-//                                        lists.clear();
-//                                        lists.addAll(data.getData());
-//                                        adapter.notifyDataSetChanged();
-//                                        if(lists.size() == 0){
-//                                            no_goods.setVisibility(View.VISIBLE);
-//                                            lstv.setVisibility(View.GONE);
-//                                        }else {
-//                                            no_goods.setVisibility(View.GONE);
-//                                            lstv.setVisibility(View.VISIBLE);
-//                                        }
-//                                    } else {
-//                                        Toast.makeText(SelectAddressActivity.this, data.getMsg(), Toast.LENGTH_SHORT).show();
-//                                    }
-//                                }
-//                            }catch (Exception e){
-//                                e.printStackTrace();
-//                            }
-//
-//
-//                        } else {
-//                            Toast.makeText(SelectAddressActivity.this, R.string.get_data_error, Toast.LENGTH_SHORT).show();
-//                        }
-//                        if (progressDialog != null) {
-//                            progressDialog.dismiss();
-//                        }
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError volleyError) {
-//                        if (progressDialog != null) {
-//                            progressDialog.dismiss();
-//                        }
-//                        Toast.makeText(SelectAddressActivity.this, R.string.get_data_error, Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//        ) {
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                Map<String, String> params = new HashMap<String, String>();
-//                params.put("uid", getGson().fromJson(getSp().getString("uid", ""), String.class));
-//                return params;
-//            }
-//
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                Map<String, String> params = new HashMap<String, String>();
-//                params.put("Content-Type", "application/x-www-form-urlencoded");
-//                return params;
-//            }
-//        };
-//        getRequestQueue().add(request);
+        String uri = InternetURL.ADDRESS_LIST_URL +"?access_token="+  getGson().fromJson(getSp().getString("access_token", ""), String.class);
+        StringRequest request = new StringRequest(
+                Request.Method.GET,
+                uri,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        if (StringUtil.isJson(s)) {
+                            try {
+                                JSONObject jo = new JSONObject(s);
+                                String code1 =  jo.getString("code");
+                                if(Integer.parseInt(code1) == 200){
+                                    ShoppingAddressDATA data = getGson().fromJson(s, ShoppingAddressDATA.class);
+                                    lists.clear();
+                                    lists.addAll(data.getData());
+                                    adapter.notifyDataSetChanged();
+                                    if(lists.size() == 0){
+                                        no_goods.setVisibility(View.VISIBLE);
+                                        lstv.setVisibility(View.GONE);
+                                    }else {
+                                        no_goods.setVisibility(View.GONE);
+                                        lstv.setVisibility(View.VISIBLE);
+                                    }
+                                }
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+
+
+                        } else {
+                            Toast.makeText(SelectAddressActivity.this, R.string.get_data_error, Toast.LENGTH_SHORT).show();
+                        }
+                        if (progressDialog != null) {
+                            progressDialog.dismiss();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        if (progressDialog != null) {
+                            progressDialog.dismiss();
+                        }
+                        Toast.makeText(SelectAddressActivity.this, R.string.get_data_error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("uid", getGson().fromJson(getSp().getString("uid", ""), String.class));
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+        getRequestQueue().add(request);
     }
 
 

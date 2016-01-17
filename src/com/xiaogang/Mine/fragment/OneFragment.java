@@ -82,11 +82,7 @@ public class OneFragment extends BaseFragment implements View.OnClickListener ,O
         view = inflater.inflate(R.layout.one_fragment, null);
         res = getActivity().getResources();
         initView(view);
-        progressDialog = new CustomProgressDialog(getActivity() , "正在加载", R.anim.frame_paopao);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressDialog.setCancelable(false);
-        progressDialog.setIndeterminate(true);
-        progressDialog.show();
+
         getAd();
         return view;
     }
@@ -94,7 +90,8 @@ public class OneFragment extends BaseFragment implements View.OnClickListener ,O
     private void initView(View view) {
         view.findViewById(R.id.index_type_liner_one).setOnClickListener(this);
         view.findViewById(R.id.index_type_liner_two).setOnClickListener(this);
-        view.findViewById(R.id.index_type_liner_three).setOnClickListener(this);
+        RelativeLayout index_type_liner_three = (RelativeLayout) view.findViewById(R.id.index_type_liner_three);
+        index_type_liner_three.setOnClickListener(this);
         view.findViewById(R.id.index_type_liner_four).setOnClickListener(this);
         view.findViewById(R.id.text_three_oo).setOnClickListener(this);
         view.findViewById(R.id.text_three_ooo).setOnClickListener(this);

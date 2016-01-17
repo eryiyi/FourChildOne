@@ -22,6 +22,8 @@ import com.xiaogang.Mine.UniversityApplication;
 import com.xiaogang.Mine.base.ActivityTack;
 import com.xiaogang.Mine.base.BaseActivity;
 import com.xiaogang.Mine.base.InternetURL;
+import com.xiaogang.Mine.data.EmpData;
+import com.xiaogang.Mine.mobule.Emp;
 import com.xiaogang.Mine.util.StringUtil;
 import com.xiaogang.Mine.widget.CustomProgressDialog;
 import org.json.JSONException;
@@ -75,11 +77,7 @@ public class RegActivity extends BaseActivity implements View.OnClickListener {
                     showMsg(RegActivity.this, "请输入验证码");
                     return;
                 }
-                progressDialog = new CustomProgressDialog(RegActivity.this , "正在加载中", R.anim.frame_paopao);
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                progressDialog.setCancelable(false);
-                progressDialog.setIndeterminate(true);
-                progressDialog.show();
+
                 reg();
                 break;
             case R.id.btnCard:
@@ -90,12 +88,6 @@ public class RegActivity extends BaseActivity implements View.OnClickListener {
                 btnCard.setClickable(false);//不可点击
                 MyTimer myTimer = new MyTimer(60000,1000);
                 myTimer.start();
-
-                progressDialog = new CustomProgressDialog(RegActivity.this , "正在加载中", R.anim.frame_paopao);
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                progressDialog.setCancelable(false);
-                progressDialog.setIndeterminate(true);
-                progressDialog.show();
 
                 getCard();
 
@@ -184,7 +176,6 @@ public class RegActivity extends BaseActivity implements View.OnClickListener {
                         +"?user_name="+mobile.getText().toString()
                         +"&password="+password.getText().toString()
                         +"&code="+card.getText().toString()
-                        +"&hx_id="+hx_id
                 ,
                 new Response.Listener<String>() {
                     @Override
@@ -194,9 +185,11 @@ public class RegActivity extends BaseActivity implements View.OnClickListener {
                                 JSONObject jo = new JSONObject(s);
                                 String code =  jo.getString("code");
                                 if(Integer.parseInt(code) == 200) {
-                                    Toast.makeText(RegActivity.this, jo.getString("msg") , Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(RegActivity.this, "注册成功" , Toast.LENGTH_SHORT).show();
+                                    EmpData data = getGson().fromJson(s, EmpData.class);
+                                    saveAccount(data.getData());
                                     //huanxin
-                                    register(hx_id);
+//                                    register(hx_id);
                                     ActivityTack.getInstanse().popUntilActivity(LoginActivity.class);
                                 }else {
                                     Toast.makeText(RegActivity.this, jo.getString("msg") , Toast.LENGTH_SHORT).show();
@@ -236,6 +229,22 @@ public class RegActivity extends BaseActivity implements View.OnClickListener {
             }
         };
         getRequestQueue().add(request);
+    }
+
+
+    public void saveAccount(Emp emp) {
+        // 登陆成功，保存用户名密码
+        save("uid", emp.getUid());
+        save("mobile", emp.getMobile());
+        save("address", emp.getAddress());
+        save("nick_name", emp.getNick_name());
+        save("cover", emp.getCover());
+        save("reg_time", emp.getReg_time());
+        save("hx_id", emp.getHx_id());
+        save("lng", emp.getLng());
+        save("lat", emp.getLat());
+        save("password", password.getText().toString());
+        save("password_hx", emp.getPassword());
     }
 
     /**

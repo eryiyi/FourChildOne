@@ -52,7 +52,14 @@ public class InternetURL {
     public static final String ADD_FAVOUR_RECORD_URL = INTERNAL + "json.php/member.api-myfollow";
     //朋友圈评论
     public static final String ADD_COMMENT_RECORD_URL = INTERNAL + "index/ServiceJson/tocomment";
+    //查询好友
     public static final String FIND_MEMBER_URL = INTERNAL + "json.php/friends.api-searchByName";
+    //收藏产品
+    public static final String FAVOUR_LOVE_URL = INTERNAL + "json.php/product.api-love";
+    //.添加或修改收获地址
+    public static final String ADDRESS_ADD_UPDATE_URL = INTERNAL + "json.php/member.api-addAddress";
+    //收获地址列表
+    public static final String ADDRESS_LIST_URL = INTERNAL + "json.php/member.api-addresses";
     //
 //    public static final String ADD_COMMENT_RECORD_URL = INTERNAL + "index/ServiceJson/tocomment";
 

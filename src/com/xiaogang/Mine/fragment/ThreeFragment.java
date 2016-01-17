@@ -68,11 +68,7 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.three_fragment, null);
         initView(view);
-        progressDialog = new CustomProgressDialog(getActivity() , "正在加载", R.anim.frame_paopao);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressDialog.setCancelable(false);
-        progressDialog.setIndeterminate(true);
-        progressDialog.show();
+
         loadData(ContentListView.REFRESH);
         return view;
     }

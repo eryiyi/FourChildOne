@@ -139,11 +139,7 @@ public class PublishPicActivity extends BaseActivity implements View.OnClickList
                         return;
                     }
                 }
-                progressDialog = new CustomProgressDialog(PublishPicActivity.this , "正在加载", R.anim.frame_paopao);
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                progressDialog.setCancelable(false);
-                progressDialog.setIndeterminate(true);
-                progressDialog.show();
+
                 //检查有没有选择图片
                 if (dataList.size() == 0) {
                     publishMood();
@@ -219,7 +215,6 @@ public class PublishPicActivity extends BaseActivity implements View.OnClickList
                                     JSONObject jo = new JSONObject(s);
                                     String code1 = jo.getString("code");
                                     if (Integer.parseInt(code1) == 200) {
-
                                         listpic.add(jo.getString("url"));
                                         if (listpic.size() == (dataList.size() - tmplist.size() - 1) && listpic.size() > 0) {
                                             publishAll();
@@ -309,7 +304,7 @@ public class PublishPicActivity extends BaseActivity implements View.OnClickList
                                 JSONObject jo = new JSONObject(s);
                                 String code =  jo.getString("code");
                                 if(Integer.parseInt(code) == 200){
-                                    Toast.makeText(PublishPicActivity.this, jo.getString("msg"), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(PublishPicActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
                                     //调用广播，刷新主页
                                     Intent intent1 = new Intent(Constants.SEND_INDEX_SUCCESS);
 //                                    intent1.putExtra("addRecord", data.getData());
@@ -376,7 +371,7 @@ public class PublishPicActivity extends BaseActivity implements View.OnClickList
                                 JSONObject jo = new JSONObject(s);
                                 String code =  jo.getString("code");
                                 if(Integer.parseInt(code) == 200){
-                                    Toast.makeText(PublishPicActivity.this, jo.getString("msg"), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(PublishPicActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
                                     //调用广播，刷新主页
                                     Intent intent1 = new Intent(Constants.SEND_INDEX_SUCCESS);
 //                                    intent1.putExtra("addRecord", data.getData());

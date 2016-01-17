@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.xiaogang.Mine.R;
-import com.xiaogang.Mine.mobule.ShoppingAddress;
+import com.xiaogang.Mine.mobule.AddressObj;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class ItemMineAddressAdapter extends BaseAdapter {
     private ViewHolder holder;
-    private List<ShoppingAddress> lists;
+    private List<AddressObj> lists;
     private Context mContext;
     Resources res;
 
@@ -36,7 +36,7 @@ public class ItemMineAddressAdapter extends BaseAdapter {
         this.onClickContentItemListener = onClickContentItemListener;
     }
 
-    public ItemMineAddressAdapter(List<ShoppingAddress> lists, Context mContext) {
+    public ItemMineAddressAdapter(List<AddressObj> lists, Context mContext) {
         this.lists = lists;
         this.mContext = mContext;
         res = mContext.getResources();
@@ -73,18 +73,18 @@ public class ItemMineAddressAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        final ShoppingAddress favour = lists.get(position);
+        final AddressObj favour = lists.get(position);
         if (favour != null) {
-            holder.item_nickname.setText(favour.getAccept_name());
-            holder.item_tel.setText(favour.getMobile());
-            holder.item_zip.setText(res.getString(R.string.zip) + favour.getZip() +res.getString(R.string.phone) + favour.getTelephone());
-            holder.item_address.setText(favour.getProvince_name()+favour.getCity_name() +favour.getArea_name()+ favour.getAddress());
-            if (favour.getIs_default_address().equals("0")){
+            holder.item_nickname.setText(favour.getContact_name());
+            holder.item_tel.setText(favour.getContact_mobile());
+            holder.item_zip.setText("");
+            holder.item_address.setText(favour.getAddress());
+//            if (favour.getIs_default_address().equals("0")){
                 //不是默认的，隐藏掉默认标签
-               holder.item_moren.setVisibility(View.GONE);
-            }else{
-                holder.item_moren.setVisibility(View.VISIBLE);
-            }
+//               holder.item_moren.setVisibility(View.GONE);
+//            }else{
+//                holder.item_moren.setVisibility(View.VISIBLE);
+//            }
 
         }
 

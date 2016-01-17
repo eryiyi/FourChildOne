@@ -69,11 +69,7 @@ public class ForgetActivity extends BaseActivity implements View.OnClickListener
                     showMsg(ForgetActivity.this, "请输入验证码");
                     return;
                 }
-                progressDialog = new CustomProgressDialog(ForgetActivity.this , "正在加载中", R.anim.frame_paopao);
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                progressDialog.setCancelable(false);
-                progressDialog.setIndeterminate(true);
-                progressDialog.show();
+
                 reset();
                 break;
             case R.id.btnCard:
@@ -84,13 +80,6 @@ public class ForgetActivity extends BaseActivity implements View.OnClickListener
                 btnCard.setClickable(false);//不可点击
                 MyTimer myTimer = new MyTimer(60000,1000);
                 myTimer.start();
-
-                progressDialog = new CustomProgressDialog(ForgetActivity.this , "正在加载中", R.anim.frame_paopao);
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                progressDialog.setCancelable(false);
-                progressDialog.setIndeterminate(true);
-                progressDialog.show();
-
                 getCard();
 
                 break;

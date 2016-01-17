@@ -88,11 +88,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
         initView();
 
         switchFragment(R.id.foot_one);
-        progressDialog = new CustomProgressDialog(MainActivity.this , "正在加载中", R.anim.frame_paopao);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressDialog.setCancelable(false);
-        progressDialog.setIndeterminate(true);
-        progressDialog.show();
+
         getMember();
 
     }

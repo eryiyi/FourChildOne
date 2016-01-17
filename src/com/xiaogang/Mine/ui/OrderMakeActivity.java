@@ -24,9 +24,9 @@ import com.xiaogang.Mine.base.InternetURL;
 import com.xiaogang.Mine.dao.DBHelper;
 import com.xiaogang.Mine.dao.ShoppingCart;
 import com.xiaogang.Mine.data.OrderDATA;
+import com.xiaogang.Mine.mobule.AddressObj;
 import com.xiaogang.Mine.mobule.Order;
 import com.xiaogang.Mine.mobule.OrdersForm;
-import com.xiaogang.Mine.mobule.ShoppingAddress;
 import com.xiaogang.Mine.pay.PayResult;
 import com.xiaogang.Mine.pay.SignUtils;
 import com.xiaogang.Mine.util.StringUtil;
@@ -65,7 +65,7 @@ public class OrderMakeActivity extends BaseActivity implements View.OnClickListe
     private ListView lstv;
     private ShoppingCart shoppingCart;
 
-    private ShoppingAddress goodsAddress;
+    private AddressObj goodsAddress;
 
     private OrdersForm SGform = new OrdersForm();
 
@@ -222,7 +222,7 @@ public class OrderMakeActivity extends BaseActivity implements View.OnClickListe
                     Toast.makeText(OrderMakeActivity.this, R.string.address_error_three, Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(StringUtil.isNullOrEmpty(goodsAddress.getAccept_name())){
+                if(StringUtil.isNullOrEmpty(goodsAddress.getAddress())){
                     Toast.makeText(OrderMakeActivity.this, R.string.address_error_three, Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -261,7 +261,7 @@ public class OrderMakeActivity extends BaseActivity implements View.OnClickListe
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode){
             case RESULT_OK:
-                goodsAddress = (ShoppingAddress) data.getExtras().get("select_address");
+                goodsAddress = (AddressObj) data.getExtras().get("select_address");
                 if(goodsAddress != null){
                     initAddress();
                 }
@@ -390,10 +390,9 @@ public class OrderMakeActivity extends BaseActivity implements View.OnClickListe
 
     //实例化收货地址
     void initAddress(){
-        order_nickname.setText(goodsAddress.getAccept_name()==null?"":goodsAddress.getAccept_name());
-        order_phone.setText(goodsAddress.getMobile()==null?"":goodsAddress.getMobile());
-        order_address.setText((goodsAddress.getProvince_name()==null?"":goodsAddress.getProvince_name())+(goodsAddress.getCity_name()==null?"":goodsAddress.getCity_name())
-        +(goodsAddress.getArea_name()==null?"":goodsAddress.getArea_name())+(goodsAddress.getAddress()==null?"":goodsAddress.getAddress()));
+        order_nickname.setText(goodsAddress.getContact_name()==null?"":goodsAddress.getContact_name());
+        order_phone.setText(goodsAddress.getContact_mobile()==null?"":goodsAddress.getContact_mobile());
+        order_address.setText((goodsAddress.getAddress()==null?"":goodsAddress.getAddress()));
     }
 
     //广播接收动作
@@ -480,15 +479,15 @@ public class OrderMakeActivity extends BaseActivity implements View.OnClickListe
                 params.put("invoice", (invoice==null?"":invoice));
                 params.put("invoice_title", (invoice_title==null?"":invoice_title));
                 params.put("postscript", (postscript.getText().toString()==null?"":postscript.getText().toString()));
-                params.put("receiver_name", goodsAddress.getAccept_name());
-                params.put("post", (goodsAddress.getZip()==null?"":goodsAddress.getZip()));
-                params.put("telephone", (goodsAddress.getTelephone()==null?"":goodsAddress.getTelephone()));
+                params.put("receiver_name", goodsAddress.getContact_name());
+//                params.put("post", (goodsAddress.getZip()==null?"":goodsAddress.getZip()));
+                params.put("telephone", (goodsAddress.getContact_mobile()==null?"":goodsAddress.getContact_mobile()));
                 params.put("country", "86");
-                params.put("province", goodsAddress.getProvince());
-                params.put("county", goodsAddress.getCity());
-                params.put("area", goodsAddress.getArea());
+//                params.put("province", goodsAddress.getProvince());
+//                params.put("county", goodsAddress.getCity());
+//                params.put("area", goodsAddress.getArea());
                 params.put("address",( goodsAddress.getAddress() ==null?"": goodsAddress.getAddress()));
-                params.put("mobile", (goodsAddress.getMobile()==null?"":goodsAddress.getMobile()));
+//                params.put("mobile", (goodsAddress.getMobile()==null?"":goodsAddress.getMobile()));
                 return params;
             }
 

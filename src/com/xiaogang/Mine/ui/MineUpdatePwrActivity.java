@@ -62,11 +62,7 @@ public class MineUpdatePwrActivity extends BaseActivity implements View.OnClickL
                     showMsg(MineUpdatePwrActivity.this, "两次输入密码不一致");
                     return;
                 }
-                progressDialog = new CustomProgressDialog(MineUpdatePwrActivity.this , "正在加载中", R.anim.frame_paopao);
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                progressDialog.setCancelable(false);
-                progressDialog.setIndeterminate(true);
-                progressDialog.show();
+
                 reset();
                 break;
         }

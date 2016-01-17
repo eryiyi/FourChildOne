@@ -107,6 +107,7 @@
         <activity android:name=".ui.MineAddressActivity" android:windowSoftInputMode="adjustResize"  android:screenOrientation="portrait"/>
         <activity android:name=".ui.MineAddressAddActivity" android:windowSoftInputMode="adjustResize"  android:screenOrientation="portrait"/>
         <activity android:name=".ui.MineAddressUpdateActivity" android:windowSoftInputMode="adjustResize"  android:screenOrientation="portrait"/>
+        <activity android:name=".ui.UpdateProfileActivity" android:windowSoftInputMode="adjustResize"  android:screenOrientation="portrait"/>
         <activity android:name=".MainActivity" android:windowSoftInputMode="adjustResize"/>
 
 
@@ -417,7 +418,7 @@
                 android:name="com.baidu.lbsapi.API_KEY"
                 android:value="3ecea51f560650b1ed8a4b99808f52e8" />
         <!-- 设置环信应用的appkey -->
-        <meta-data android:name="EASEMOB_APPKEY"  android:value="826321978#fourchild" />
+        <meta-data android:name="EASEMOB_APPKEY"  android:value="merlin#merlinxinshiyuan" />
         <!-- 声明sdk所需的service SDK核心功能-->
         <service android:name="com.easemob.chat.EMChatService" />
 

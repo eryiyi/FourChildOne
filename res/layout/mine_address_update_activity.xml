@@ -24,7 +24,7 @@
                   android:layout_height="wrap_content"/>
     </RelativeLayout>
 
-    <com.xg.PropertyApp.widget.ReboundScrollView
+    <com.xiaogang.Mine.widget.ReboundScrollView
             android:layout_width="match_parent"
             android:layout_weight="1"
             android:layout_height="wrap_content">
@@ -82,85 +82,77 @@
                   android:background="@drawable/gray_line"
                   android:layout_height="0.5dp"></View>
 
-            <TextView android:layout_width="80dp"
-                      android:text="电话："
-                      android:layout_marginTop="5dp"
-                      android:layout_below="@+id/view_line_five"
-                      android:textSize="16sp"
-                      android:gravity="center_vertical"
-                      android:id="@+id/text_mobile"
-                      android:textColor="@color/black_text_color"
-                      android:layout_height="40dp"/>
-            <EditText android:layout_width="match_parent"
-                      android:layout_toRightOf="@+id/text_mobile"
-                      android:hint="收货人电话"
-                      android:padding="5dp"
-                      android:layout_marginTop="3dp"
-                      android:layout_below="@+id/view_line_five"
-                      android:id="@+id/add_tel"
-                      android:background="@null"
-                      android:layout_height="40dp"/>
+            <!--<TextView android:layout_width="80dp"-->
+                      <!--android:text="电话："-->
+                      <!--android:layout_marginTop="5dp"-->
+                      <!--android:layout_below="@+id/view_line_five"-->
+                      <!--android:textSize="16sp"-->
+                      <!--android:gravity="center_vertical"-->
+                      <!--android:id="@+id/text_mobile"-->
+                      <!--android:textColor="@color/black_text_color"-->
+                      <!--android:layout_height="40dp"/>-->
+            <!--<EditText android:layout_width="match_parent"-->
+                      <!--android:layout_toRightOf="@+id/text_mobile"-->
+                      <!--android:hint="收货人电话"-->
+                      <!--android:padding="5dp"-->
+                      <!--android:layout_marginTop="3dp"-->
+                      <!--android:layout_below="@+id/view_line_five"-->
+                      <!--android:id="@+id/add_tel"-->
+                      <!--android:background="@null"-->
+                      <!--android:layout_height="40dp"/>-->
 
-            <View android:layout_width="match_parent"
-                  android:layout_marginTop="5dp"
-                  android:id="@+id/view_line_two"
-                  android:visibility="gone"
-                  android:layout_below="@+id/add_tel"
-                  android:background="@drawable/gray_line"
-                  android:layout_height="0.5dp"></View>
+            <!--<TextView android:layout_width="80dp"-->
+                      <!--android:text="所在地区："-->
+                      <!--android:layout_marginTop="5dp"-->
+                      <!--android:layout_below="@+id/view_line_five"-->
+                      <!--android:textSize="16sp"-->
+                      <!--android:gravity="center_vertical"-->
+                      <!--android:id="@+id/text_three"-->
+                      <!--android:textColor="@color/black_text_color"-->
+                      <!--android:layout_height="40dp"/>-->
+            <!--<TextView android:layout_width="match_parent"-->
+                      <!--android:layout_toRightOf="@+id/text_three"-->
+                      <!--android:text="省 市 区"-->
+                      <!--android:padding="5dp"-->
+                      <!--android:gravity="center_vertical"-->
+                      <!--android:layout_marginTop="3dp"-->
+                      <!--android:layout_below="@+id/view_line_five"-->
+                      <!--android:id="@+id/add_address_one"-->
+                      <!--android:background="@null"-->
+                      <!--android:layout_height="40dp"/>-->
+            <!--<View android:layout_width="match_parent"-->
+                  <!--android:layout_marginTop="5dp"-->
+                  <!--android:id="@+id/view_line_six"-->
+                  <!--android:visibility="gone"-->
+                  <!--android:layout_below="@+id/add_address_one"-->
+                  <!--android:background="@drawable/gray_line"-->
+                  <!--android:layout_height="0.5dp"></View>-->
 
-            <TextView android:layout_width="80dp"
-                      android:text="所在地区："
-                      android:layout_marginTop="5dp"
-                      android:layout_below="@+id/view_line_two"
-                      android:textSize="16sp"
-                      android:gravity="center_vertical"
-                      android:id="@+id/text_three"
-                      android:textColor="@color/black_text_color"
-                      android:layout_height="40dp"/>
-            <TextView android:layout_width="match_parent"
-                      android:layout_toRightOf="@+id/text_three"
-                      android:text="省 市 区"
-                      android:padding="5dp"
-                      android:gravity="center_vertical"
-                      android:layout_marginTop="3dp"
-                      android:layout_below="@+id/view_line_two"
-                      android:id="@+id/add_address_one"
-                      android:background="@null"
-                      android:layout_height="40dp"/>
-            <View android:layout_width="match_parent"
-                  android:layout_marginTop="5dp"
-                  android:id="@+id/view_line_six"
-                  android:visibility="gone"
-                  android:layout_below="@+id/add_address_one"
-                  android:background="@drawable/gray_line"
-                  android:layout_height="0.5dp"></View>
-
-            <TextView android:layout_width="80dp"
-                      android:text="邮编："
-                      android:layout_marginTop="5dp"
-                      android:layout_below="@+id/view_line_six"
-                      android:textSize="16sp"
-                      android:gravity="center_vertical"
-                      android:id="@+id/text_six"
-                      android:textColor="@color/black_text_color"
-                      android:layout_height="40dp"/>
-            <EditText android:layout_width="match_parent"
-                      android:layout_toRightOf="@+id/text_six"
-                      android:hint="邮编"
-                      android:padding="5dp"
-                      android:gravity="center_vertical"
-                      android:layout_marginTop="3dp"
-                      android:layout_below="@+id/view_line_six"
-                      android:id="@+id/add_youbian"
-                      android:background="@null"
-                      android:layout_height="40dp"/>
+            <!--<TextView android:layout_width="80dp"-->
+                      <!--android:text="邮编："-->
+                      <!--android:layout_marginTop="5dp"-->
+                      <!--android:layout_below="@+id/view_line_six"-->
+                      <!--android:textSize="16sp"-->
+                      <!--android:gravity="center_vertical"-->
+                      <!--android:id="@+id/text_six"-->
+                      <!--android:textColor="@color/black_text_color"-->
+                      <!--android:layout_height="40dp"/>-->
+            <!--<EditText android:layout_width="match_parent"-->
+                      <!--android:layout_toRightOf="@+id/text_six"-->
+                      <!--android:hint="邮编"-->
+                      <!--android:padding="5dp"-->
+                      <!--android:gravity="center_vertical"-->
+                      <!--android:layout_marginTop="3dp"-->
+                      <!--android:layout_below="@+id/view_line_six"-->
+                      <!--android:id="@+id/add_youbian"-->
+                      <!--android:background="@null"-->
+                      <!--android:layout_height="40dp"/>-->
 
 
             <View android:layout_width="match_parent"
                   android:layout_marginTop="5dp"
                   android:id="@+id/view_line_three"
-                  android:layout_below="@+id/add_youbian"
+                  android:layout_below="@+id/view_line_five"
                   android:background="@drawable/gray_line"
                   android:layout_height="0.5dp"></View>
             <TextView android:layout_width="80dp"
@@ -188,22 +180,22 @@
                   android:background="@drawable/gray_line"
                   android:layout_height="0.5dp"></View>
 
-            <TextView android:layout_width="wrap_content"
-                      android:text="*设置为默认收货地址"
-                      android:textColor="@color/black_text_color"
-                      android:textSize="16sp"
-                      android:layout_marginTop="15dp"
-                      android:layout_below="@+id/view_line_four"
-                      android:layout_height="wrap_content"/>
+            <!--<TextView android:layout_width="wrap_content"-->
+                      <!--android:text="*设置为默认收货地址"-->
+                      <!--android:textColor="@color/black_text_color"-->
+                      <!--android:textSize="16sp"-->
+                      <!--android:layout_marginTop="15dp"-->
+                      <!--android:layout_below="@+id/view_line_four"-->
+                      <!--android:layout_height="wrap_content"/>-->
 
-            <CheckBox android:layout_width="wrap_content"
-                      android:id="@+id/checkbox"
-                      android:layout_below="@+id/view_line_four"
-                      android:layout_alignParentRight="true"
-                      android:layout_height="wrap_content"/>
+            <!--<CheckBox android:layout_width="wrap_content"-->
+                      <!--android:id="@+id/checkbox"-->
+                      <!--android:layout_below="@+id/view_line_four"-->
+                      <!--android:layout_alignParentRight="true"-->
+                      <!--android:layout_height="wrap_content"/>-->
 
         </RelativeLayout>
-    </com.xg.PropertyApp.widget.ReboundScrollView>
+    </com.xiaogang.Mine.widget.ReboundScrollView>
     <LinearLayout android:layout_width="match_parent"
                   android:orientation="horizontal"
                   android:layout_height="wrap_content">

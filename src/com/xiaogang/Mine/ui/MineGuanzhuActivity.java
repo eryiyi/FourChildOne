@@ -87,15 +87,15 @@ public class MineGuanzhuActivity extends BaseActivity implements View.OnClickLis
             }
         });
 
-        if(lists != null && lists.size() > 0){
+//        if(lists != null && lists.size() > 0){
             mine_no_result_img.setVisibility(View.GONE);
             mine_no_result_text.setVisibility(View.GONE);
             lstv.setVisibility(View.VISIBLE);
-        }else {
-            mine_no_result_img.setVisibility(View.VISIBLE);
-            mine_no_result_text.setVisibility(View.VISIBLE);
-            lstv.setVisibility(View.GONE);
-        }
+//        }else {
+//            mine_no_result_img.setVisibility(View.VISIBLE);
+//            mine_no_result_text.setVisibility(View.VISIBLE);
+//            lstv.setVisibility(View.GONE);
+//        }
         initData();
 
     }

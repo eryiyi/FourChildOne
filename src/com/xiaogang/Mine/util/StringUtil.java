@@ -10,6 +10,9 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,6 +38,30 @@ public class StringUtil {
         } catch (JsonParseException e) {
             return false;
         }
+    }
+
+
+    /**
+     *
+     * 方法描述：取得当前日期的上月或下月日期 ,amount=-1为上月日期，amount=1为下月日期；创建人：jya
+     * @return
+     * @throws Exception
+     */
+    public static String getFrontBackStrDate(String strDate, String format, int amount) throws Exception {
+        if (null == strDate) {
+            return null;
+        }
+        try {
+
+            DateFormat fmt = new SimpleDateFormat(format);
+            Calendar c = Calendar.getInstance();
+            c.setTime(fmt.parse(strDate));
+            c.add(Calendar.MONTH, amount);
+            return fmt.format(c.getTime());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public static boolean isNullOrEmpty(String str) {

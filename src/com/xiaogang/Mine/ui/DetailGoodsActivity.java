@@ -15,6 +15,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.xiaogang.Mine.R;
@@ -22,14 +27,20 @@ import com.xiaogang.Mine.adpter.AnimateFirstDisplayListener;
 import com.xiaogang.Mine.adpter.OnClickContentItemListener;
 import com.xiaogang.Mine.adpter.ViewPagerAdapterGoods;
 import com.xiaogang.Mine.base.BaseActivity;
+import com.xiaogang.Mine.base.InternetURL;
 import com.xiaogang.Mine.dao.DBHelper;
 import com.xiaogang.Mine.dao.ShoppingCart;
+import com.xiaogang.Mine.data.MemberObjData;
 import com.xiaogang.Mine.mobule.ProducteObj;
 import com.xiaogang.Mine.util.DateUtil;
 import com.xiaogang.Mine.util.StringUtil;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2015/12/17.
@@ -56,6 +67,8 @@ public class DetailGoodsActivity extends BaseActivity  implements View.OnClickLi
     private TextView address;
     private TextView sumry;
     private TextView number;
+    private ImageView favour_img;
+    private String  type = "0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +92,7 @@ public class DetailGoodsActivity extends BaseActivity  implements View.OnClickLi
     }
 
     void initView(){
+        favour_img = (ImageView) this.findViewById(R.id.favour_img);
         price = (TextView) this.findViewById(R.id.price);
         sell_price = (TextView) this.findViewById(R.id.sell_price);
         price.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG);
@@ -87,6 +101,7 @@ public class DetailGoodsActivity extends BaseActivity  implements View.OnClickLi
         address = (TextView) this.findViewById(R.id.address);
         number = (TextView) this.findViewById(R.id.number);
         this.findViewById(R.id.foot_mine_cart).setOnClickListener(this);
+        this.findViewById(R.id.foot_favour).setOnClickListener(this);
         this.findViewById(R.id.foot_tel).setOnClickListener(this);
     }
 
@@ -103,7 +118,15 @@ public class DetailGoodsActivity extends BaseActivity  implements View.OnClickLi
                 if(!StringUtil.isNullOrEmpty(goodsHot.getTel())){
                     Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + goodsHot.getTel()));
                     startActivity(intent);
+                }else {
+                    showMsg(DetailGoodsActivity.this, "暂无商家电话");
                 }
+            }
+                break;
+            case R.id.foot_favour:
+            {
+                //收藏
+                getfavour();
             }
                 break;
         }
@@ -275,6 +298,67 @@ public class DetailGoodsActivity extends BaseActivity  implements View.OnClickLi
         }else {
             number.setText("0");
         }
+    }
+
+    void getfavour(){
+        StringRequest request = new StringRequest(
+                Request.Method.GET,
+                InternetURL.FAVOUR_LOVE_URL+"?access_token=" + getGson().fromJson(getSp().getString("access_token", ""), String.class)
+                +"&refer_id="+goodsHot.getProduct_id()
+                +"&type=" + type,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        if (StringUtil.isJson(s)) {
+                            try {
+                                JSONObject jo = new JSONObject(s);
+                                String code =  jo.getString("code");
+                                if(Integer.parseInt(code) == 200){
+                                    if(type.equals("0")){
+                                        type = "1";
+                                        favour_img.setImageResource(R.drawable.favour1);
+                                        showMsg(DetailGoodsActivity.this, "收藏成功");
+                                    }else {
+                                        type = "0";
+                                        favour_img.setImageResource(R.drawable.favour);
+                                        showMsg(DetailGoodsActivity.this, "取消收藏成功");
+                                    }
+                                }
+                                else{
+                                    Toast.makeText(DetailGoodsActivity.this, jo.getString("msg"), Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        if (progressDialog != null) {
+                            progressDialog.dismiss();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        if (progressDialog != null) {
+                            progressDialog.dismiss();
+                        }
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+        getRequestQueue().add(request);
     }
 
 }

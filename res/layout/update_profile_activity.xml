@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:id="@+id/main"
+              android:layout_width="match_parent"
+              android:background="@color/gray_two"
+              android:layout_height="match_parent">
+    <RelativeLayout android:layout_width="match_parent"
+                    android:background="@color/red"
+                    android:id="@+id/top_liner"
+                    android:layout_height="@dimen/top">
+        <ImageView android:layout_width="25dp"
+                   android:layout_alignParentLeft="true"
+                   android:layout_centerVertical="true"
+                   android:id="@+id/back"
+                   android:layout_marginLeft="10dp"
+                   android:src="@drawable/back"
+                   android:layout_height="25dp"/>
+        <TextView android:layout_width="wrap_content"
+                  android:text="更新"
+                  android:textColor="@color/white"
+                  android:textSize="18sp"
+                  android:layout_centerInParent="true"
+                  android:layout_height="wrap_content"/>
+    </RelativeLayout>
+    <com.xiaogang.Mine.widget.ReboundScrollView android:layout_width="match_parent"
+                                                android:layout_height="match_parent">
+        <LinearLayout android:layout_width="match_parent"
+                      android:orientation="vertical"
+                      android:focusable="true"
+                      android:focusableInTouchMode="true"
+                      android:layout_height="match_parent">
+            <RelativeLayout android:layout_width="match_parent"
+                            android:background="@color/white"
+                            android:padding="8dp"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:id="@+id/relate_one"
+                            android:layout_marginTop="15dp"
+                            android:layout_height="wrap_content">
+                <ImageView android:layout_width="60dp"
+                           android:scaleType="centerCrop"
+                           android:src="@drawable/head"
+                           android:id="@+id/mine_head"
+                           android:layout_height="60dp"/>
+                <EditText android:layout_width="match_parent"
+                          android:textSize="14sp"
+                          android:hint="昵称"
+                          android:layout_marginLeft="8dp"
+                          android:layout_toRightOf="@+id/mine_head"
+                          android:textColor="@color/red"
+                          android:id="@+id/mine_name"
+                          android:layout_height="wrap_content"/>
+
+                <EditText android:layout_width="match_parent"
+                          android:id="@+id/mine_sign"
+                          android:layout_marginLeft="8dp"
+                          android:layout_below="@+id/mine_name"
+                          android:textColor="@color/red"
+                          android:textSize="13sp"
+                          android:hint="签名"
+                          android:layout_marginTop="2dp"
+                          android:layout_toRightOf="@+id/mine_head"
+                          android:layout_height="wrap_content"/>
+            </RelativeLayout>
+            <RelativeLayout android:layout_width="match_parent"
+                            android:padding="8dp"
+                            android:id="@+id/liner_sex"
+                            android:layout_marginTop="15dp"
+                            android:background="@color/white"
+                            android:layout_height="wrap_content">
+
+                <TextView android:layout_width="wrap_content"
+                          android:textColor="@color/textColor"
+                          android:text="性别"
+                          android:layout_centerVertical="true"
+                          android:layout_marginLeft="8dp"
+                          android:layout_gravity="center_vertical"
+                          android:gravity="center_vertical"
+                          android:layout_height="wrap_content"/>
+                <TextView android:layout_width="wrap_content"
+                          android:layout_marginLeft="100dp"
+                          android:text="女"
+                          android:textColor="@color/red"
+                          android:id="@+id/mine_sex"
+                          android:layout_centerVertical="true"
+                          android:layout_gravity="center_vertical"
+                          android:gravity="center_vertical"
+                          android:layout_height="wrap_content"/>
+
+            </RelativeLayout>
+            <RelativeLayout android:layout_width="match_parent"
+                            android:padding="8dp"
+                            android:id="@+id/liner_birth"
+                            android:layout_marginTop="3dp"
+                            android:background="@color/white"
+                            android:layout_height="wrap_content">
+
+                <TextView android:layout_width="wrap_content"
+                          android:textColor="@color/textColor"
+                          android:text="出生年月"
+                          android:layout_centerVertical="true"
+                          android:layout_marginLeft="8dp"
+                          android:layout_gravity="center_vertical"
+                          android:gravity="center_vertical"
+                          android:layout_height="wrap_content"/>
+                <TextView android:layout_width="wrap_content"
+                          android:layout_marginLeft="100dp"
+                          android:text="20160101"
+                          android:textColor="@color/red"
+                          android:id="@+id/mine_birth"
+                          android:layout_centerVertical="true"
+                          android:layout_gravity="center_vertical"
+                          android:gravity="center_vertical"
+                          android:layout_height="wrap_content"/>
+
+            </RelativeLayout>
+            <EditText android:layout_width="match_parent"
+                      android:textSize="14sp"
+                      android:layout_marginTop="8dp"
+                      android:hint="地址"
+                      android:layout_toRightOf="@+id/mine_head"
+                      android:textColor="@color/red"
+                      android:id="@+id/mine_address"
+                      android:layout_height="wrap_content"/>
+            <Button android:layout_width="match_parent"
+                    android:text="保存"
+                    android:textColor="@color/white"
+                    android:padding="15dp"
+                    android:onClick="addSave"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@color/red"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+    </com.xiaogang.Mine.widget.ReboundScrollView>
+
+</LinearLayout>
