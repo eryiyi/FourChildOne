@@ -10,23 +10,34 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.adpter.Pro_type_adapter;
-import com.xiaogang.Mine.mobule.CategoryObj;
-import com.xiaogang.Mine.mobule.GoodsTypeBig;
-import com.xiaogang.Mine.mobule.GoodsTypeSmall;
+import com.xiaogang.Mine.base.BaseFragment;
+import com.xiaogang.Mine.base.InternetURL;
+import com.xiaogang.Mine.data.CategoryObjData;
+import com.xiaogang.Mine.data.ProducteTypeObjData;
+import com.xiaogang.Mine.mobule.*;
+import com.xiaogang.Mine.util.StringUtil;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class Fragment_pro_type extends Fragment {
+public class Fragment_pro_type extends BaseFragment {
 	private ImageView hint_img;
 	private GridView listView;
 	private Pro_type_adapter adapter;
 	private ProgressBar progressBar;
 	private CategoryObj categoryObj;
 	ArrayList<CategoryObj> lists = new ArrayList<>();//这个是所有的类别
-	private List<CategoryObj> toolsList = new ArrayList<CategoryObj>();//这个是小类别
+	private List<ProducteObj> toolsList = new ArrayList<ProducteObj>();//这个是小类别
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -35,15 +46,15 @@ public class Fragment_pro_type extends Fragment {
 		hint_img=(ImageView) view.findViewById(R.id.hint_img);
 		listView = (GridView) view.findViewById(R.id.listView);
 		categoryObj= (CategoryObj) getArguments().getSerializable("goodsTypeBig");
-		lists = (ArrayList<CategoryObj>) getArguments().getSerializable("lists");
-		if(lists != null){
-			for(CategoryObj categoryObj1: lists){
-				//取出所有符合该大类别的分类
-				if(categoryObj1.getUp_id().equals(categoryObj.getType_id())){
-					toolsList.add(categoryObj1);
-				}
-			}
-		}
+//		lists = (ArrayList<ProducteObj>) getArguments().getSerializable("lists");
+//		if(lists != null){
+//			for(CategoryObj categoryObj1: lists){
+//				//取出所有符合该大类别的分类
+//				if(categoryObj1.getUp_id().equals(categoryObj.getType_id())){
+//					toolsList.add(categoryObj1);
+//				}
+//			}
+//		}
 		((TextView)view.findViewById(R.id.toptype)).setText(categoryObj.getType_name());
 		GetTypeList();
 		adapter=new Pro_type_adapter(getActivity(), toolsList);
@@ -58,10 +69,67 @@ public class Fragment_pro_type extends Fragment {
 			}
 		});
 		listView.setSelector(new ColorDrawable(Color.TRANSPARENT));
+
+		getBigType();
 		return view;
 	}
-	
-	
+
+
+	private void getBigType() {
+		StringRequest request = new StringRequest(
+				Request.Method.GET,
+				InternetURL.GET_SHOP_PRODUCT_URL
+						+"?access_token=" + getGson().fromJson(getSp().getString("access_token", ""), String.class)
+						+"&type_id="+categoryObj.getType_id()
+				,
+				new Response.Listener<String>() {
+					@Override
+					public void onResponse(String s) {
+						if (StringUtil.isJson(s)) {
+							try {
+								JSONObject jo = new JSONObject(s);
+								String code1 =  jo.getString("code");
+								if(Integer.parseInt(code1) == 200){
+									ProducteTypeObjData data = getGson().fromJson(s, ProducteTypeObjData.class);
+									List<ProducteTypeObjSmall> producteTypeObjSmalls = data.getData().getProduct_types();
+									toolsList.clear();
+									toolsList.addAll(producteTypeObjSmalls.get(0).getProductes());
+									adapter.notifyDataSetChanged();
+								}else {
+									Toast.makeText(getActivity(), jo.getString("msg"), Toast.LENGTH_SHORT).show();
+								}
+							}catch (Exception e){
+								e.printStackTrace();
+							}
+						} else {
+							Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
+						}
+					}
+				},
+				new Response.ErrorListener() {
+					@Override
+					public void onErrorResponse(VolleyError volleyError) {
+						Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
+					}
+				}
+		) {
+			@Override
+			protected Map<String, String> getParams() throws AuthFailureError {
+				Map<String, String> params = new HashMap<String, String>();
+				return params;
+			}
+
+			@Override
+			public Map<String, String> getHeaders() throws AuthFailureError {
+				Map<String, String> params = new HashMap<String, String>();
+				params.put("Content-Type", "application/x-www-form-urlencoded");
+				return params;
+			}
+		};
+		getRequestQueue().add(request);
+	}
+
+
 	private void GetTypeList() {
 		progressBar.setVisibility(View.GONE);
 	}

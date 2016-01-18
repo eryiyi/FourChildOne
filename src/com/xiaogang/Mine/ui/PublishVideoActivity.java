@@ -3,6 +3,7 @@ package com.xiaogang.Mine.ui;
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -72,6 +73,10 @@ public class PublishVideoActivity extends BaseActivity implements  View.OnClickL
     private ImageView imagePlay;
 
     private EditText face_content;
+    private String id;
+    ProgressDialog pd = null;
+    private boolean progressShow;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,11 +137,18 @@ public class PublishVideoActivity extends BaseActivity implements  View.OnClickL
                     showSelectImageDialog();
                 break;
             case R.id.publish_video_run://发布
-                progressDialog = new CustomProgressDialog(PublishVideoActivity.this , "正在加载", R.anim.frame_paopao);
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                progressDialog.setCancelable(false);
-                progressDialog.setIndeterminate(true);
-                progressDialog.show();
+                progressShow = true;
+                pd = new ProgressDialog(PublishVideoActivity.this);
+                pd.setCanceledOnTouchOutside(false);
+                pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        progressShow = false;
+                    }
+                });
+                pd.setMessage(getString(R.string.please_wait));
+                pd.show();
                 uploadFile();
                 break;
         }
@@ -198,8 +210,8 @@ public class PublishVideoActivity extends BaseActivity implements  View.OnClickL
                                         publishRun(videoUrl);
                                     }
                                 } catch (JSONException e) {
-                                    if (progressDialog != null) {
-                                        progressDialog.dismiss();
+                                    if (pd != null && pd.isShowing()) {
+                                        pd.dismiss();
                                     }
                                     e.printStackTrace();
                                 }
@@ -210,8 +222,8 @@ public class PublishVideoActivity extends BaseActivity implements  View.OnClickL
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
 
-                            if (progressDialog != null) {
-                                progressDialog.dismiss();
+                            if (pd != null && pd.isShowing()) {
+                                pd.dismiss();
                             }
                         }
                     },
@@ -247,16 +259,16 @@ public class PublishVideoActivity extends BaseActivity implements  View.OnClickL
                                 e.printStackTrace();
                             }
                         }
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
+                        if (pd != null && pd.isShowing()) {
+                            pd.dismiss();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
+                        if (pd != null && pd.isShowing()) {
+                            pd.dismiss();
                         }
                         Toast.makeText(PublishVideoActivity.this, "发布视频失败", Toast.LENGTH_SHORT).show();
                     }

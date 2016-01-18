@@ -1,6 +1,7 @@
 package com.xiaogang.Mine.ui;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -40,7 +41,9 @@ public class RegActivity extends BaseActivity implements View.OnClickListener {
     private EditText card;
     private Button btnCard;
     Resources res;
-
+    private String id;
+    ProgressDialog pd = null;
+    private boolean progressShow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +79,18 @@ public class RegActivity extends BaseActivity implements View.OnClickListener {
                     showMsg(RegActivity.this, "请输入验证码");
                     return;
                 }
+                progressShow = true;
+                pd = new ProgressDialog(RegActivity.this);
+                pd.setCanceledOnTouchOutside(false);
+                pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
 
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        progressShow = false;
+                    }
+                });
+                pd.setMessage(getString(R.string.please_wait));
+                pd.show();
                 reg();
                 break;
             case R.id.btnCard:
@@ -88,6 +102,18 @@ public class RegActivity extends BaseActivity implements View.OnClickListener {
                 MyTimer myTimer = new MyTimer(60000,1000);
                 myTimer.start();
 
+                progressShow = true;
+                pd = new ProgressDialog(RegActivity.this);
+                pd.setCanceledOnTouchOutside(false);
+                pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        progressShow = false;
+                    }
+                });
+                pd.setMessage(getString(R.string.please_wait));
+                pd.show();
                 getCard();
 
                 break;
@@ -117,16 +143,16 @@ public class RegActivity extends BaseActivity implements View.OnClickListener {
                         } else {
                             Toast.makeText(RegActivity.this, "获得数据失败", Toast.LENGTH_SHORT).show();
                         }
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
+                        if (pd != null && pd.isShowing()) {
+                            pd.dismiss();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
+                        if (pd != null && pd.isShowing()) {
+                            pd.dismiss();
                         }
                         Toast.makeText(RegActivity.this, R.string.get_cart_error, Toast.LENGTH_SHORT).show();
                     }
@@ -199,16 +225,16 @@ public class RegActivity extends BaseActivity implements View.OnClickListener {
                         } else {
                             Toast.makeText(RegActivity.this, R.string.get_cart_error, Toast.LENGTH_SHORT).show();
                         }
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
+                        if (pd != null && pd.isShowing()) {
+                            pd.dismiss();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
+                        if (pd != null && pd.isShowing()) {
+                            pd.dismiss();
                         }
                         Toast.makeText(RegActivity.this, R.string.get_cart_error, Toast.LENGTH_SHORT).show();
                     }

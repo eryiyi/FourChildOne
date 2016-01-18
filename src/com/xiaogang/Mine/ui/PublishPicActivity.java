@@ -3,6 +3,7 @@ package com.xiaogang.Mine.ui;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -73,6 +74,12 @@ public class PublishPicActivity extends BaseActivity implements View.OnClickList
     private Uri uri;
     public EditText et_sendmessage;
     private SelectPhoTwoPopWindow deleteWindow;
+
+    private String id;
+    ProgressDialog pd = null;
+    private boolean progressShow;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,47 +147,25 @@ public class PublishPicActivity extends BaseActivity implements View.OnClickList
                     }
                 }
 
+                progressShow = true;
+                pd = new ProgressDialog(PublishPicActivity.this);
+                pd.setCanceledOnTouchOutside(false);
+                pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        progressShow = false;
+                    }
+                });
+                pd.setMessage(getString(R.string.please_wait));
+                pd.show();
+
                 //检查有没有选择图片
                 if (dataList.size() == 0) {
                     publishMood();
                     return;
                 } else {
                     sendCover();
-//                    for (int i = 0; i < dataList.size(); i++) {
-//                        //七牛
-//                        Bitmap bm = FileUtils.getSmallBitmap(dataList.get(i));
-//                        final String cameraImagePath = FileUtils.saveBitToSD(bm, System.currentTimeMillis() + ".jpg");
-//                        Map<String,String> map = new HashMap<>();
-//                        map.put("space", "paopao-pic");
-//                        RequestParams params = new RequestParams(map);
-//                        client.get(InternetURL.UPLOAD_TOKEN ,params, new JsonHttpResponseHandler(){
-//                            @Override
-//                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                                super.onSuccess(statusCode, headers, response);
-//                                try {
-//                                    String token = response.getString("data");
-//                                    UploadManager uploadManager = new UploadManager();
-//                                    uploadManager.put(StringUtil.getBytes(cameraImagePath), StringUtil.getUUID(), token,
-//                                            new UpCompletionHandler() {
-//                                                @Override
-//                                                public void complete(String key, ResponseInfo info, JSONObject response) {
-//                                                    //key
-//                                                    uploadPaths.add(key);
-//                                                    if (uploadPaths.size() == dataList.size()) {
-//                                                        publishAll();
-//                                                    }
-//                                                }
-//                                            }, null);
-//                                } catch (JSONException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//                            @Override
-//                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-//                                super.onFailure(statusCode, headers, throwable, errorResponse);
-//                            }
-//                        });
-//                    }
                 }
                 break;
             case R.id.add_pic://打开选择框 ，相机还是相册
@@ -227,8 +212,8 @@ public class PublishPicActivity extends BaseActivity implements View.OnClickList
                                     if (listpic.size() == (dataList.size() - tmplist.size() - 1) && listpic.size() > 0) {
                                         publishAll();
                                     }
-                                    if (progressDialog != null) {
-                                        progressDialog.dismiss();
+                                    if (pd != null && pd.isShowing()) {
+                                        pd.dismiss();
                                     }
                                     e.printStackTrace();
                                 }
@@ -242,11 +227,8 @@ public class PublishPicActivity extends BaseActivity implements View.OnClickList
                             if (listpic.size() == (dataList.size() - tmplist.size()) && listpic.size() > 0) {
                                 publishAll();
                             }
-                            if (progressDialog != null) {
-                                progressDialog.dismiss();
-                            }
-                            if (progressDialog != null) {
-                                progressDialog.dismiss();
+                            if (pd != null && pd.isShowing()) {
+                                pd.dismiss();
                             }
                         }
                     },
@@ -293,11 +275,6 @@ public class PublishPicActivity extends BaseActivity implements View.OnClickList
     //发布
     private void publishMood() {
         final String contentStr = et_sendmessage.getText().toString();
-//        String uri = InternetURL.ADD_RECORD_URL + "?uid=" + getGson().fromJson(getSp().getString("uid", ""), String.class)
-//                +"&type=" +"0"
-//                +"&content=" + contentStr
-//                +"&url="+ ""
-//                ;
         StringRequest request = new StringRequest(
                 Request.Method.POST,
                 InternetURL.ADD_RECORD_URL,
@@ -319,8 +296,8 @@ public class PublishPicActivity extends BaseActivity implements View.OnClickList
                                 e.printStackTrace();
                             }
                         }
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
+                        if (pd != null && pd.isShowing()) {
+                            pd.dismiss();
                         }
                     }
                 },
@@ -328,8 +305,8 @@ public class PublishPicActivity extends BaseActivity implements View.OnClickList
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         Toast.makeText(PublishPicActivity.this, "发布失败", Toast.LENGTH_SHORT).show();
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
+                        if (pd != null && pd.isShowing()) {
+                            pd.dismiss();
                         }
                     }
                 }
@@ -364,11 +341,7 @@ public class PublishPicActivity extends BaseActivity implements View.OnClickList
                 filePath.append(",");
             }
         }
-//        String uri = InternetURL.ADD_RECORD_URL + "?uid=" + getGson().fromJson(getSp().getString("uid", ""), String.class)
-//                +"&type=" +"1"
-//                +"&content=" + contentStr
-//                +"&url="+ String.valueOf(filePath)
-//                ;
+
         StringRequest request = new StringRequest(
                 Request.Method.POST,
                 InternetURL.ADD_RECORD_URL,
@@ -391,16 +364,16 @@ public class PublishPicActivity extends BaseActivity implements View.OnClickList
                                 e.printStackTrace();
                             }
                         }
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
+                        if (pd != null && pd.isShowing()) {
+                            pd.dismiss();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
+                        if (pd != null && pd.isShowing()) {
+                            pd.dismiss();
                         }
                         Toast.makeText(PublishPicActivity.this, "发布失败", Toast.LENGTH_SHORT).show();
                     }

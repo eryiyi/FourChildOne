@@ -1,5 +1,7 @@
 package com.xiaogang.Mine.ui;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -39,6 +41,9 @@ public class NewsTableViewActivity extends BaseActivity implements View.OnClickL
     ProducteTypeObj producteTypeObj;
     private String type;
     private TextView detail_title;
+    private String id;
+    ProgressDialog pd = null;
+    private boolean progressShow;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +57,18 @@ public class NewsTableViewActivity extends BaseActivity implements View.OnClickL
         }
         initView();
 
+        progressShow = true;
+        pd = new ProgressDialog(NewsTableViewActivity.this);
+        pd.setCanceledOnTouchOutside(false);
+        pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                progressShow = false;
+            }
+        });
+        pd.setMessage(getString(R.string.please_wait));
+        pd.show();
         getData();
     }
 
@@ -64,7 +81,7 @@ public class NewsTableViewActivity extends BaseActivity implements View.OnClickL
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ProducteObj producteObj = list.get(position);
                 Intent detailView = new Intent(NewsTableViewActivity.this, DetailGoodsActivity.class);
-                detailView.putExtra("good", producteObj);
+                detailView.putExtra("good", producteObj.getProduct_id());
                 startActivity(detailView);
             }
         });
@@ -103,16 +120,16 @@ public class NewsTableViewActivity extends BaseActivity implements View.OnClickL
                         } else {
                             Toast.makeText(NewsTableViewActivity.this, R.string.get_data_error, Toast.LENGTH_SHORT).show();
                         }
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
+                        if (pd != null && pd.isShowing()) {
+                            pd.dismiss();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
+                        if (pd != null && pd.isShowing()) {
+                            pd.dismiss();
                         }
                         Toast.makeText(NewsTableViewActivity.this, R.string.get_data_error, Toast.LENGTH_SHORT).show();
                     }

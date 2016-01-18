@@ -1,6 +1,8 @@
 package com.xiaogang.Mine.ui;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Paint;
@@ -31,7 +33,11 @@ import com.xiaogang.Mine.base.InternetURL;
 import com.xiaogang.Mine.dao.DBHelper;
 import com.xiaogang.Mine.dao.ShoppingCart;
 import com.xiaogang.Mine.data.MemberObjData;
+import com.xiaogang.Mine.data.ProductDetailData;
+import com.xiaogang.Mine.data.ProducteTypeObjData;
+import com.xiaogang.Mine.mobule.ProductDetail;
 import com.xiaogang.Mine.mobule.ProducteObj;
+import com.xiaogang.Mine.mobule.ShopObj;
 import com.xiaogang.Mine.util.DateUtil;
 import com.xiaogang.Mine.util.StringUtil;
 import org.json.JSONException;
@@ -46,7 +52,6 @@ import java.util.Map;
  * Created by Administrator on 2015/12/17.
  */
 public class DetailGoodsActivity extends BaseActivity  implements View.OnClickListener ,OnClickContentItemListener {
-    ProducteObj goodsHot;
     private final static int SCANNIN_GREQUEST_CODE = 1;
     private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
     ImageLoader imageLoader = ImageLoader.getInstance();//图片加载类
@@ -67,28 +72,37 @@ public class DetailGoodsActivity extends BaseActivity  implements View.OnClickLi
     private TextView address;
     private TextView sumry;
     private TextView number;
+    private TextView unit;
     private ImageView favour_img;
     private String  type = "0";
 
+    private ProductDetail productDetail;
+
+    private String id;
+    ProgressDialog pd = null;
+    private boolean progressShow;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.goods_detail);
-        goodsHot = (ProducteObj) getIntent().getExtras().get("good");
+        id = getIntent().getExtras().getString("good");
         res = this.getResources();
         initView();
-        if(goodsHot != null){
-            lists.add(goodsHot.getProduct_pic()==null?"":goodsHot.getProduct_pic());
-        }
-        initViewPager();
-
-        title.setText(goodsHot.getProduct_name()==null?"":goodsHot.getProduct_name());
-        sumry.setText(Html.fromHtml(goodsHot.getInfo()==null?"":goodsHot.getInfo()));
-        sell_price.setText("￥"+(goodsHot.getPrice_tuangou()==null?"":goodsHot.getPrice_tuangou()));
-        price.setText("￥"+(goodsHot.getPrice()==null?"":goodsHot.getPrice()));
-        address.setText(goodsHot.getUnit()==null?"":goodsHot.getUnit());
-
         getCartNum();
+
+        progressShow = true;
+        pd = new ProgressDialog(DetailGoodsActivity.this);
+        pd.setCanceledOnTouchOutside(false);
+        pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                progressShow = false;
+            }
+        });
+        pd.setMessage(getString(R.string.please_wait));
+        pd.show();
+        getGoods();
     }
 
     void initView(){
@@ -100,6 +114,7 @@ public class DetailGoodsActivity extends BaseActivity  implements View.OnClickLi
         sumry = (TextView) this.findViewById(R.id.sumry);
         address = (TextView) this.findViewById(R.id.address);
         number = (TextView) this.findViewById(R.id.number);
+        unit = (TextView) this.findViewById(R.id.unit);
         this.findViewById(R.id.foot_mine_cart).setOnClickListener(this);
         this.findViewById(R.id.foot_favour).setOnClickListener(this);
         this.findViewById(R.id.foot_tel).setOnClickListener(this);
@@ -115,12 +130,15 @@ public class DetailGoodsActivity extends BaseActivity  implements View.OnClickLi
             case R.id.foot_tel:
             {
                 //电话：
-                if(!StringUtil.isNullOrEmpty(goodsHot.getTel())){
-                    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + goodsHot.getTel()));
-                    startActivity(intent);
-                }else {
-                    showMsg(DetailGoodsActivity.this, "暂无商家电话");
+                if( productDetail!= null && productDetail.getShop() != null){
+                    if(!StringUtil.isNullOrEmpty(productDetail.getShop().getTel())){
+                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + productDetail.getShop().getTel()));
+                        startActivity(intent);
+                    }else {
+                        showMsg(DetailGoodsActivity.this, "暂无商家电话");
+                    }
                 }
+
             }
                 break;
             case R.id.foot_favour:
@@ -267,17 +285,17 @@ public class DetailGoodsActivity extends BaseActivity  implements View.OnClickLi
     public void addCart(View view){
         //
         //先判断是否已经加入购物车
-        if(DBHelper.getInstance(DetailGoodsActivity.this).isSaved(goodsHot.getProduct_id())){
+        if(DBHelper.getInstance(DetailGoodsActivity.this).isSaved(productDetail.getProduct_id())){
             //如果你存在
             Toast.makeText(DetailGoodsActivity.this, R.string.add_cart_is, Toast.LENGTH_SHORT).show();
         }else {
             ShoppingCart shoppingCart = new ShoppingCart();
             shoppingCart.setCartid(StringUtil.getUUID());
-            shoppingCart.setGoods_id(goodsHot.getProduct_id()==null?"":goodsHot.getProduct_id());
+            shoppingCart.setGoods_id(productDetail.getProduct_id()==null?"":productDetail.getProduct_id());
             shoppingCart.setEmp_id(getGson().fromJson(getSp().getString("uid", ""), String.class));
-            shoppingCart.setGoods_name(goodsHot.getProduct_name()==null?"":goodsHot.getProduct_name());
-            shoppingCart.setGoods_cover(goodsHot.getProduct_pic()==null?"":goodsHot.getProduct_pic());
-            shoppingCart.setSell_price(goodsHot.getPrice_tuangou()==null?"":goodsHot.getPrice_tuangou());
+            shoppingCart.setGoods_name(productDetail.getProduct_name()==null?"":productDetail.getProduct_name());
+            shoppingCart.setGoods_cover(productDetail.getProduct_pic()==null?"":productDetail.getProduct_pic());
+            shoppingCart.setSell_price(productDetail.getPrice_tuangou()==null?"":productDetail.getPrice_tuangou());
             shoppingCart.setGoods_count("1");
             shoppingCart.setDateline(DateUtil.getCurrentDateTime());
             shoppingCart.setIs_select("0");
@@ -304,7 +322,7 @@ public class DetailGoodsActivity extends BaseActivity  implements View.OnClickLi
         StringRequest request = new StringRequest(
                 Request.Method.GET,
                 InternetURL.FAVOUR_LOVE_URL+"?access_token=" + getGson().fromJson(getSp().getString("access_token", ""), String.class)
-                +"&refer_id="+goodsHot.getProduct_id()
+                +"&refer_id="+ id
                 +"&type=" + type,
                 new Response.Listener<String>() {
                     @Override
@@ -341,6 +359,80 @@ public class DetailGoodsActivity extends BaseActivity  implements View.OnClickLi
                     public void onErrorResponse(VolleyError volleyError) {
                         if (progressDialog != null) {
                             progressDialog.dismiss();
+                        }
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+        getRequestQueue().add(request);
+    }
+
+    void getGoods(){
+        String uri = InternetURL.GET_SHOP_PRODUCT_DETAIL_URL+"?access_token=" + getGson().fromJson(getSp().getString("access_token", ""), String.class)
+                +"&product_id="+ id;
+        StringRequest request = new StringRequest(
+                Request.Method.GET,
+                uri
+                ,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        if (StringUtil.isJson(s)) {
+                            try {
+                                JSONObject jo = new JSONObject(s);
+                                String code =  jo.getString("code");
+                                if(Integer.parseInt(code) == 200){
+                                    ProductDetailData data = getGson().fromJson(s, ProductDetailData.class);
+                                    productDetail = data.getData();
+                                    if(productDetail != null && productDetail.getShop() != null){
+                                        ShopObj shopObj = productDetail.getShop();
+                                        address.setText(
+                                                "店铺名称："+shopObj.getShop_name()
+                                                        +"\n"+
+                                                        "营业时间："+shopObj.getBusiness_time()
+                                                        +"\n"+
+                                                        "店铺地址："+shopObj.getAddress()
+
+                                        );
+
+                                        title.setText(productDetail.getProduct_name()==null?"":productDetail.getProduct_name());
+                                        sumry.setText(Html.fromHtml(productDetail.getInfo()==null?"":productDetail.getInfo()));
+                                        sell_price.setText("￥"+(productDetail.getPrice_tuangou()==null?"":productDetail.getPrice_tuangou()));
+                                        price.setText("￥"+(productDetail.getPrice()==null?"":productDetail.getPrice()));
+                                        unit.setText(productDetail.getUnit()==null?"":productDetail.getUnit());
+                                        lists.add(InternetURL.INTERNAL + productDetail.getProduct_pic());
+                                        initViewPager();
+                                    }
+                                }
+                                else{
+                                    Toast.makeText(DetailGoodsActivity.this, jo.getString("msg"), Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        if (pd != null && pd.isShowing()) {
+                            pd.dismiss();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        if (pd != null && pd.isShowing()) {
+                            pd.dismiss();
                         }
                     }
                 }

@@ -1,5 +1,7 @@
 package com.xiaogang.Mine.ui;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateUtils;
@@ -17,11 +19,10 @@ import com.xiaogang.Mine.adpter.ItemMineShebeiAdapter;
 import com.xiaogang.Mine.base.ActivityTack;
 import com.xiaogang.Mine.base.BaseActivity;
 import com.xiaogang.Mine.base.InternetURL;
-import com.xiaogang.Mine.data.OrdersDATA;
-import com.xiaogang.Mine.data.ProducteObjData;
-import com.xiaogang.Mine.data.ProducteTypeObjData;
+import com.xiaogang.Mine.data.*;
 import com.xiaogang.Mine.library.PullToRefreshBase;
 import com.xiaogang.Mine.library.PullToRefreshListView;
+import com.xiaogang.Mine.mobule.ProductDetail;
 import com.xiaogang.Mine.mobule.ProducteObj;
 import com.xiaogang.Mine.util.StringUtil;
 
@@ -38,9 +39,13 @@ public class MineGuanzhuActivity extends BaseActivity implements View.OnClickLis
     private ImageView mine_no_result_img;
     private TextView mine_no_result_text;
     private ItemGuanzhuAdapter adapter;
-    private List<ProducteObj> lists  = new ArrayList<ProducteObj>();
+    private List<ProductDetail> lists  = new ArrayList<ProductDetail>();
     private int pageIndex = 1;
     private static boolean IS_REFRESH = true;
+
+    private String id;
+    ProgressDialog pd = null;
+    private boolean progressShow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,10 +85,10 @@ public class MineGuanzhuActivity extends BaseActivity implements View.OnClickLis
         lstv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Orders orderVo = orderVos.get(position-1);
-//                Intent detailView = new Intent(MineOrdersMngActivity.this, DetailOrderMngActivity.class);
-//                detailView.putExtra("orderVo",orderVo);
-//                startActivity(detailView);
+                ProductDetail orderVo = lists.get(position-1);
+                Intent detailView = new Intent(MineGuanzhuActivity.this, DetailGoodsActivity.class);
+                detailView.putExtra("good",orderVo.getProduct_id());
+                startActivity(detailView);
             }
         });
 
@@ -96,6 +101,21 @@ public class MineGuanzhuActivity extends BaseActivity implements View.OnClickLis
 //            mine_no_result_text.setVisibility(View.VISIBLE);
 //            lstv.setVisibility(View.GONE);
 //        }
+
+
+
+        progressShow = true;
+        pd = new ProgressDialog(MineGuanzhuActivity.this);
+        pd.setCanceledOnTouchOutside(false);
+        pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                progressShow = false;
+            }
+        });
+        pd.setMessage(getString(R.string.please_wait));
+        pd.show();
         initData();
 
     }
@@ -118,7 +138,7 @@ public class MineGuanzhuActivity extends BaseActivity implements View.OnClickLis
                     @Override
                     public void onResponse(String s) {
                         if (StringUtil.isJson(s)) {
-                            ProducteObjData data = getGson().fromJson(s, ProducteObjData.class);
+                            ProductDetailDatas data = getGson().fromJson(s, ProductDetailDatas.class);
                             if (Integer.parseInt(data.getCode() )== 200) {
                                 if (IS_REFRESH) {
                                     lists.clear();
@@ -132,11 +152,17 @@ public class MineGuanzhuActivity extends BaseActivity implements View.OnClickLis
                         } else {
                             Toast.makeText(MineGuanzhuActivity.this, R.string.get_data_error, Toast.LENGTH_SHORT).show();
                         }
+                        if (pd != null && pd.isShowing()) {
+                            pd.dismiss();
+                        }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
+                        if (pd != null && pd.isShowing()) {
+                            pd.dismiss();
+                        }
                         Toast.makeText(MineGuanzhuActivity.this, R.string.get_data_error, Toast.LENGTH_SHORT).show();
                     }
                 }

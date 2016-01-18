@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.mobule.CategoryObj;
 import com.xiaogang.Mine.mobule.GoodsTypeSmall;
+import com.xiaogang.Mine.mobule.ProducteObj;
 
 import java.util.List;
 
@@ -16,10 +17,10 @@ import java.util.List;
 public class Pro_type_adapter extends BaseAdapter {
 	// ∂®“ÂContext
 		private LayoutInflater mInflater;
-	    private List<CategoryObj> list;
+	    private List<ProducteObj> list;
 	    private Context context;
-	    private CategoryObj type;
-		public Pro_type_adapter(Context context, List<CategoryObj> list){
+	    private ProducteObj type;
+		public Pro_type_adapter(Context context, List<ProducteObj> list){
 			mInflater= LayoutInflater.from(context);
 			this.list=list;
 			this.context=context;
@@ -58,7 +59,7 @@ public class Pro_type_adapter extends BaseAdapter {
 			if(list!=null&&list.size()>0)
 			{
 				type=list.get(position);
-				view.name.setText(type.getType_name());
+				view.name.setText(type.getProduct_name());
 //				view.icon.setBackgroundResource(R.drawable.diannao);
 			}
 	        return convertView;

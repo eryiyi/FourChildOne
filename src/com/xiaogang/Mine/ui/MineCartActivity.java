@@ -33,6 +33,7 @@ public class MineCartActivity extends BaseActivity implements View.OnClickListen
     private List<ShoppingCart> lists = new ArrayList<>();
     private TextView heji;
     private TextView qujiesuan;
+    private TextView title;
     private ImageView selectAll;
     Resources res;
     @Override
@@ -52,6 +53,7 @@ public class MineCartActivity extends BaseActivity implements View.OnClickListen
         selectAll = (ImageView) this.findViewById(R.id.selectAll);
         heji = (TextView) this.findViewById(R.id.heji);
         qujiesuan = (TextView) this.findViewById(R.id.qujiesuan);
+        title = (TextView) this.findViewById(R.id.title);
         qujiesuan.setOnClickListener(this);
         lstv = (ListView) this.findViewById(R.id.lstv);
         this.findViewById(R.id.selectAll).setOnClickListener(this);
@@ -140,8 +142,12 @@ public class MineCartActivity extends BaseActivity implements View.OnClickListen
         lstv.setAdapter(adapter);
         if(lists.size() == 0){
             qujiesuan.setText(res.getString(R.string.no_data));
+            title.setVisibility(View.VISIBLE);
+            lstv.setVisibility(View.GONE);
         }else {
             qujiesuan.setText(res.getString(R.string.qujiesuan));
+            title.setVisibility(View.GONE);
+            lstv.setVisibility(View.VISIBLE);
         }
         adapter.setOnClickContentItemListener(this);
         toCalculate();

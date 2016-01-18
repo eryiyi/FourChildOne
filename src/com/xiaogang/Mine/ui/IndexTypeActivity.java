@@ -1,6 +1,7 @@
 package com.xiaogang.Mine.ui;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -60,7 +61,9 @@ public class IndexTypeActivity extends BaseActivity implements View.OnClickListe
     private EditText search_editext;
     private ImageView mine_cart;
 
-
+    private String id;
+    ProgressDialog pd = null;
+    private boolean progressShow;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +73,19 @@ public class IndexTypeActivity extends BaseActivity implements View.OnClickListe
         inflaters=LayoutInflater.from(this);
         initView();
         //获得大类
+        progressShow = true;
+        pd = new ProgressDialog(IndexTypeActivity.this);
+        pd.setCanceledOnTouchOutside(false);
+        pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                progressShow = false;
+            }
+        });
+        pd.setMessage(getString(R.string.please_wait));
+        pd.show();
+
         getBigType();
 
     }
@@ -106,7 +122,8 @@ public class IndexTypeActivity extends BaseActivity implements View.OnClickListe
         switch (view.getId())
         {
             case R.id.mine_cart:
-
+                Intent carV = new Intent(IndexTypeActivity.this, MineCartActivity.class);
+                startActivity(carV);
                 break;
         }
     }
@@ -195,7 +212,7 @@ public class IndexTypeActivity extends BaseActivity implements View.OnClickListe
             Bundle bundle=new Bundle();
             CategoryObj goodsTypeBig=toolsList.get(arg0);
             bundle.putSerializable("goodsTypeBig", goodsTypeBig);
-            bundle.putSerializable("lists", lists);
+//            bundle.putSerializable("lists", lists);
             fragment.setArguments(bundle);
             return fragment;
         }
@@ -299,11 +316,17 @@ public class IndexTypeActivity extends BaseActivity implements View.OnClickListe
                         } else {
                             Toast.makeText(IndexTypeActivity.this, R.string.get_data_error, Toast.LENGTH_SHORT).show();
                         }
+                        if (pd != null && pd.isShowing()) {
+                            pd.dismiss();
+                        }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
+                        if (pd != null && pd.isShowing()) {
+                            pd.dismiss();
+                        }
                         Toast.makeText(IndexTypeActivity.this, R.string.get_data_error, Toast.LENGTH_SHORT).show();
                     }
                 }

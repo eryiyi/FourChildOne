@@ -389,6 +389,8 @@ public class OneFragment extends BaseFragment implements View.OnClickListener ,O
                 startActivity(threeView);
                 break;
             case R.id.index_type_liner_four:
+                Intent mineShebei = new Intent(getActivity(), MineShebeiActivity.class);
+                startActivity(mineShebei);
                 break;
             case R.id.text_three_oo:
                 Intent moreView  = new Intent(getActivity(), NewsTableViewActivity.class);
@@ -455,7 +457,7 @@ public class OneFragment extends BaseFragment implements View.OnClickListener ,O
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 ProducteObj good = listNews.get(position);
                 Intent detailView = new Intent(getActivity(), DetailGoodsActivity.class);
-                detailView.putExtra("good", good);
+                detailView.putExtra("good", good.getProduct_id());
                 startActivity(detailView);
             }
         });
@@ -464,7 +466,7 @@ public class OneFragment extends BaseFragment implements View.OnClickListener ,O
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 ProducteObj good = listHots.get(position);
                 Intent detailView = new Intent(getActivity(), DetailGoodsActivity.class);
-                detailView.putExtra("good", good);
+                detailView.putExtra("good", good.getProduct_id());
                 startActivity(detailView);
             }
         });

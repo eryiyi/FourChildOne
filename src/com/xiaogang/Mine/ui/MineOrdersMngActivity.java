@@ -1,5 +1,7 @@
 package com.xiaogang.Mine.ui;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.View;
@@ -46,14 +48,30 @@ public class MineOrdersMngActivity extends BaseActivity implements View.OnClickL
     private TextView text_two;
     private TextView text_three;
     private TextView text_four;
+    private TextView title;
     private String status="";
 
+
+    private String id;
+    ProgressDialog pd = null;
+    private boolean progressShow;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mine_order_activity);
         initView();
+        progressShow = true;
+        pd = new ProgressDialog(MineOrdersMngActivity.this);
+        pd.setCanceledOnTouchOutside(false);
+        pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
 
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                progressShow = false;
+            }
+        });
+        pd.setMessage(getString(R.string.please_wait));
+        pd.show();
         initData();
     }
 
@@ -101,6 +119,7 @@ public class MineOrdersMngActivity extends BaseActivity implements View.OnClickL
         text_two = (TextView) this.findViewById(R.id.text_two);
         text_three = (TextView) this.findViewById(R.id.text_three);
         text_four = (TextView) this.findViewById(R.id.text_four);
+        title = (TextView) this.findViewById(R.id.title);
         text_one.setOnClickListener(this);
         text_two.setOnClickListener(this);
         text_three.setOnClickListener(this);
@@ -189,19 +208,33 @@ public class MineOrdersMngActivity extends BaseActivity implements View.OnClickL
                                     orderVos.clear();
                                 }
                                 orderVos.addAll(data.getData());
+                                if(orderVos != null && orderVos.size()>0){
+                                    classtype_lstv.setVisibility(View.VISIBLE);
+                                    title.setVisibility(View.GONE);
+                                }else {
+                                    classtype_lstv.setVisibility(View.GONE);
+                                    title.setVisibility(View.VISIBLE);
+                                }
                                 classtype_lstv.onRefreshComplete();
                                 adapter.notifyDataSetChanged();
+
                             } else {
                                 Toast.makeText(MineOrdersMngActivity.this, R.string.get_data_error, Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             Toast.makeText(MineOrdersMngActivity.this, R.string.get_data_error, Toast.LENGTH_SHORT).show();
                         }
+                        if (pd != null && pd.isShowing()) {
+                            pd.dismiss();
+                        }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
+                        if (pd != null && pd.isShowing()) {
+                            pd.dismiss();
+                        }
                         Toast.makeText(MineOrdersMngActivity.this, R.string.get_data_error, Toast.LENGTH_SHORT).show();
                     }
                 }
