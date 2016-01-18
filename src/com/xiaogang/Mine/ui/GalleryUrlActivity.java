@@ -7,7 +7,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.base.BaseActivity;
-import com.xiaogang.Mine.base.InternetURL;
 import com.xiaogang.Mine.galleryweidget.BasePagerAdapter;
 import com.xiaogang.Mine.galleryweidget.GalleryViewPager;
 import com.xiaogang.Mine.galleryweidget.UrlPagerAdapter;

@@ -1,6 +1,5 @@
 package com.xiaogang.Mine.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,12 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.adpter.ItemVideosAdapter;
-import com.xiaogang.Mine.adpter.OnClickContentItemListener;
 import com.xiaogang.Mine.base.BaseFragment;
-import com.xiaogang.Mine.mobule.VideoPlayer;
 import com.xiaogang.Mine.mobule.VideosObj;
-import com.xiaogang.Mine.ui.VideoPlayerActivity2;
-import com.xiaogang.Mine.util.Constants;
 
 import java.util.ArrayList;
 import java.util.List;

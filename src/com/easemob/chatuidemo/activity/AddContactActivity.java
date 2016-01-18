@@ -21,7 +21,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -29,7 +28,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.easemob.applib.controller.HXSDKHelper;
 import com.easemob.chat.EMContactManager;
-
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.adpter.ItemAddContactAdapter;

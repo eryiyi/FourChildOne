@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ImageView;
 import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.base.BaseActivity;
 

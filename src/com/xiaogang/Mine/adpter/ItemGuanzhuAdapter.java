@@ -15,7 +15,6 @@ import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.UniversityApplication;
 import com.xiaogang.Mine.base.InternetURL;
 import com.xiaogang.Mine.mobule.ProductDetail;
-import com.xiaogang.Mine.mobule.ProducteObj;
 import com.xiaogang.Mine.util.RelativeDateFormat;
 
 import java.util.List;

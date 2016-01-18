@@ -109,6 +109,7 @@
         <activity android:name=".ui.MineAddressUpdateActivity" android:windowSoftInputMode="adjustResize"  android:screenOrientation="portrait"/>
         <activity android:name=".ui.PublishVideoActivity" android:windowSoftInputMode="adjustResize"  android:screenOrientation="portrait"/>
         <activity android:name=".ui.UpdateProfileActivity" android:windowSoftInputMode="adjustResize"  android:screenOrientation="portrait"/>
+        <activity android:name=".ui.CommentRecordActivity" android:windowSoftInputMode="adjustResize"  android:screenOrientation="portrait"/>
         <activity android:name=".MainActivity" android:windowSoftInputMode="adjustResize"/>
 
 

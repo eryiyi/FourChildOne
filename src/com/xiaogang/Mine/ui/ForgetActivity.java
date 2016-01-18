@@ -1,6 +1,5 @@
 package com.xiaogang.Mine.ui;
 
-import android.app.ProgressDialog;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -18,7 +17,6 @@ import com.xiaogang.Mine.base.ActivityTack;
 import com.xiaogang.Mine.base.BaseActivity;
 import com.xiaogang.Mine.base.InternetURL;
 import com.xiaogang.Mine.util.StringUtil;
-import com.xiaogang.Mine.widget.CustomProgressDialog;
 import org.json.JSONException;
 import org.json.JSONObject;
 

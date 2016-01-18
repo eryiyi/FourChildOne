@@ -1,9 +1,6 @@
 package com.xiaogang.Mine.data;
 
-import com.xiaogang.Mine.mobule.ProducteType;
 import com.xiaogang.Mine.mobule.ProducteTypeObj;
-
-import java.util.List;
 
 /**
  * Created by Administrator on 2016/1/4.

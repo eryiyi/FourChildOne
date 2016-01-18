@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +18,11 @@ import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.adpter.Pro_type_adapter;
 import com.xiaogang.Mine.base.BaseFragment;
 import com.xiaogang.Mine.base.InternetURL;
-import com.xiaogang.Mine.data.CategoryObjData;
 import com.xiaogang.Mine.data.ProducteTypeObjData;
-import com.xiaogang.Mine.mobule.*;
+import com.xiaogang.Mine.mobule.CategoryObj;
+import com.xiaogang.Mine.mobule.ProducteObj;
+import com.xiaogang.Mine.mobule.ProducteTypeObjSmall;
+import com.xiaogang.Mine.ui.DetailGoodsActivity;
 import com.xiaogang.Mine.util.StringUtil;
 import org.json.JSONObject;
 
@@ -62,10 +63,10 @@ public class Fragment_pro_type extends BaseFragment {
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-//				Intent intent = new Intent(getActivity(), SearchGoodsByCategoryActivity.class);
-//				GoodsTypeSmall goodsTypeSmall = list.get(arg2);
-//				intent.putExtra("category_id", goodsTypeSmall.getId());
-//				startActivity(intent);
+				Intent intent = new Intent(getActivity(), DetailGoodsActivity.class);
+				ProducteObj goodsTypeSmall = toolsList.get(arg2);
+				intent.putExtra("good", goodsTypeSmall.getProduct_id());
+				startActivity(intent);
 			}
 		});
 		listView.setSelector(new ColorDrawable(Color.TRANSPARENT));
@@ -76,11 +77,12 @@ public class Fragment_pro_type extends BaseFragment {
 
 
 	private void getBigType() {
+		String uri = InternetURL.GET_SHOP_PRODUCT_URL
+				+"?access_token=" + getGson().fromJson(getSp().getString("access_token", ""), String.class)
+				+"&type_id="+categoryObj.getType_id();
 		StringRequest request = new StringRequest(
 				Request.Method.GET,
-				InternetURL.GET_SHOP_PRODUCT_URL
-						+"?access_token=" + getGson().fromJson(getSp().getString("access_token", ""), String.class)
-						+"&type_id="+categoryObj.getType_id()
+				uri
 				,
 				new Response.Listener<String>() {
 					@Override

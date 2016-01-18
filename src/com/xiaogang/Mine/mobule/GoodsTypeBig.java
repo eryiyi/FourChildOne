@@ -3,8 +3,6 @@ package com.xiaogang.Mine.mobule;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.List;
-
 /**
  * Created by Administrator on 2015/8/1.
  *产品分类

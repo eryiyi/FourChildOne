@@ -1,5 +1,6 @@
 package com.xiaogang.Mine.mobule;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -29,7 +30,7 @@ import java.util.List;
  "list": []
  }
  */
-public class RecordObj {
+public class RecordObj implements Serializable{
     private String id;
     private String fid;
     private String uid;

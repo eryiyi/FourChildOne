@@ -5,16 +5,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.xiaogang.Mine.R;
-import com.xiaogang.Mine.mobule.CategoryObj;
-import com.xiaogang.Mine.mobule.GoodsTypeSmall;
+import com.xiaogang.Mine.UniversityApplication;
 import com.xiaogang.Mine.mobule.ProducteObj;
 
 import java.util.List;
 
 
 public class Pro_type_adapter extends BaseAdapter {
+	ImageLoader imageLoader = ImageLoader.getInstance();//图片加载类
+	private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
+
 	// 定义Context
 		private LayoutInflater mInflater;
 	    private List<ProducteObj> list;
@@ -50,7 +55,7 @@ public class Pro_type_adapter extends BaseAdapter {
 			if(convertView==null){
 				view=new MyView();
 				convertView=mInflater.inflate(R.layout.list_pro_type_item, null);
-//				view.icon=(ImageView)convertView.findViewById(R.id.typeicon);
+				view.icon=(ImageView)convertView.findViewById(R.id.typeicon);
 				view.name=(TextView)convertView.findViewById(R.id.typename);
 				convertView.setTag(view);
 			}else{
@@ -59,14 +64,17 @@ public class Pro_type_adapter extends BaseAdapter {
 			if(list!=null&&list.size()>0)
 			{
 				type=list.get(position);
-				view.name.setText(type.getProduct_name());
-//				view.icon.setBackgroundResource(R.drawable.diannao);
+				if(type != null){
+					view.name.setText(type.getProduct_name());
+					imageLoader.displayImage(
+							type.getProduct_pic(), view.icon, UniversityApplication.options, animateFirstListener);
+				}
 			}
 	        return convertView;
 		}
 
 		private class MyView{
-//			private ImageView icon;
+			private ImageView icon;
 			private TextView name;
 		}
 		

@@ -1,7 +1,6 @@
 package com.xiaogang.Mine.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -29,16 +28,12 @@ import com.xiaogang.Mine.adpter.OnClickContentItemListener;
 import com.xiaogang.Mine.adpter.ViewPagerAdapter;
 import com.xiaogang.Mine.base.BaseFragment;
 import com.xiaogang.Mine.base.InternetURL;
-import com.xiaogang.Mine.dao.DBHelper;
-import com.xiaogang.Mine.dao.ShoppingCart;
 import com.xiaogang.Mine.data.IndexData;
-import com.xiaogang.Mine.data.SlideDATA;
-import com.xiaogang.Mine.mobule.*;
+import com.xiaogang.Mine.mobule.IndexObj;
+import com.xiaogang.Mine.mobule.ProducteObj;
+import com.xiaogang.Mine.mobule.SlidePic;
 import com.xiaogang.Mine.ui.*;
-import com.xiaogang.Mine.util.Constants;
-import com.xiaogang.Mine.util.DateUtil;
 import com.xiaogang.Mine.util.StringUtil;
-import com.xiaogang.Mine.widget.CustomProgressDialog;
 import org.json.JSONObject;
 
 import java.util.ArrayList;

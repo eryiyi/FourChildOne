@@ -3,7 +3,6 @@ package com.xiaogang.Mine.ui;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -28,8 +27,6 @@ import com.xiaogang.Mine.base.InternetURL;
 import com.xiaogang.Mine.data.CategoryObjData;
 import com.xiaogang.Mine.fragment.Fragment_pro_type;
 import com.xiaogang.Mine.mobule.CategoryObj;
-import com.xiaogang.Mine.mobule.GoodsTypeBig;
-import com.xiaogang.Mine.mobule.GoodsTypeSmall;
 import com.xiaogang.Mine.util.StringUtil;
 import org.json.JSONObject;
 

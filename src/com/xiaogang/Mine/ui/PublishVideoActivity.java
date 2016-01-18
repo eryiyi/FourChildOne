@@ -5,19 +5,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.SurfaceTexture;
-import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
-import android.text.Editable;
-import android.text.SpannableString;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.*;
 import android.view.inputmethod.InputMethodManager;
@@ -27,7 +19,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-
 import com.xiaogang.Mine.MainActivity;
 import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.base.ActivityTack;
@@ -35,18 +26,13 @@ import com.xiaogang.Mine.base.BaseActivity;
 import com.xiaogang.Mine.base.InternetURL;
 import com.xiaogang.Mine.upload.CommonUtil;
 import com.xiaogang.Mine.util.Constants;
-import com.xiaogang.Mine.util.FileUtils;
 import com.xiaogang.Mine.util.StringUtil;
-import com.xiaogang.Mine.widget.CustomProgressDialog;
 import com.xiaogang.Mine.widget.PublishPopWindow;
-import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

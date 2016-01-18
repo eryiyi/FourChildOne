@@ -11,13 +11,6 @@
  */
 package com.easemob.chatuidemo.activity;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -45,18 +38,20 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.Chronometer;
-import android.widget.ImageView;
-import android.widget.Toast;
-import android.widget.VideoView;
-
+import android.widget.*;
 import com.easemob.chatuidemo.utils.CommonUtils;
 import com.easemob.chatuidemo.video.util.Utils;
 import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
 import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.base.BaseActivity;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 public class RecorderVideoActivity extends BaseActivity implements
 		OnClickListener, SurfaceHolder.Callback, OnErrorListener,

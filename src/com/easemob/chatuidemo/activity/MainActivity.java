@@ -13,17 +13,10 @@
  */
 package com.easemob.chatuidemo.activity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -36,28 +29,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.easemob.EMCallBack;
-import com.easemob.EMConnectionListener;
-import com.easemob.EMError;
-import com.easemob.EMEventListener;
-import com.easemob.EMGroupChangeListener;
-import com.easemob.EMNotifierEvent;
-import com.easemob.EMValueCallBack;
+import com.easemob.*;
 import com.easemob.applib.controller.HXSDKHelper;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMContactListener;
-import com.easemob.chat.EMContactManager;
-import com.easemob.chat.EMConversation;
+import com.easemob.chat.*;
 import com.easemob.chat.EMConversation.EMConversationType;
-import com.easemob.chat.EMGroup;
-import com.easemob.chat.EMGroupManager;
-import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.EMMessage.Type;
-import com.easemob.chat.TextMessageBody;
 import com.easemob.chatuidemo.Constant;
-
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.chatuidemo.db.UserDao;
@@ -67,9 +45,10 @@ import com.easemob.chatuidemo.domain.User;
 import com.easemob.chatuidemo.utils.CommonUtils;
 import com.easemob.util.EMLog;
 import com.easemob.util.HanziToPinyin;
-import com.easemob.util.NetUtils;
 import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.base.BaseActivity;
+
+import java.util.*;
 
 public class MainActivity extends BaseActivity implements EMEventListener {
 

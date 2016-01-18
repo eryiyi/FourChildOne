@@ -1,11 +1,12 @@
 package com.xiaogang.Mine.mobule;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Administrator on 2016/1/12.
  */
-public class Favours {
+public class Favours  implements Serializable{
     private String count;
     private List<FavourObj> list;
 

@@ -1,6 +1,5 @@
 package com.xiaogang.Mine.ui;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -11,11 +10,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.xiaogang.Mine.R;
-import com.xiaogang.Mine.base.ActivityTack;
 import com.xiaogang.Mine.base.BaseActivity;
 import com.xiaogang.Mine.base.InternetURL;
 import com.xiaogang.Mine.util.StringUtil;
-import com.xiaogang.Mine.widget.CustomProgressDialog;
 import org.json.JSONException;
 import org.json.JSONObject;
 

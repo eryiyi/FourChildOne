@@ -13,7 +13,6 @@ import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.UniversityApplication;
 import com.xiaogang.Mine.mobule.MemberObj;
 
-
 import java.util.List;
 
 /**

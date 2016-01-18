@@ -1,10 +1,7 @@
 package com.xiaogang.Mine.fragment;
 
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.*;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -30,12 +27,12 @@ import com.xiaogang.Mine.base.InternetURL;
 import com.xiaogang.Mine.data.RecordObjData;
 import com.xiaogang.Mine.mobule.RecordObj;
 import com.xiaogang.Mine.mobule.VideoPlayer;
+import com.xiaogang.Mine.ui.CommentRecordActivity;
 import com.xiaogang.Mine.ui.PublishPicActivity;
 import com.xiaogang.Mine.ui.VideoPlayerActivity2;
 import com.xiaogang.Mine.util.Constants;
 import com.xiaogang.Mine.util.StringUtil;
 import com.xiaogang.Mine.widget.ContentListView;
-import com.xiaogang.Mine.widget.CustomProgressDialog;
 import com.xiaogang.Mine.widget.SelectPhoPopWindow;
 import com.yixia.camera.demo.ui.record.MediaRecorderActivity;
 import org.json.JSONException;
@@ -61,6 +58,12 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
     private int pageIndex = 1;
     private SelectPhoPopWindow deleteWindow;
 
+    private String id;
+    ProgressDialog pd = null;
+    private boolean progressShow;
+
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +74,18 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.three_fragment, null);
         initView(view);
+        progressShow = true;
+        pd = new ProgressDialog(getActivity());
+        pd.setCanceledOnTouchOutside(false);
+        pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                progressShow = false;
+            }
+        });
+        pd.setMessage(getString(R.string.please_wait));
+        pd.show();
 
         loadData(ContentListView.REFRESH);
         return view;
@@ -182,8 +197,8 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
                             }
                             Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
                         }
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
+                        if (pd != null && pd.isShowing()) {
+                            pd.dismiss();
                         }
                     }
                 },
@@ -192,8 +207,8 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
                     public void onErrorResponse(VolleyError volleyError) {
                         lstv.onRefreshComplete();
                         lstv.onLoadComplete();
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
+                        if (pd != null && pd.isShowing()) {
+                            pd.dismiss();
                         }
                         Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
                     }
@@ -282,7 +297,6 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
         switch (flag){
             case 10:
                 //
-
                 for(RecordObj videosObj1 : lists){
                     if(videosObj1.getId().equals(videosObj.getId())){
                         //当前点击的哪一个
@@ -299,9 +313,17 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
                 break;
             case 2:
                 //赞
+            {
+                setFavour();
+            }
                 break;
             case 3:
                 //评论
+            {
+                Intent commentV = new Intent(getActivity(), CommentRecordActivity.class);
+                commentV.putExtra("info", videosObj);
+                startActivity(commentV);
+            }
                 break;
             case 5:
                 //视频点击
@@ -327,6 +349,10 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
                 pageIndex = 1;
                 loadData(ContentListView.REFRESH);
             }
+            if(action.equals("add_comment_record_success")){
+                //添加评论成功
+            }
+
         }
     };
 
@@ -334,6 +360,7 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
     public void registerBoradcastReceiver() {
         IntentFilter myIntentFilter = new IntentFilter();
         myIntentFilter.addAction(Constants.SEND_INDEX_SUCCESS);
+        myIntentFilter.addAction("add_comment_record_success");
         //注册广播
         getActivity().registerReceiver(mBroadcastReceiver, myIntentFilter);
     }
@@ -343,4 +370,67 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
         super.onDestroy();
         getActivity().unregisterReceiver(mBroadcastReceiver);
     }
+
+
+
+    private void setFavour() {
+        String uri = InternetURL.ADD_FAVOUR_RECORD_URL
+//                +"?access_token=" + getGson().fromJson(getSp().getString("access_token", ""), String.class)
+                +"?growing_id=" +videosObj.getId()
+                +"&uid=" + getGson().fromJson(getSp().getString("uid", ""), String.class)
+                +"&cancel=" + "0";
+        StringRequest request = new StringRequest(
+                Request.Method.GET,
+                uri
+                ,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        if (StringUtil.isJson(s)) {
+                            try {
+                                JSONObject jo = new JSONObject(s);
+                                String code1 =  jo.getString("code");
+                                if(Integer.parseInt(code1) == 200){
+                                    //
+
+                                }else {
+                                    Toast.makeText(getActivity(), jo.getString("msg"), Toast.LENGTH_SHORT).show();
+                                }
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        } else {
+                            Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
+                        }
+                        if (pd != null && pd.isShowing()) {
+                            pd.dismiss();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        if (pd != null && pd.isShowing()) {
+                            pd.dismiss();
+                        }
+                        Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+        getRequestQueue().add(request);
+    }
+
 }

@@ -1,6 +1,5 @@
 package com.xiaogang.Mine;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.*;
 import android.content.pm.ActivityInfo;
@@ -13,8 +12,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -33,12 +30,10 @@ import com.easemob.chatuidemo.activity.LoginActivity;
 import com.easemob.util.EMLog;
 import com.xiaogang.Mine.base.BaseActivity;
 import com.xiaogang.Mine.base.InternetURL;
-import com.xiaogang.Mine.data.EmpData;
 import com.xiaogang.Mine.data.MemberObjData;
 import com.xiaogang.Mine.fragment.*;
 import com.xiaogang.Mine.mobule.MemberObj;
 import com.xiaogang.Mine.util.StringUtil;
-import com.xiaogang.Mine.widget.CustomProgressDialog;
 import org.json.JSONException;
 import org.json.JSONObject;
 
