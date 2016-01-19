@@ -19,6 +19,7 @@ import com.xiaogang.Mine.mobule.RecordObj;
 import com.xiaogang.Mine.util.StringUtil;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -73,11 +74,17 @@ public class CommentRecordActivity extends BaseActivity implements View.OnClickL
     }
 
     private void setData() {
+        String userStr = content.getText().toString() ;
+        try {
+            userStr = URLEncoder.encode(userStr, "UTF-8");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         String uri = InternetURL.ADD_COMMENT_RECORD_URL
 //                +"?access_token=" + getGson().fromJson(getSp().getString("access_token", ""), String.class)
                 +"?growing_id=" +info.getId()
                 +"&uid=" + getGson().fromJson(getSp().getString("uid", ""), String.class)
-                +"&content=" +content.getText().toString();
+                +"&content=" + userStr;
         StringRequest request = new StringRequest(
                 Request.Method.GET,
                 uri

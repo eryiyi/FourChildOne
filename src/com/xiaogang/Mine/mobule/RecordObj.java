@@ -51,6 +51,10 @@ public class RecordObj implements Serializable{
     private String is_favoured;
     private String is_select;
 
+    private Favours favours;
+    private List<CommentObj> comments;
+
+
     public String getIs_select() {
         return is_select;
     }
@@ -59,8 +63,6 @@ public class RecordObj implements Serializable{
         this.is_select = is_select;
     }
 
-    private Favours favours;
-    private List<CommentObj> comments;
 
 
     public String getFid() {

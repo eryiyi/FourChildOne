@@ -49,7 +49,7 @@ public class InternetURL {
     //朋友圈首页
     public static final String LIST_RECORD_URL = INTERNAL + "index/ServiceJson/pylist";
     //朋友圈喜爱操作
-    public static final String ADD_FAVOUR_RECORD_URL = INTERNAL + "json.php/member.api-myfollow";
+    public static final String ADD_FAVOUR_RECORD_URL = INTERNAL + "index/ServiceJson/toFavour";
     //朋友圈评论
     public static final String ADD_COMMENT_RECORD_URL = INTERNAL + "index/ServiceJson/tocomment";
     //查询好友

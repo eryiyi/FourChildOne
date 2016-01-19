@@ -95,5 +95,38 @@
                    android:layout_weight="1"
                    android:layout_height="12dp"/>
     </LinearLayout>
+    <!--赞-->
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_height="40dp"
+                    android:visibility="gone"
+                    android:layout_toRightOf="@+id/head"
+                    android:layout_below="@+id/commentBtn"
+                    android:layout_marginRight="10dp"
+                    android:orientation="horizontal"
+                    android:id="@+id/detail_like_liner_layout"
+                    android:layout_marginTop="2dp">
+        <GridView
+                android:numColumns="8"
+                android:stretchMode="columnWidth"
+                android:id="@+id/gridView"
+                android:horizontalSpacing="2dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+    </RelativeLayout>
+    <LinearLayout android:layout_width="match_parent"
+                  android:orientation="vertical"
+                  android:id="@+id/comment_lin"
+                  android:visibility="gone"
+                  android:layout_toRightOf="@+id/head"
+                  android:layout_below="@+id/detail_like_liner_layout"
+                  android:layout_height="wrap_content">
+        <GridView android:layout_width="match_parent"
+                  android:numColumns="1"
+                  android:id="@+id/gridView2"
+                  android:horizontalSpacing="2dp"
+                  android:layout_height="wrap_content">
+        </GridView>
+    </LinearLayout>
 
 </RelativeLayout>

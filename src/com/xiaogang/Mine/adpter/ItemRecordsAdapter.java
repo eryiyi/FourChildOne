@@ -3,6 +3,8 @@ package com.xiaogang.Mine.adpter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +14,14 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.UniversityApplication;
 import com.xiaogang.Mine.base.InternetURL;
+import com.xiaogang.Mine.mobule.CommentObj;
+import com.xiaogang.Mine.mobule.FavourObj;
 import com.xiaogang.Mine.mobule.RecordObj;
+import com.xiaogang.Mine.ui.DetailFavourActivity;
 import com.xiaogang.Mine.ui.GalleryUrlActivity;
 import com.xiaogang.Mine.util.Constants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,12 +33,16 @@ public class ItemRecordsAdapter extends BaseAdapter {
     private Context mContect;
     Resources res;
 
+    private List<FavourObj> itemList = new ArrayList<FavourObj>();
+    private List<CommentObj> itemListC = new ArrayList<CommentObj>();
+    private DetailFavourAdapter adaptertwo;
+    private CommentAdapter adapterComment;
+
     private OnClickContentItemListener onClickContentItemListener;
 
     public void setOnClickContentItemListener(OnClickContentItemListener onClickContentItemListener) {
         this.onClickContentItemListener = onClickContentItemListener;
     }
-
 
     ImageLoader imageLoader = ImageLoader.getInstance();//图片加载类
     private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
@@ -73,12 +83,18 @@ public class ItemRecordsAdapter extends BaseAdapter {
             holder.dateline = (TextView) convertView.findViewById(R.id.dateline);
             holder.name = (TextView) convertView.findViewById(R.id.name);
             holder.comment_liner = (LinearLayout) convertView.findViewById(R.id.comment_liner);
+            holder.comment_lin = (LinearLayout) convertView.findViewById(R.id.comment_lin);
+            holder.gridView = (GridView) convertView.findViewById(R.id.gridView);
+            holder.gridView2 = (GridView) convertView.findViewById(R.id.gridView2);
+            holder.detail_like_liner_layout = (RelativeLayout) convertView.findViewById(R.id.detail_like_liner_layout);
 
             convertView.setTag(holder);
         }else{
             holder = (ViewHolder) convertView.getTag();
         }
         final RecordObj cell = lists.get(position);
+        holder.detail_like_liner_layout.setVisibility(View.GONE);
+        holder.comment_lin.setVisibility(View.GONE);
         if(cell != null){
             holder.name.setText(cell.getPublisher() == null ? "" : cell.getPublisher());
             holder.dateline.setText(cell.getTime() == null ? "未知" : cell.getTime());
@@ -127,6 +143,58 @@ public class ItemRecordsAdapter extends BaseAdapter {
                     imageLoader.displayImage( cell.getUrl(), holder.video_pic, UniversityApplication.options, animateFirstListener);
                     break;
             }
+
+            //赞
+            List<FavourObj> itemListtwo = new ArrayList<FavourObj>();//赞列表用
+            itemListtwo.clear();
+            itemListtwo.addAll(cell.getFavours().getList());
+            itemList.clear();
+            if (itemListtwo.size() > 5) {
+                for (int i = 0; i < 6; i++) {
+                    itemList.add(itemListtwo.get(i));
+                }
+            } else {
+                itemList.addAll(itemListtwo);
+            }
+            if (itemList.size() > 0) {//当存在赞数据的时候
+                holder.detail_like_liner_layout.setVisibility(View.VISIBLE);
+            }
+
+            adaptertwo = new DetailFavourAdapter(itemList, mContect , itemListtwo.size());
+            holder.gridView.setAdapter(adaptertwo);
+            holder.gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
+            holder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    Intent favour = new Intent(mContect, DetailFavourActivity.class);
+                    favour.putExtra("minerecordfavour", cell.getFavours());
+                    mContect.startActivity(favour);
+
+                }
+            });
+            if (itemList.size() > 0) {//当存在赞数据的时候
+                holder.detail_like_liner_layout.setVisibility(View.VISIBLE);
+            }
+            adaptertwo.notifyDataSetChanged();
+
+
+            //视频
+            List<CommentObj> itemListtwoComment = new ArrayList<CommentObj>();//赞列表用
+            itemListtwoComment.clear();
+            itemListtwoComment.addAll(cell.getComments());
+
+            if (itemListtwoComment.size() > 0) {//当存在赞数据的时候
+                holder.comment_lin.setVisibility(View.VISIBLE);
+            }
+
+            adapterComment = new CommentAdapter(itemListtwoComment, mContect , itemListtwoComment.size());
+            holder.gridView2.setAdapter(adapterComment);
+            holder.gridView2.setSelector(new ColorDrawable(Color.TRANSPARENT));
+            if (itemListC.size() > 0) {//当存在赞数据的时候
+                holder.comment_lin.setVisibility(View.VISIBLE);
+            }
+            adapterComment.notifyDataSetChanged();
         }
 
         if("1".equals(cell.getIs_select())){
@@ -166,6 +234,10 @@ public class ItemRecordsAdapter extends BaseAdapter {
         TextView content;
         TextView name;
         TextView dateline;
+        LinearLayout comment_lin;
         LinearLayout comment_liner;
+        RelativeLayout detail_like_liner_layout;//赞区域
+        GridView gridView;
+        GridView gridView2;
     }
 }

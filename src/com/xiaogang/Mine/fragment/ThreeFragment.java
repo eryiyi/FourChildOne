@@ -25,6 +25,8 @@ import com.xiaogang.Mine.adpter.OnClickContentItemListener;
 import com.xiaogang.Mine.base.BaseFragment;
 import com.xiaogang.Mine.base.InternetURL;
 import com.xiaogang.Mine.data.RecordObjData;
+import com.xiaogang.Mine.mobule.FavourObj;
+import com.xiaogang.Mine.mobule.Favours;
 import com.xiaogang.Mine.mobule.RecordObj;
 import com.xiaogang.Mine.mobule.VideoPlayer;
 import com.xiaogang.Mine.ui.CommentRecordActivity;
@@ -62,7 +64,7 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
     ProgressDialog pd = null;
     private boolean progressShow;
 
-
+    private String cancelStr = "0";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -126,7 +128,6 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
     private void loadData(final int currentid) {
         String uri = InternetURL.LIST_RECORD_URL
                 + "?uid="+ getGson().fromJson(getSp().getString("uid", ""), String.class)
-//                + "?uid="+ "113"
                 +"&pageIndex="+pageIndex+"&pageSize=20";
         StringRequest request = new StringRequest(
                 Request.Method.GET,
@@ -291,9 +292,11 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
     };
 
     RecordObj videosObj ;
+    private int tmpPosition;
     @Override
     public void onClickContentItem(int position, int flag, Object object) {
         videosObj = lists.get(position);
+        tmpPosition = position;
         switch (flag){
             case 10:
                 //
@@ -314,6 +317,26 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
             case 2:
                 //赞
             {
+                progressShow = true;
+                pd = new ProgressDialog(getActivity());
+                pd.setCanceledOnTouchOutside(false);
+                pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        progressShow = false;
+                    }
+                });
+                pd.setMessage(getString(R.string.please_wait));
+                pd.show();
+                if(videosObj.getIs_favoured().equals("0")){
+                    //没有收藏过 收藏
+                    cancelStr = "0";
+                }
+               else {
+                    //收藏过了 取消吧
+                    cancelStr = "1";
+                }
                 setFavour();
             }
                 break;
@@ -351,6 +374,7 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
             }
             if(action.equals("add_comment_record_success")){
                 //添加评论成功
+                loadData(ContentListView.REFRESH);
             }
 
         }
@@ -371,14 +395,12 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
         getActivity().unregisterReceiver(mBroadcastReceiver);
     }
 
-
-
     private void setFavour() {
         String uri = InternetURL.ADD_FAVOUR_RECORD_URL
-//                +"?access_token=" + getGson().fromJson(getSp().getString("access_token", ""), String.class)
-                +"?growing_id=" +videosObj.getId()
+                +"?access_token=" + getGson().fromJson(getSp().getString("access_token", ""), String.class)
+                +"&growing_id=" +videosObj.getId()
                 +"&uid=" + getGson().fromJson(getSp().getString("uid", ""), String.class)
-                +"&cancel=" + "0";
+                +"&cancel=" + cancelStr;
         StringRequest request = new StringRequest(
                 Request.Method.GET,
                 uri
@@ -391,8 +413,35 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
                                 JSONObject jo = new JSONObject(s);
                                 String code1 =  jo.getString("code");
                                 if(Integer.parseInt(code1) == 200){
-                                    //
-
+                                    if("0".equals(cancelStr)){
+                                        cancelStr = "1";
+                                        Toast.makeText(getActivity(), "点赞成功", Toast.LENGTH_SHORT).show();
+                                        Favours favours = lists.get(tmpPosition).getFavours();//当前的所有收藏
+                                        List<FavourObj>  favourObjs = favours.getList();
+                                        FavourObj favourObj = new FavourObj();
+                                        favourObj.setCover(getGson().fromJson(getSp().getString("cover", ""), String.class));
+                                        favourObjs.add(favourObj);
+                                        favours.setList(favourObjs);
+                                        lists.get(tmpPosition).setFavours(favours);
+                                        lists.get(tmpPosition).setIs_select("0");
+                                        lists.get(tmpPosition).setIs_favoured("1");
+                                        adapter.notifyDataSetChanged();
+                                    }else {
+                                        cancelStr = "0";
+                                        Favours favours = lists.get(tmpPosition).getFavours();//当前的所有收藏
+                                        List<FavourObj>  favourObjs = favours.getList();
+                                       for(FavourObj favourObj1:favourObjs){
+                                           if(favourObj1.getCover().equals(getGson().fromJson(getSp().getString("cover", ""), String.class))){
+                                               favourObjs.remove(favourObj1);
+                                           }
+                                       }
+                                        favours.setList(favourObjs);
+                                        lists.get(tmpPosition).setFavours(favours);
+                                        lists.get(tmpPosition).setIs_select("0");
+                                        lists.get(tmpPosition).setIs_favoured("0");
+                                        adapter.notifyDataSetChanged();
+                                        Toast.makeText(getActivity(), "取消成功", Toast.LENGTH_SHORT).show();
+                                    }
                                 }else {
                                     Toast.makeText(getActivity(), jo.getString("msg"), Toast.LENGTH_SHORT).show();
                                 }

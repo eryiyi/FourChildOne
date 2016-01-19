@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:padding="5dp"
+        android:background="@drawable/zhuye_item_select"
+        android:layout_height="wrap_content">
+
+        <TextView android:layout_width="wrap_content"
+                  android:text="小刚"
+                  android:textColor="@color/red"
+                  android:textSize="14sp"
+                  android:id="@+id/title"
+                  android:layout_height="wrap_content"/>
+
+        <TextView android:layout_width="match_parent"
+                  android:id="@+id/comment"
+                  android:textSize="12sp"
+                  android:gravity="center|left"
+                  android:text="好好"
+                  android:layout_marginLeft="5dp"
+                  android:layout_toRightOf="@+id/title"
+                  android:textColor="@color/textColor"
+                  android:layout_height="wrap_content"/>
+</RelativeLayout>
