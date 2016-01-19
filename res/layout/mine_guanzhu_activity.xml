@@ -26,6 +26,7 @@
         <ImageView android:layout_width="wrap_content"
                    android:src="@drawable/share"
                    android:padding="15dp"
+                   android:visibility="gone"
                    android:layout_centerVertical="true"
                    android:layout_alignParentRight="true"
                    android:layout_height="wrap_content"/>

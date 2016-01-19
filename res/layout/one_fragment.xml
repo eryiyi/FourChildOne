@@ -14,16 +14,17 @@
                    android:src="@drawable/index_saomiao"
                    android:layout_centerVertical="true"
                    android:padding="8dp"
+                   android:visibility="gone"
                    android:layout_height="45dp"/>
         <ImageView android:layout_width="45dp"
                    android:src="@drawable/index_msg"
                    android:padding="8dp"
+                   android:visibility="gone"
                    android:layout_centerVertical="true"
                    android:layout_alignParentRight="true"
                    android:layout_height="45dp"/>
         <EditText android:layout_width="wrap_content"
-                  android:layout_marginLeft="60dp"
-                  android:layout_marginRight="60dp"
+
                   android:drawableLeft="@drawable/index_sousuo"
                   android:paddingLeft="8dp"
                   android:hint="搜索"
