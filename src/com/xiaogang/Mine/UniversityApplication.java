@@ -20,6 +20,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.videogo.constant.Config;
+import com.videogo.openapi.EZOpenSDK;
+import com.xiaogang.Mine.yingshi.CustomExceptionHandler;
 import com.yixia.camera.VCamera;
 import com.yixia.camera.demo.service.AssertService;
 import com.yixia.camera.util.DeviceUtils;
@@ -121,6 +124,11 @@ public class UniversityApplication extends FrontiaApplication {
 //        EZOpenSDK.initLib(this, APP_KEY, "");
 //        // EZOpenSDK.getInstance().setAccessToken("at.dmtlxyp47nejsckiai1pdwzsdvxmo7jp-8ofxo9vacz-1s48ov1-p3r36v0vj");
 //        Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(this));
+
+        Config.LOGGING = true;
+        EZOpenSDK.initLib(this, APP_KEY, "");
+        // EZOpenSDK.getInstance().setAccessToken("at.dmtlxyp47nejsckiai1pdwzsdvxmo7jp-8ofxo9vacz-1s48ov1-p3r36v0vj");
+        Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(this));
     }
 
 

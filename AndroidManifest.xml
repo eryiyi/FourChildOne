@@ -61,6 +61,9 @@
     <uses-permission android:name="com.videogo.open.permission.C2D_MESSAGE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
 
+
+
+
     <supports-screens
             android:anyDensity="true"
             android:largeScreens="true"
@@ -428,6 +431,11 @@
 
 
         <!--萤石-->
+        <activity
+                android:name="com.videogo.main.EzvizWebViewActivity"
+                android:configChanges="orientation|keyboardHidden"
+                android:screenOrientation="portrait" />
+
         <receiver
                 android:name="com.xiaogang.Mine.yingshi.EzvizBroadcastReceiver"
                 android:exported="false" >

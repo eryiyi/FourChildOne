@@ -21,4 +21,7 @@
     <dimen name="indicator_corner_radius">12dp</dimen>
     <dimen name="header_footer_top_bottom_padding">12dp</dimen>
     <dimen name="header_footer_left_right_padding">24dp</dimen>
+    <dimen name="title_text_size">18dp</dimen>
+
+
 </resources>

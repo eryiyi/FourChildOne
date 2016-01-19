@@ -15,7 +15,7 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 18 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="alipaySDK-20150818" level="project" />
     <orderEntry type="module" module-name="VitamioRecorderLibrary1" />
+    <orderEntry type="library" name="alipaySDK-20150818" level="project" />
   </component>
 </module>
