@@ -232,17 +232,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
                                 e.printStackTrace();
                             }
                         }
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
-                        }
+
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
-                        }
+
                     }
                 }
         ) {

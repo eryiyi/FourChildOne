@@ -106,17 +106,13 @@ public class ForgetActivity extends BaseActivity implements View.OnClickListener
                         } else {
                             Toast.makeText(ForgetActivity.this, R.string.get_cart_error, Toast.LENGTH_SHORT).show();
                         }
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
-                        }
+
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
-                        }
+
                         Toast.makeText(ForgetActivity.this, R.string.get_cart_error, Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -181,17 +177,13 @@ public class ForgetActivity extends BaseActivity implements View.OnClickListener
                         } else {
                             Toast.makeText(ForgetActivity.this, R.string.get_cart_error, Toast.LENGTH_SHORT).show();
                         }
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
-                        }
+
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
-                        }
+
                         Toast.makeText(ForgetActivity.this, R.string.get_cart_error, Toast.LENGTH_SHORT).show();
                     }
                 }

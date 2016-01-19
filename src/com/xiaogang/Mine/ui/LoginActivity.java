@@ -156,17 +156,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                 e.printStackTrace();
                             }
                         }
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
-                        }
+
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
-                        }
+
                         Toast.makeText(LoginActivity.this, "登陆失败", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -251,17 +247,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                 e.printStackTrace();
                             }
                         }
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
-                        }
+
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
-                        }
+
                         Toast.makeText(LoginActivity.this, "登陆失败", Toast.LENGTH_SHORT).show();
                     }
                 }

@@ -166,9 +166,7 @@ public class IndexTypeActivity extends BaseActivity implements View.OnClickListe
         shop_pager.setAdapter(shopAdapter);
         shop_pager.setOnPageChangeListener(onPageChangeListener);
 
-        if (progressDialog != null) {
-            progressDialog.dismiss();
-        }
+
     }
 
     /**

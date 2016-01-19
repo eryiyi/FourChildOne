@@ -2,12 +2,6 @@
 
 
     <style name="AppTheme" parent="android:Theme.Light" />
-    <style name="customProgressBar" parent="@android:style/Widget.ProgressBar.Small">
-        <item name="android:indeterminateDrawable">@drawable/custom_progress_bar</item>
-        <item name="android:layout_width">21dip</item>
-        <item name="android:layout_height">21dip</item>
-        <item name="android:layout_gravity">center</item>
-    </style>
 
     <style name="SetPicCheck" parent="@android:style/Widget.CompoundButton.CheckBox">
         <item name="android:button">@drawable/selector_set_number_check</item>
@@ -49,6 +43,14 @@
         <item name="android:textSize">12sp</item>
         <item name="android:background">@drawable/timestampe_bg</item>
     </style>
+
+    <style name="customProgressBar" parent="@android:style/Widget.ProgressBar.Small">
+        <item name="android:indeterminateDrawable">@drawable/custom_progress_bar</item>
+        <item name="android:layout_width">21dip</item>
+        <item name="android:layout_height">21dip</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
 
     <style name="AnimFade" parent="@android:style/Animation.Activity">
         <item name="android:activityOpenEnterAnimation">@anim/fade_in</item>

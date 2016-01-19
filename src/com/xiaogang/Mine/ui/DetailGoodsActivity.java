@@ -346,17 +346,13 @@ public class DetailGoodsActivity extends BaseActivity  implements View.OnClickLi
                                 e.printStackTrace();
                             }
                         }
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
-                        }
+
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
-                        }
+
                     }
                 }
         ) {

@@ -367,17 +367,13 @@ public class OrderMakeActivity extends BaseActivity implements View.OnClickListe
                         } else {
                             Toast.makeText(OrderMakeActivity.this, R.string.get_data_error, Toast.LENGTH_SHORT).show();
                         }
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
-                        }
+
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
-                        }
+
                         Toast.makeText(OrderMakeActivity.this, R.string.get_data_error, Toast.LENGTH_SHORT).show();
                     }
                 }

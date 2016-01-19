@@ -92,17 +92,13 @@ public class MineUpdatePwrActivity extends BaseActivity implements View.OnClickL
                         } else {
                             Toast.makeText(MineUpdatePwrActivity.this, R.string.get_cart_error, Toast.LENGTH_SHORT).show();
                         }
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
-                        }
+
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
-                        }
+
                         Toast.makeText(MineUpdatePwrActivity.this, R.string.get_cart_error, Toast.LENGTH_SHORT).show();
                     }
                 }

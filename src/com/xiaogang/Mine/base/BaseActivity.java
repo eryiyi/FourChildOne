@@ -16,7 +16,6 @@ import com.easemob.applib.controller.HXSDKHelper;
 import com.google.gson.Gson;
 import com.xiaogang.Mine.UniversityApplication;
 import com.xiaogang.Mine.upload.MultiPartStringRequest;
-import com.xiaogang.Mine.widget.CustomProgressDialog;
 
 import java.io.File;
 import java.util.Map;
@@ -25,7 +24,6 @@ import java.util.concurrent.ExecutorService;
  * Created by liuzwei on 2014/11/11.
  */
 public class BaseActivity extends FragmentActivity{
-    public CustomProgressDialog progressDialog;
     private static final int notifiId = 11;
     protected NotificationManager notificationManager;
     /**

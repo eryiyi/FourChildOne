@@ -217,9 +217,7 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
                                     }
                                 } catch (JSONException e) {
 
-                                    if (progressDialog != null) {
-                                        progressDialog.dismiss();
-                                    }
+
                                     e.printStackTrace();
                                 } catch (ParseException e) {
                                     e.printStackTrace();
@@ -230,9 +228,7 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
-                            if (progressDialog != null) {
-                                progressDialog.dismiss();
-                            }
+
                         }
                     },
                     null);
@@ -324,17 +320,13 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
                                 e.printStackTrace();
                             }
                         }
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
-                        }
+
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
-                        }
+
                         Toast.makeText(UpdateProfileActivity.this, "获得数据失败", Toast.LENGTH_SHORT).show();
                     }
                 }
