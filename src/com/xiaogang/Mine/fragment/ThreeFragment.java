@@ -34,7 +34,7 @@ import com.xiaogang.Mine.util.Constants;
 import com.xiaogang.Mine.util.StringUtil;
 import com.xiaogang.Mine.widget.ContentListView;
 import com.xiaogang.Mine.widget.SelectPhoPopWindow;
-import com.yixia.camera.demo.ui.record.MediaRecorderActivity;
+//import com.yixia.camera.demo.ui.record.MediaRecorderActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -270,10 +270,10 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
                 case R.id.video:
                 {
                     //视频
-                    save(Constants.PK_ADD_VIDEO_TYPE, "0");
-                    Intent intent = new Intent(getActivity(), MediaRecorderActivity.class);
-                    startActivity(intent);
-                    getActivity().overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
+//                    save(Constants.PK_ADD_VIDEO_TYPE, "0");
+//                    Intent intent = new Intent(getActivity(), MediaRecorderActivity.class);
+//                    startActivity(intent);
+//                    getActivity().overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
                 }
                     break;
                 case R.id.wenzi:

@@ -113,6 +113,7 @@
         <activity android:name=".ui.PublishVideoActivity" android:windowSoftInputMode="adjustResize"  android:screenOrientation="portrait"/>
         <activity android:name=".ui.UpdateProfileActivity" android:windowSoftInputMode="adjustResize"  android:screenOrientation="portrait"/>
         <activity android:name=".ui.CommentRecordActivity" android:windowSoftInputMode="adjustResize"  android:screenOrientation="portrait"/>
+        <activity android:name=".ui.EZRealPlayActivity" android:windowSoftInputMode="adjustResize"  android:screenOrientation="portrait"/>
         <activity android:name=".MainActivity" android:windowSoftInputMode="adjustResize"/>
 
 
@@ -484,34 +485,34 @@
 
         <service android:name="com.xiaogang.Mine.yingshi.GCMIntentService" />
 
-        <activity
-                android:name="com.yixia.camera.demo.ui.record.MediaRecorderActivity"
-                android:hardwareAccelerated="true"
-                android:launchMode="singleTop"
-                android:screenOrientation="portrait"
-                android:theme="@style/CameraTheme" >
-        </activity>
-        <activity
-                android:name="com.yixia.camera.demo.ui.record.MediaPreviewActivity"
-                android:hardwareAccelerated="true"
-                android:launchMode="singleTop"
-                android:screenOrientation="portrait"
-                android:theme="@style/CameraTheme" >
-        </activity>
-        <activity
-                android:name="com.yixia.camera.demo.ui.record.ImportVideoActivity"
-                android:hardwareAccelerated="true"
-                android:launchMode="singleTop"
-                android:screenOrientation="portrait"
-                android:theme="@style/CameraTheme" >
-        </activity>
-        <activity
-                android:name="com.yixia.camera.demo.ui.record.VideoPlayerActivity"
-                android:screenOrientation="portrait"
-                android:theme="@style/CameraTheme" >
-        </activity>
+        <!--<activity-->
+                <!--android:name="com.yixia.camera.demo.ui.record.MediaRecorderActivity"-->
+                <!--android:hardwareAccelerated="true"-->
+                <!--android:launchMode="singleTop"-->
+                <!--android:screenOrientation="portrait"-->
+                <!--android:theme="@style/CameraTheme" >-->
+        <!--</activity>-->
+        <!--<activity-->
+                <!--android:name="com.yixia.camera.demo.ui.record.MediaPreviewActivity"-->
+                <!--android:hardwareAccelerated="true"-->
+                <!--android:launchMode="singleTop"-->
+                <!--android:screenOrientation="portrait"-->
+                <!--android:theme="@style/CameraTheme" >-->
+        <!--</activity>-->
+        <!--<activity-->
+                <!--android:name="com.yixia.camera.demo.ui.record.ImportVideoActivity"-->
+                <!--android:hardwareAccelerated="true"-->
+                <!--android:launchMode="singleTop"-->
+                <!--android:screenOrientation="portrait"-->
+                <!--android:theme="@style/CameraTheme" >-->
+        <!--</activity>-->
+        <!--<activity-->
+                <!--android:name="com.yixia.camera.demo.ui.record.VideoPlayerActivity"-->
+                <!--android:screenOrientation="portrait"-->
+                <!--android:theme="@style/CameraTheme" >-->
+        <!--</activity>-->
 
-        <service android:name="com.yixia.camera.demo.service.AssertService" />
+        <!--<service android:name="com.yixia.camera.demo.service.AssertService" />-->
 
 
     </application>

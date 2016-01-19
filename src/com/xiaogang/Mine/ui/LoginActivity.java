@@ -23,6 +23,7 @@ import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuidemo.domain.User;
 import com.easemob.chatuidemo.utils.CommonUtils;
+import com.videogo.openapi.EZOpenSDK;
 import com.xiaogang.Mine.MainActivity;
 import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.UniversityApplication;
@@ -219,6 +220,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         save("lat", emp.getLat());
         save("password", password.getText().toString());
         save("password_hx", emp.getPassword());
+
+        //yingshi  login
+        EZOpenSDK.getInstance().openLoginPage();
     }
 
     void getAccessToken(){

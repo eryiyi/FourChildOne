@@ -2,6 +2,29 @@
 <resources>
 
     <color name="common_top_bar_blue">#4ebcd3</color>
+    <color name="line_color">#bebdbc</color>
+    <color name="black_bg">#000000</color>
+    <!-- 引导和登录 -->
+    <color name="login_line_color">#e0e0e3</color>
+    <color name="a1_blue_color">#1ea1ff</color>
+    <color name="a1_orange_color">#ff7e00</color>
+    <color name="my_list_deviver">#b2b2b2</color>
+    <color name="corsor_color">#adadad</color>
+    <color name="quality_focused_color">#448cf3</color>
+    <color name="source_detection_btn_color">#48a9fb</color>
+    <color name="preview_quality_color">#3eaefa</color>
+    <color name="application_bg">@color/common_bg</color>
+    <color name="more_color">#3ea6ef</color>
+    <color name="scan_yellow">#e56b19</color>
+    <color name="tv_my_blue">#1b9ee2</color>
+    <color name="auto_wifi_tip_red">#FF4000</color>
+    <color name="add_title_text_color">#666666</color>
+    <color name="help_link">#527ddb</color>
+    <color name="opensdk_cameralist_bg">#f0f0f1</color>
+    <color name="on_off_text_selector">#3ea6ef</color>
+    <color name="grouplayout_item_bg_sel">#f3f4f5</color>
+
+    <color name="common_sub_text">#888888</color>
     <color name="btn_login_normal">#00acff</color>
     <color name="btn_login_pressed">#46678d</color>
     <color name="btn_logout_normal">#d33f3f</color>
