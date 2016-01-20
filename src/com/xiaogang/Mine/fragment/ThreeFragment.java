@@ -80,7 +80,6 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
         pd = new ProgressDialog(getActivity());
         pd.setCanceledOnTouchOutside(false);
         pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
-
             @Override
             public void onCancel(DialogInterface dialog) {
                 progressShow = false;
