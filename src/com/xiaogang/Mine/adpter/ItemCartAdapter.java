@@ -12,6 +12,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.UniversityApplication;
+import com.xiaogang.Mine.base.InternetURL;
 import com.xiaogang.Mine.dao.ShoppingCart;
 
 import java.util.List;
@@ -77,7 +78,7 @@ public class ItemCartAdapter extends BaseAdapter {
             holder.item_cont.setText(typeBean.getGoods_name());
             holder.item_money.setText( typeBean.getSell_price());
             holder.item_num.setText( typeBean.getGoods_count());
-            imageLoader.displayImage(typeBean.getGoods_cover(), holder.item_pic, UniversityApplication.options, animateFirstListener);
+            imageLoader.displayImage(InternetURL.INTERNAL + typeBean.getGoods_cover(), holder.item_pic, UniversityApplication.options, animateFirstListener);
 
             if("0".equals(typeBean.getIs_select())){
                 holder.select_is.setImageResource(R.drawable.select_one);

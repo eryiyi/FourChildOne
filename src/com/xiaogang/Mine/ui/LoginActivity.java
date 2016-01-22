@@ -24,6 +24,8 @@ import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuidemo.domain.User;
 import com.easemob.chatuidemo.utils.CommonUtils;
 import com.videogo.openapi.EZOpenSDK;
+import com.videogo.openapi.bean.EZAccessToken;
+import com.videogo.util.LogUtil;
 import com.xiaogang.Mine.MainActivity;
 import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.UniversityApplication;
@@ -392,5 +394,58 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         dao.saveContactList(users);
     }
 
+
+
+//    void getYingShi(){
+//        StringRequest request = new StringRequest(
+//                Request.Method.POST,
+//                InternetURL.GET_YS_TOKEN,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String s) {
+//                        if (StringUtil.isJson(s)) {
+//                            try {
+//                                JSONObject jo = new JSONObject(s);
+//                                String code =  jo.getString("code");
+//                                if(Integer.parseInt(code) == 200){
+//
+//                                }
+//                                else{
+//                                    Toast.makeText(LoginActivity.this, jo.getString("msg"), Toast.LENGTH_SHORT).show();
+//                                }
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError volleyError) {
+//                    }
+//                }
+//        ) {
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                Map<String, String> params = new HashMap<String, String>();
+//                params.put("", );
+//                params.put("", );
+//                params.put("", );
+//                params.put("", );
+//                params.put("", );
+//                params.put("", );
+//                return params;
+//            }
+//
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                Map<String, String> params = new HashMap<String, String>();
+//                params.put("Content-Type", "application/x-www-form-urlencoded");
+//                return params;
+//            }
+//        };
+//        getRequestQueue().add(request);
+//    }
 
 }

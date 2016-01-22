@@ -8,6 +8,7 @@ public class InternetURL {
 
     //1 获得秘钥
     public static final String GET_TOKEN_URL = INTERNAL + "json.php/user.api-authkey";
+    public static final String GET_YS_TOKEN = "https://open.ys7.com/api/method/" + "token/getAccessToken";
     //2多媒体文件获取
     public static final String UPLOAD_FILE_URL = INTERNAL + "json.php/user.api-uploadfile/";
     //3注册

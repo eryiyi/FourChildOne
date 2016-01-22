@@ -82,7 +82,7 @@ public class OrderMakeActivity extends BaseActivity implements View.OnClickListe
     // 商户PID
     public static final String PARTNER = "2088021438756659";
     // 商户收款账号
-    public static final String SELLER = "82229443@qq.com";
+    public static final String SELLER = "mengyaxinshiyuan@163.com";
     // 商户私钥，pkcs8格式
     public static final String RSA_PRIVATE = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBALys+oYaxqv4FYju" +
             "8C1poM6qmHLjWPnXzqEJT0NxyFXgdaK/Qe9DcpcASod9mIAdlLIxJEyYNlWeonAJ" +

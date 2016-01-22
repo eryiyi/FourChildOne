@@ -26,6 +26,7 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:hint="搜索"
+                android:visibility="gone"
                 android:drawablePadding="8dp"
                 android:drawableLeft="@drawable/sousuo"
                 android:padding="3dp"
@@ -37,7 +38,16 @@
                 android:textSize="16sp"
                 android:id="@+id/search_editext"
                 />
+        <TextView android:layout_width="wrap_content"
+                  android:layout_weight="1"
+                  android:textSize="18sp"
+                  android:text="商品分类"
+                  android:gravity="center"
+                  android:layout_gravity="center"
+                  android:textColor="@color/white"
+                  android:layout_height="wrap_content"/>
         <RelativeLayout android:layout_width="50dp"
+
                         android:layout_height="wrap_content">
             <ImageView android:layout_width="wrap_content"
                        android:src="@drawable/cart_white"

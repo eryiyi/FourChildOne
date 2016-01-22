@@ -69,6 +69,7 @@
                           android:layout_height="wrap_content">
                 <TextView android:layout_width="match_parent"
                           android:text="视频评论"
+                          android:visibility="gone"
                           android:id="@+id/mine_video_comment"
                           android:padding="15dp"
                           android:textSize="14sp"
@@ -78,6 +79,7 @@
                           android:drawableRight="@drawable/red_in"
                           android:layout_height="wrap_content"/>
                 <View android:layout_width="match_parent"
+                      android:visibility="gone"
                       android:background="@color/translucent_20"
                       android:layout_height="0.1dp"></View>
                 <TextView android:layout_width="match_parent"
