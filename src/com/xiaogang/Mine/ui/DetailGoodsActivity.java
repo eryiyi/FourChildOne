@@ -78,6 +78,10 @@ public class DetailGoodsActivity extends BaseActivity  implements View.OnClickLi
     private String id;
     ProgressDialog pd = null;
     private boolean progressShow;
+
+    private TextView detail_title;
+    private TextView comment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,6 +115,11 @@ public class DetailGoodsActivity extends BaseActivity  implements View.OnClickLi
         sumry = (TextView) this.findViewById(R.id.sumry);
         address = (TextView) this.findViewById(R.id.address);
         number = (TextView) this.findViewById(R.id.number);
+        comment = (TextView) this.findViewById(R.id.comment);
+        detail_title = (TextView) this.findViewById(R.id.detail_title);
+
+        comment.setOnClickListener(this);
+        detail_title.setOnClickListener(this);
         unit = (TextView) this.findViewById(R.id.unit);
         this.findViewById(R.id.foot_mine_cart).setOnClickListener(this);
         this.findViewById(R.id.foot_favour).setOnClickListener(this);
@@ -143,6 +152,15 @@ public class DetailGoodsActivity extends BaseActivity  implements View.OnClickLi
                 //收藏
                 getfavour();
             }
+                break;
+            case R.id.detail_title:
+            {
+                Intent intentD = new Intent(DetailGoodsActivity.this, DetailGoodsDetailActivity.class);
+                intentD.putExtra("productDetail" ,productDetail);
+                startActivity(intentD);
+            }
+                break;
+            case R.id.comment:
                 break;
         }
     }

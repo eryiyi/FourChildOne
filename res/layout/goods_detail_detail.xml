@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:background="@color/white"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <RelativeLayout android:layout_width="match_parent"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:background="@drawable/foot_back"
+                    android:layout_height="@dimen/height_top_bar">
+        <ImageView android:layout_width="wrap_content"
+                   android:onClick="back"
+                   android:src="@drawable/back_white"
+                   android:layout_centerVertical="true"
+                   android:padding="8dp"
+                   android:layout_height="wrap_content"/>
+
+        <TextView android:layout_width="wrap_content"
+                  android:text="详情"
+                  android:id="@+id/detail_title"
+                  android:textSize="16sp"
+                  android:textColor="@color/white"
+                  android:layout_centerInParent="true"
+                  android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
+    <com.xiaogang.Mine.widget.ReboundScrollView android:layout_width="match_parent"
+                                                android:layout_weight="1"
+                                                android:layout_height="wrap_content">
+
+
+                <TextView android:layout_width="wrap_content"
+                          android:textColor="@color/textColor"
+                          android:padding="15dp"
+                          android:id="@+id/title"
+                          android:lineSpacingMultiplier="1.2"
+                          android:textSize="16sp"
+                          android:text="法国原装进口 PERONLSD Xslfdajsklf S3鹅蛋型新生儿床垫 婴儿床睡铺"
+                          android:layout_height="wrap_content"/>
+                <ListView android:layout_width="match_parent"
+                          android:id="@+id/lstv"
+                          android:layout_height="match_parent">
+
+                </ListView>
+    </com.xiaogang.Mine.widget.ReboundScrollView>
+
+</LinearLayout>

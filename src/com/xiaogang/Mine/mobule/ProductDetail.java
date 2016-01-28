@@ -1,5 +1,6 @@
 package com.xiaogang.Mine.mobule;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -31,7 +32,7 @@ import java.util.List;
 
  pices
  */
-public class ProductDetail {
+public class ProductDetail implements Serializable {
     private String product_id;
     private String product_name;
     private String school_id;

@@ -348,6 +348,7 @@ public class TwoFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private void addCameraList(List<EZCameraInfo> result) {
+        mAdapter.clearItem();
         int count = result.size();
         EZCameraInfo item = null;
         for (int i = 0; i < count; i++) {

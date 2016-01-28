@@ -232,7 +232,6 @@ public class UpdateProfileActivity extends BaseActivity implements View.OnClickL
                         }
                     },
                     null);
-
     }
 
     void saveNoPic() throws ParseException {

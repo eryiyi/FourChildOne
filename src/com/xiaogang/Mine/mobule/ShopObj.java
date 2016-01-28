@@ -1,5 +1,7 @@
 package com.xiaogang.Mine.mobule;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/1/18.
  *    "": "17",
@@ -25,7 +27,7 @@ package com.xiaogang.Mine.mobule;
  "": "1",
  "": "15880208517"
  */
-public class ShopObj {
+public class ShopObj implements Serializable{
     private String shop_id;
     private String category_id;
     private String uid;

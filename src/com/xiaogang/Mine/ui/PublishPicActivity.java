@@ -105,7 +105,7 @@ public class PublishPicActivity extends BaseActivity implements View.OnClickList
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 String path = dataList.get(position);
-                if (path.contains("camera_default") && position == dataList.size() - 1 && dataList.size() - 1 != 9) {
+                if (path.contains("camera_default")) {
                     showSelectImageDialog();
                 } else {
                     Intent intent = new Intent(PublishPicActivity.this, ImageDelActivity.class);
@@ -430,9 +430,9 @@ public class PublishPicActivity extends BaseActivity implements View.OnClickList
         ArrayList<String> tDataList = new ArrayList<String>();
 
         for (String s : dataList) {
-//            if (!s.contains("camera_default")) {
+            if (!s.contains("camera_default")) {
             tDataList.add(s);
-//            }
+            }
         }
         return tDataList;
     }
@@ -449,9 +449,9 @@ public class PublishPicActivity extends BaseActivity implements View.OnClickList
                             String string = tDataList.get(i);
                             dataList.add(string);
                         }
-//                        if (dataList.size() < 9) {
-//                            dataList.add("camera_default");
-//                        }
+                        if (dataList.size() < 9) {
+                            dataList.add("camera_default");
+                        }
                         adapter.notifyDataSetChanged();
                     } else {
                         finish();
@@ -464,14 +464,16 @@ public class PublishPicActivity extends BaseActivity implements View.OnClickList
                     }
                     Bitmap bitmap = ImageUtils.getUriBitmap(this, uri, 400, 400);
                     String cameraImagePath = FileUtils.saveBitToSD(bitmap, System.currentTimeMillis() + ".jpg");
-
+                    dataList.add("camera_default");
                     dataList.add(cameraImagePath);
+
                     adapter.notifyDataSetChanged();
                     break;
                 case CommonDefine.TAKE_PICTURE_FROM_GALLERY:
                     tDataList = data.getStringArrayListExtra("datalist");
                     if (tDataList != null) {
                         dataList.clear();
+                        dataList.add("camera_default");
                         for (int i = 0; i < tDataList.size(); i++) {
                             String string = tDataList.get(i);
                             dataList.add(string);
