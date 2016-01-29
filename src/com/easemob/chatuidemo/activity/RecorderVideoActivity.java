@@ -208,7 +208,7 @@ public class RecorderVideoActivity extends BaseActivity implements
 	}
 
 	@Override
-	protected void onPause() {
+	public void onPause() {
 		super.onPause();
 		if (mWakeLock != null) {
 			mWakeLock.release();

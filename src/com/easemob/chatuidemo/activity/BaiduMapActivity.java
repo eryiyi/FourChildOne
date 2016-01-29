@@ -163,7 +163,7 @@ public class BaiduMapActivity extends BaseActivity {
 	}
 
 	@Override
-	protected void onPause() {
+	public void onPause() {
 		mMapView.onPause();
 		if (mLocClient != null) {
 			mLocClient.stop();

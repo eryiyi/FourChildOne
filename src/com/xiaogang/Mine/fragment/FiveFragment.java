@@ -1,5 +1,6 @@
 package com.xiaogang.Mine.fragment;
 
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +25,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.umeng.update.UmengUpdateAgent;
+import com.umeng.update.UmengUpdateListener;
+import com.umeng.update.UpdateResponse;
+import com.umeng.update.UpdateStatus;
 import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.UniversityApplication;
 import com.xiaogang.Mine.adpter.AnimateFirstDisplayListener;
@@ -50,7 +55,9 @@ public class FiveFragment extends BaseFragment implements View.OnClickListener {
     private TextView mine_nickname;
     private TextView mine_age;
     private TextView mine_sign;
+    public ProgressDialog progressDialog;
     private TextView huncun;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,6 +74,13 @@ public class FiveFragment extends BaseFragment implements View.OnClickListener {
             e.printStackTrace();
         }
         getMember();
+
+        try {
+            huncun.setText(DataCleanManager.getTotalCacheSize(getActivity()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return view;
     }
 
@@ -79,6 +93,7 @@ public class FiveFragment extends BaseFragment implements View.OnClickListener {
         view.findViewById(R.id.mine_address).setOnClickListener(this);
         view.findViewById(R.id.relate_one).setOnClickListener(this);
         view.findViewById(R.id.checknews).setOnClickListener(this);
+        huncun = (TextView) view.findViewById(R.id.huncun);
 
         mine_head = (ImageView) view.findViewById(R.id.mine_head);
         mine_nickname = (TextView) view.findViewById(R.id.mine_nickname);
@@ -88,7 +103,7 @@ public class FiveFragment extends BaseFragment implements View.OnClickListener {
 
         TextView version = (TextView) view.findViewById(R.id.version);
         version.setText("我的版本:"+ (getVersionName()==null?"V1.0":getVersionName()));
-
+        version.setOnClickListener(this);
     }
 
 
@@ -128,9 +143,14 @@ public class FiveFragment extends BaseFragment implements View.OnClickListener {
             case R.id.mine_huancun:
                 //清除临时文件
                 //缓存
-                DataCleanManager.cleanInternalCache(getActivity());
-                getpkginfo("com.xiaogang.Mine");
-                Toast.makeText(getActivity(), "清除成功！", Toast.LENGTH_SHORT).show();
+                // 启动一个线程
+                DataCleanManager.clearAllCache(getActivity());
+                Toast.makeText(getActivity().getApplication(), "清除缓存成功",Toast.LENGTH_LONG);
+                try {
+                    huncun.setText(DataCleanManager.getTotalCacheSize(getActivity()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.mine_anquan:
                 Intent anquanView = new Intent(getActivity(), MineAnquanActivity.class);
@@ -173,6 +193,29 @@ public class FiveFragment extends BaseFragment implements View.OnClickListener {
 //                        }
 //                    }
 //                });
+                break;
+            case R.id.version:
+                //版本号
+                progressDialog = new ProgressDialog(getActivity());
+                progressDialog.show();
+                UmengUpdateAgent.forceUpdate(getActivity());
+                UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
+                    @Override
+                    public void onUpdateReturned(int i, UpdateResponse updateResponse) {
+                        progressDialog.dismiss();
+                        switch (i) {
+                            case UpdateStatus.Yes:
+//                                Toast.makeText(mContext, "有新版本发现", Toast.LENGTH_SHORT).show();
+                                break;
+                            case UpdateStatus.No:
+                                Toast.makeText(getActivity(), "已是最新版本", Toast.LENGTH_SHORT).show();
+                                break;
+                            case UpdateStatus.Timeout:
+                                Toast.makeText(getActivity(), "连接超时", Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+                    }
+                });
                 break;
         }
     }

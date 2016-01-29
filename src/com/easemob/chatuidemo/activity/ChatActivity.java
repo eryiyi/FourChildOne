@@ -1482,7 +1482,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 	}
 
 	@Override
-	protected void onPause() {
+	public void onPause() {
 		super.onPause();
 		if (wakeLock.isHeld())
 			wakeLock.release();

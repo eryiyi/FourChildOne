@@ -28,6 +28,7 @@ import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.activity.ChatAllHistoryFragment;
 import com.easemob.chatuidemo.activity.LoginActivity;
 import com.easemob.util.EMLog;
+import com.umeng.update.UmengUpdateAgent;
 import com.xiaogang.Mine.base.BaseActivity;
 import com.xiaogang.Mine.base.InternetURL;
 import com.xiaogang.Mine.data.MemberObjData;
@@ -77,6 +78,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        UmengUpdateAgent.update(this);
 
         res = getResources();
         fm = getSupportFragmentManager();

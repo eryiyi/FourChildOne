@@ -14,6 +14,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.easemob.applib.controller.HXSDKHelper;
 import com.google.gson.Gson;
+import com.umeng.analytics.MobclickAgent;
 import com.xiaogang.Mine.UniversityApplication;
 import com.xiaogang.Mine.upload.MultiPartStringRequest;
 
@@ -81,6 +82,7 @@ public class BaseActivity extends FragmentActivity{
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onResume(this);
         // onresume时，取消notification显示
         HXSDKHelper.getInstance().getNotifier().reset();
     }
@@ -170,4 +172,11 @@ public class BaseActivity extends FragmentActivity{
         ActivityTack.getInstanse().removeActivity(this);
         super.onDestroy();
     }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
+
 }
