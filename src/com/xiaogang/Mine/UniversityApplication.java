@@ -22,12 +22,14 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.videogo.constant.Config;
 import com.videogo.openapi.EZOpenSDK;
+import com.xiaogang.Mine.mobule.SlidePic;
 import com.xiaogang.Mine.yingshi.CustomExceptionHandler;
 //import com.yixia.camera.VCamera;
 //import com.yixia.camera.demo.service.AssertService;
 //import com.yixia.camera.util.DeviceUtils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +60,8 @@ public class UniversityApplication extends FrontiaApplication {
      */
     public static String currentUserNick = "";
     public static DemoHXSDKHelper hxSDKHelper = new DemoHXSDKHelper();
+
+    public static  List<SlidePic> listsAd = new ArrayList<SlidePic>();
 
 
 //    public LocationClient mLocationClient;

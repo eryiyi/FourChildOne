@@ -66,7 +66,7 @@ public class ViewPagerAdapter extends PagerAdapter {
         holder.iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickContentItemListener.onClickContentItem(position, 0, null);
+                onClickContentItemListener.onClickContentItem(position, 0, "000");
             }
         });
         ((ViewPager) container).addView(convertView, 0);

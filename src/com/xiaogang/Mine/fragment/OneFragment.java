@@ -22,6 +22,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.xiaogang.Mine.R;
+import com.xiaogang.Mine.UniversityApplication;
 import com.xiaogang.Mine.adpter.AnimateFirstDisplayListener;
 import com.xiaogang.Mine.adpter.ItemHotAdapter;
 import com.xiaogang.Mine.adpter.OnClickContentItemListener;
@@ -55,7 +56,7 @@ public class OneFragment extends BaseFragment implements View.OnClickListener ,O
     private ImageView dot, dots[];
     private Runnable runnable;
     private int autoChangeTime = 5000;
-    private List<SlidePic> lists = new ArrayList<SlidePic>();
+    public List<SlidePic> lists = new ArrayList<SlidePic>();
 
     View view;
 
@@ -115,6 +116,7 @@ public class OneFragment extends BaseFragment implements View.OnClickListener ,O
                                             lists.clear();
                                             lists.addAll(indexObj.getAds());
                                             initViewPager();
+                                            UniversityApplication.listsAd = lists;
                                         }
                                         if(indexObj.getNews() != null){
                                             listNews.clear();

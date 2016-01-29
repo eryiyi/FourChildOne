@@ -206,19 +206,19 @@ public class ItemRecordsAdapter extends BaseAdapter {
         holder.commentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickContentItemListener.onClickContentItem(position, 10, null);
+                onClickContentItemListener.onClickContentItem(position, 10, "111");
             }
         });
         holder.zanBtnImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickContentItemListener.onClickContentItem(position, 2, null);
+                onClickContentItemListener.onClickContentItem(position, 2, "111");
             }
         });
         holder.commentBtnImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickContentItemListener.onClickContentItem(position, 3, null);
+                onClickContentItemListener.onClickContentItem(position, 3, "111");
             }
         });
         return convertView;

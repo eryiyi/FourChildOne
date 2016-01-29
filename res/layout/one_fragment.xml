@@ -59,9 +59,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentBottom="true"
                             android:layout_alignParentLeft="true"
-                            android:background="#33000000"
                             android:gravity="center"
-                            android:visibility="gone"
                             android:orientation="horizontal"
                             android:paddingBottom="3dp"
                             android:paddingTop="3dp" >
