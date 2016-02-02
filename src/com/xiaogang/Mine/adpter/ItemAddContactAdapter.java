@@ -78,7 +78,12 @@ public class ItemAddContactAdapter extends BaseAdapter {
                     onClickContentItemListener.onClickContentItem(position, 1, null);
                 }
             });
-
+            holder.avatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onClickContentItemListener.onClickContentItem(position, 2, null);
+                }
+            });
         }
         return convertView;
     }

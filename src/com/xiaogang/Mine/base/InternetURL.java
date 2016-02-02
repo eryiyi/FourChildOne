@@ -61,8 +61,8 @@ public class InternetURL {
     public static final String ADDRESS_ADD_UPDATE_URL = INTERNAL + "json.php/member.api-addAddress";
     //收获地址列表
     public static final String ADDRESS_LIST_URL = INTERNAL + "json.php/member.api-addresses";
-    //
-//    public static final String ADD_COMMENT_RECORD_URL = INTERNAL + "index/ServiceJson/tocomment";
+    //获取会员信息
+    public static final String GET_MEMBER_BYID_URL = INTERNAL + "json.php/member.api-getBaseInfonByUid";
 
 
 }

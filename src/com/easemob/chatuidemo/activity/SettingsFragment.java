@@ -120,7 +120,8 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	private LinearLayout pushNick;
 	
 	DemoHXSDKModel model;
-	
+
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.fragment_conversation_settings, container, false);
@@ -136,6 +137,9 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		rl_switch_vibrate = (RelativeLayout) getView().findViewById(R.id.rl_switch_vibrate);
 		rl_switch_speaker = (RelativeLayout) getView().findViewById(R.id.rl_switch_speaker);
 		rl_switch_chatroom_leave = (RelativeLayout) getView().findViewById(R.id.rl_switch_chatroom_owner_leave);
+
+		getView().findViewById(R.id.back).setOnClickListener(this);
+
 
 		iv_switch_open_notification = (ImageView) getView().findViewById(R.id.iv_switch_open_notification);
 		iv_switch_close_notification = (ImageView) getView().findViewById(R.id.iv_switch_close_notification);
@@ -232,6 +236,9 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+			case R.id.back:
+				getActivity().finish();
+				break;
 		case R.id.rl_switch_notification:
 			if (iv_switch_open_notification.getVisibility() == View.VISIBLE) {
 				iv_switch_open_notification.setVisibility(View.INVISIBLE);

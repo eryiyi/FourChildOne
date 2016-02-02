@@ -120,6 +120,7 @@
         <activity android:name=".ui.EZRealPlayActivity" android:windowSoftInputMode="adjustResize"  android:screenOrientation="portrait"/>
         <activity android:name=".ui.DetailGoodsDetailActivity" android:windowSoftInputMode="adjustResize"  android:screenOrientation="portrait"/>
         <activity android:name=".ui.DetailFavourActivity" android:windowSoftInputMode="adjustResize"  android:screenOrientation="portrait"/>
+        <activity android:name=".ui.ProfileActivity" android:windowSoftInputMode="adjustResize"  android:screenOrientation="portrait"/>
         <activity android:name=".MainActivity" android:windowSoftInputMode="adjustResize"/>
 
 

@@ -2,21 +2,22 @@
 <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
-        android:padding="2dp"
-        android:background="@drawable/zhuye_item_select"
+        android:background="@color/white"
         android:layout_height="wrap_content">
 
-        <com.xiaogang.Mine.widget.CircleImageView
-                android:id="@+id/detail_favour_item_icon"
-                android:layout_width="32dp"
-                android:scaleType="centerCrop"
-                android:layout_height="32dp"
-                android:src="@drawable/head"/>
+        <!--<com.xiaogang.Mine.widget.CircleImageView-->
+                <!--android:id="@+id/detail_favour_item_icon"-->
+                <!--android:layout_width="32dp"-->
+                <!--android:scaleType="centerCrop"-->
+                <!--android:layout_height="32dp"-->
+                <!--android:src="@drawable/head"/>-->
 
-        <TextView android:layout_width="32dp"
+        <TextView android:layout_width="wrap_content"
                   android:id="@+id/favour_count"
-                  android:background="@drawable/head"
                   android:gravity="center"
-                  android:textColor="@color/white"
-                  android:layout_height="32dp"/>
+                  android:padding="3dp"
+                  android:textSize="14sp"
+                  android:text="safasdfasdfadsf"
+                  android:textColor="@color/nickname_color"
+                  android:layout_height="wrap_content"/>
 </RelativeLayout>

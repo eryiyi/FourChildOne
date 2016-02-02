@@ -54,30 +54,31 @@ public class DetailFavourAdapter extends BaseAdapter {
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(mContext).inflate(R.layout.detail_favour_item, null);
-            holder.ivIcon = (ImageView) convertView.findViewById(R.id.detail_favour_item_icon);
+//            holder.ivIcon = (ImageView) convertView.findViewById(R.id.detail_favour_item_icon);
             holder.favour_count = (TextView) convertView.findViewById(R.id.favour_count);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
         final FavourObj cell = findEmps.get(position);//获得元素
-        if (position == (findEmps.size() - 1)) {
-            holder.favour_count.setVisibility(View.VISIBLE);
-            if(countTmp >99){
-                countTmp = 99;
-            }
-            holder.favour_count.setText(String.valueOf(countTmp));
-        } else {
-            holder.favour_count.setVisibility(View.GONE);
-        }
+//        if (position == (findEmps.size() - 1)) {
+//            holder.favour_count.setVisibility(View.VISIBLE);
+//            if(countTmp >99){
+//                countTmp = 99;
+//            }
+//            holder.favour_count.setText(String.valueOf(countTmp));
+//        } else {
+//            holder.favour_count.setVisibility(View.GONE);
+//        }
         if (cell != null) {
-            imageLoader.displayImage(cell.getCover(), holder.ivIcon, UniversityApplication.txOptions, animateFirstListener);
+//            imageLoader.displayImage(cell.getCover(), holder.ivIcon, UniversityApplication.txOptions, animateFirstListener);
+            holder.favour_count.setText(cell.getName()==null?"":cell.getName());
         }
         return convertView;
     }
 
     class ViewHolder {
-        ImageView ivIcon;
+//        ImageView ivIcon;
         TextView favour_count;//喜欢数量
     }
 

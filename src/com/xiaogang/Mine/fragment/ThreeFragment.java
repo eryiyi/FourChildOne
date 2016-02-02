@@ -294,7 +294,6 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
                                             adapter.notifyDataSetChanged();
                                         }
                                         if (ContentListView.LOAD == currentid) {
-                                            lists.clear();
                                             lists.addAll(data.getData());
                                             lstv.setResultSize(data.getData().size());
                                             adapter.notifyDataSetChanged();
@@ -306,7 +305,6 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
                                             adapter.notifyDataSetChanged();
                                         }
                                         if (ContentListView.LOAD == currentid) {
-                                            lists.clear();
                                             lstv.setResultSize(0);
                                             adapter.notifyDataSetChanged();
                                         }
@@ -319,7 +317,6 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
                                         adapter.notifyDataSetChanged();
                                     }
                                     if (ContentListView.LOAD == currentid) {
-                                        lists.clear();
                                         lstv.setResultSize(0);
                                         adapter.notifyDataSetChanged();
                                     }
@@ -335,7 +332,6 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
                                 adapter.notifyDataSetChanged();
                             }
                             if (ContentListView.LOAD == currentid) {
-                                lists.clear();
                                 lstv.setResultSize(0);
                                 adapter.notifyDataSetChanged();
                             }
@@ -575,6 +571,7 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
                                         Favours favours = lists.get(tmpPosition).getFavours();//当前的所有收藏
                                         List<FavourObj>  favourObjs = favours.getList();
                                         FavourObj favourObj = new FavourObj();
+                                        favourObj.setName(getGson().fromJson(getSp().getString("nick_name", ""), String.class));
                                         favourObj.setCover(getGson().fromJson(getSp().getString("cover", ""), String.class));
                                         favourObjs.add(favourObj);
                                         favours.setList(favourObjs);

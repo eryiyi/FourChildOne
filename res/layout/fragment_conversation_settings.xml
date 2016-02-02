@@ -10,7 +10,15 @@
         android:layout_height="@dimen/height_top_bar"
         android:background="@color/top_bar_normal_bg"
         android:gravity="center_vertical" >
-
+        <Button android:layout_width="wrap_content"
+                android:drawablePadding="8dp"
+                android:id="@+id/back"
+                android:background="@null"
+                android:textColor="@color/white"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:drawableLeft="@drawable/back_white"
+                android:layout_height="match_parent"/>
         <TextView
             android:id="@+id/message_title"
             android:layout_width="wrap_content"

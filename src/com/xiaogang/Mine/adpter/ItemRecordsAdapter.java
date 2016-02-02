@@ -195,6 +195,7 @@ public class ItemRecordsAdapter extends BaseAdapter {
                 holder.comment_lin.setVisibility(View.VISIBLE);
             }
             adapterComment.notifyDataSetChanged();
+
         }
 
         if("1".equals(cell.getIs_select())){

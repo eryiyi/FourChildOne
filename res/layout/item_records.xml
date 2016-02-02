@@ -96,9 +96,10 @@
                    android:layout_height="12dp"/>
     </LinearLayout>
     <!--赞-->
+
     <RelativeLayout android:layout_width="match_parent"
                     android:layout_marginLeft="10dp"
-                    android:layout_height="40dp"
+                    android:layout_height="wrap_content"
                     android:visibility="gone"
                     android:layout_toRightOf="@+id/head"
                     android:layout_below="@+id/commentBtn"
@@ -107,7 +108,7 @@
                     android:id="@+id/detail_like_liner_layout"
                     android:layout_marginTop="2dp">
         <GridView
-                android:numColumns="8"
+                android:numColumns="auto_fit"
                 android:stretchMode="columnWidth"
                 android:id="@+id/gridView"
                 android:horizontalSpacing="2dp"

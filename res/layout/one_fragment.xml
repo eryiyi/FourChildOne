@@ -130,6 +130,7 @@
                               android:layout_height="wrap_content"/>
                 </RelativeLayout>
                 <RelativeLayout android:layout_width="0dp"
+                                android:visibility="gone"
                                 android:id="@+id/index_type_liner_four"
                                 android:layout_weight="1"
                                 android:layout_height="wrap_content">

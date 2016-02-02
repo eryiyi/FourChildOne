@@ -36,6 +36,7 @@ import com.xiaogang.Mine.base.BaseActivity;
 import com.xiaogang.Mine.base.InternetURL;
 import com.xiaogang.Mine.data.MemberObjDatas;
 import com.xiaogang.Mine.mobule.MemberObj;
+import com.xiaogang.Mine.ui.ProfileActivity;
 import com.xiaogang.Mine.util.StringUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -231,6 +232,18 @@ public class AddContactActivity extends BaseActivity implements OnClickContentIt
 					addContact(member);
 				}
 				break;
+			case 2:MemberObj member1 = lists.get(position);
+				if(member1 != null){
+					Intent intent = new Intent(AddContactActivity.this, ProfileActivity.class);
+					intent.putExtra("uid", member1.getUid() );
+					startActivity(intent);
+				}
+				break;
 		}
 	}
+
+
+
+
+
 }
