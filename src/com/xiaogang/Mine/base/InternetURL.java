@@ -63,6 +63,8 @@ public class InternetURL {
     public static final String ADDRESS_LIST_URL = INTERNAL + "json.php/member.api-addresses";
     //获取会员信息
     public static final String GET_MEMBER_BYID_URL = INTERNAL + "json.php/member.api-getBaseInfonByUid";
-
+    //查询模糊
+    public static final String GET_KEY_URL = INTERNAL + "json.php/product.api-search";
+//    http://yey.xqb668.com/?key=%E7%AC%94%E7%AD%92&access_token=MDc5M0E0Z05WSHI2S1Z1VmpWS2hGT3o3SnZFQXBsbGxhQVZ6L0ZQLzlvYw==
 
 }

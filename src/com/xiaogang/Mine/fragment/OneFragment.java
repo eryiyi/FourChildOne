@@ -1,6 +1,7 @@
 package com.xiaogang.Mine.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -9,6 +10,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,6 +66,10 @@ public class OneFragment extends BaseFragment implements View.OnClickListener ,O
     private GridView grid_one;
     private GridView grid_two;
 
+
+    private EditText searchText;
+
+
     private ItemHotAdapter adpterNews;
     private ItemHotAdapter adpterHot;
     private List<ProducteObj> listNews = new ArrayList<ProducteObj>();
@@ -78,6 +85,22 @@ public class OneFragment extends BaseFragment implements View.OnClickListener ,O
         view = inflater.inflate(R.layout.one_fragment, null);
         res = getActivity().getResources();
         initView(view);
+
+
+        searchText = (EditText) view.findViewById(R.id.searchText);
+        searchText.setOnFocusChangeListener(new android.view.View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus) {
+// 此处为得到焦点时的处理内容
+                    Intent searV = new Intent(getActivity(), SearchTableViewActivity.class);
+                    startActivity(searV);
+                    //
+                } else {
+// 此处为失去焦点时的处理内容
+                }
+            }
+        });
 
         getAd();
         return view;

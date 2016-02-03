@@ -51,6 +51,24 @@ public class ProducteObj implements Serializable {
     private String sale_num;
     private String good_rate;
     private String tel;
+    private String is_hot;
+    private String is_new;
+
+    public String getIs_hot() {
+        return is_hot;
+    }
+
+    public void setIs_hot(String is_hot) {
+        this.is_hot = is_hot;
+    }
+
+    public String getIs_new() {
+        return is_new;
+    }
+
+    public void setIs_new(String is_new) {
+        this.is_new = is_new;
+    }
 
     public String getTel() {
         return tel;
