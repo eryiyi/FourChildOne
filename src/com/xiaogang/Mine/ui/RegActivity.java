@@ -141,7 +141,7 @@ public class RegActivity extends BaseActivity implements View.OnClickListener {
                                 e.printStackTrace();
                             }
                         } else {
-                            Toast.makeText(RegActivity.this, "获得数据失败", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegActivity.this, R.string.get_cart_error, Toast.LENGTH_SHORT).show();
                         }
                         if (pd != null && pd.isShowing()) {
                             pd.dismiss();
@@ -223,7 +223,7 @@ public class RegActivity extends BaseActivity implements View.OnClickListener {
                                 e.printStackTrace();
                             }
                         } else {
-                            Toast.makeText(RegActivity.this, R.string.get_cart_error, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegActivity.this, R.string.reg_error, Toast.LENGTH_SHORT).show();
                         }
                         if (pd != null && pd.isShowing()) {
                             pd.dismiss();
@@ -236,7 +236,7 @@ public class RegActivity extends BaseActivity implements View.OnClickListener {
                         if (pd != null && pd.isShowing()) {
                             pd.dismiss();
                         }
-                        Toast.makeText(RegActivity.this, R.string.get_cart_error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegActivity.this, R.string.reg_error, Toast.LENGTH_SHORT).show();
                     }
                 }
         ) {

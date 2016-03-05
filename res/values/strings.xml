@@ -325,6 +325,7 @@
     <string name="toast_updatephoto_fail">更新头像失败!</string>
     <string name="get_data_error">获得数据失败</string>
     <string name="get_cart_error">"获得验证码失败"</string>
+    <string name="reg_error">"注册失败"</string>
     <string name="daojishi_one">"倒计时"</string>
     <string name="daojishi_two">"秒"</string>
     <string name="daojishi_three">"重新获取"</string>

@@ -1,10 +1,8 @@
 package com.xiaogang.Mine.fragment;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.*;
 import android.content.pm.IPackageStatsObserver;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -93,6 +91,7 @@ public class FiveFragment extends BaseFragment implements View.OnClickListener {
         view.findViewById(R.id.mine_address).setOnClickListener(this);
         view.findViewById(R.id.relate_one).setOnClickListener(this);
         view.findViewById(R.id.checknews).setOnClickListener(this);
+        view.findViewById(R.id.quite).setOnClickListener(this);
         huncun = (TextView) view.findViewById(R.id.huncun);
 
         mine_head = (ImageView) view.findViewById(R.id.mine_head);
@@ -216,6 +215,24 @@ public class FiveFragment extends BaseFragment implements View.OnClickListener {
                         }
                     }
                 });
+                break;
+            case R.id.quite:
+                AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                        .setIcon(R.drawable.logo)
+                        .setTitle("确定退出吗？")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                save("password" ,"");
+                                save("isLogin" ,"0");
+                                getActivity().finish();
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .create();
+                dialog.show();
                 break;
         }
     }

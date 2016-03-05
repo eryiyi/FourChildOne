@@ -179,6 +179,19 @@
                           android:textColor="@color/red"
                           android:drawableRight="@drawable/red_in"
                           android:layout_height="wrap_content"/>
+                <View android:layout_width="match_parent"
+                      android:background="@color/translucent_20"
+                      android:layout_height="0.1dp"></View>
+                <TextView android:layout_width="match_parent"
+                          android:text="退出账号"
+                          android:padding="15dp"
+                          android:id="@+id/quite"
+                          android:textSize="14sp"
+                          android:drawableLeft="@drawable/mine_security"
+                          android:drawablePadding="15dp"
+                          android:textColor="@color/red"
+                          android:drawableRight="@drawable/red_in"
+                          android:layout_height="wrap_content"/>
             </LinearLayout>
         </LinearLayout>
     </com.xiaogang.Mine.widget.ReboundScrollView>
