@@ -13,7 +13,16 @@
  * 
  * @warning 这里写本文件的相关警告
  */
-package com.xiaogang.Mine.ui;
+package com.xiaogang.Mine.ui.play;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import java.util.Calendar;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -33,20 +42,39 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.view.*;
+import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
+import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.hik.CASClient.EN_SWITCH_OPERATE_TYPE;
 import com.videogo.camera.CameraInfoEx;
 import com.videogo.camera.CameraManager;
@@ -56,27 +84,38 @@ import com.videogo.constant.Constant;
 import com.videogo.constant.IntentConsts;
 import com.videogo.device.DeviceInfoEx;
 import com.videogo.device.DeviceManager;
-import com.videogo.exception.*;
+import com.videogo.exception.BaseException;
+import com.videogo.exception.CASClientSDKException;
+import com.videogo.exception.ErrorCode;
+import com.videogo.exception.HCNetSDKException;
+import com.videogo.exception.InnerException;
+import com.videogo.exception.RtspClientException;
+import com.videogo.exception.TTSClientSDKException;
 import com.videogo.openapi.EZConstants;
 import com.videogo.openapi.EZConstants.EZPTZAction;
 import com.videogo.openapi.EZConstants.EZPTZCommand;
-import com.videogo.openapi.EZConstants.EZRealPlayConstants;
 import com.videogo.openapi.EZConstants.EZVideoLevel;
+import com.videogo.openapi.EZConstants.EZRealPlayConstants;
 import com.videogo.openapi.EZOpenSDK;
 import com.videogo.openapi.EZPlayer;
 import com.videogo.openapi.bean.EZCameraInfo;
+import com.videogo.openapi.bean.EZDeviceInfo;
 import com.videogo.realplay.RealPlayStatus;
-import com.videogo.util.*;
-import com.videogo.widget.*;
+import com.videogo.util.ConnectionDetector;
+import com.videogo.util.LocalInfo;
+import com.videogo.util.LogUtil;
+import com.videogo.util.MediaScanner;
+import com.videogo.util.RotateViewUtil;
+import com.videogo.util.SDCardUtil;
+import com.videogo.util.Utils;
+import com.videogo.widget.CheckTextButton;
+import com.videogo.widget.CustomRect;
+import com.videogo.widget.CustomTouchListener;
+import com.videogo.widget.RingView;
+import com.videogo.widget.TitleBar;
+import com.hik.streamconvert.StreamConvert;
 import com.xiaogang.Mine.R;
-import com.xiaogang.Mine.base.BaseActivity;
 import com.xiaogang.Mine.util.*;
-import com.xiaogang.Mine.yingshi.play.RealPlaySquareInfo;
-
-import java.util.Calendar;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * 实时预览2.7
@@ -84,8 +123,8 @@ import java.util.TimerTask;
  * @author xiaxingsuo
  * @data 2015-11-11
  */
-public class EZRealPlayActivity extends BaseActivity implements OnClickListener, SurfaceHolder.Callback,
-        Handler.Callback, OnTouchListener, SecureValidate.SecureValidateListener {
+public class EZRealPlayActivity extends Activity implements OnClickListener, SurfaceHolder.Callback,
+        Handler.Callback, OnTouchListener, SecureValidate.SecureValidateListener, OpenYSService.OpenYSServiceListener {
     private static final String TAG = "RealPlayerActivity";
     /** 动画时间 */
     private static final int ANIMATION_DURING_TIME = 500;
@@ -129,9 +168,6 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
     /** 屏幕当前方向 */
     private int mOrientation = Configuration.ORIENTATION_PORTRAIT;
     private int mForceOrientation = 0;
-    /** 存放上一次的流量 */
-    private long mStreamFlow = 0;
-    private long mTotalStreamFlow = 0;
     private Rect mRealPlayRect = null;
 
     private LinearLayout mRealPlayPageLy = null;
@@ -176,6 +212,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
 
     /** 录像文件路径 */
     private String mRecordFilePath = null;
+    private boolean mIsRecording = false;
     private String mRecordTime = null;
     /** 录像时间 */
     private int mRecordSecond = 0;
@@ -232,7 +269,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
     private RingView mTalkRingView = null;
     private Button mTalkBackControlBtn = null;
 
-//    private WaitDialog mWaitDialog = null;
+    private WaitDialog mWaitDialog = null;
 
     /** 监听锁屏解锁的事件 */
     private RealPlayBroadcastReceiver mBroadcastReceiver = null;
@@ -263,15 +300,12 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
     private TextView mRealPlayPreviewTv = null;
 
     /** 演示点预览控制对象 */
-    private EZPlayer mEZPlayer = null;
+    private EZPlayer  mEZPlayer = null;
     private EZOpenSDK mEZOpenSDK = EZOpenSDK.getInstance();
-    private StubPlayer mStub = new StubPlayer();
+//    private StubPlayer mStub = new StubPlayer();
     private CheckTextButton mFullScreenTitleBarBackBtn;
     private EZVideoLevel mCurrentQulityMode = EZVideoLevel.VIDEO_LEVEL_HD;
-
-
-    private WaitDialog mWaitDialog = null;
-
+    private EZDeviceInfo mDeviceInfo = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -307,11 +341,6 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
                 stopRealPlay();
             }
             setRealPlayFailUI(getString(R.string.realplay_fail_device_not_exist));
-        } else if (mEZPlayer != null && mStub.getPrivacyStatus() == 1) {
-            if (mStatus != RealPlayStatus.STATUS_STOP) {
-                stopRealPlay();
-            }
-            setRealPlayFailUI(null);
         } else {
             if (mStatus == RealPlayStatus.STATUS_INIT || mStatus == RealPlayStatus.STATUS_PAUSE
                     || mStatus == RealPlayStatus.STATUS_DECRYPT) {
@@ -401,6 +430,9 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
         if (intent != null) {
             mCameraInfo = (EZCameraInfo) intent.getParcelableExtra(IntentConsts.EXTRA_CAMERA_INFO);
             mRtspUrl = intent.getStringExtra(IntentConsts.EXTRA_RTSP_URL);
+            mCurrentQulityMode = (mCameraInfo.getVideoLevel()== 0 ? EZVideoLevel.VIDEO_LEVEL_FLUNET :
+                    (mCameraInfo.getVideoLevel()== 1) ? EZVideoLevel.VIDEO_LEVEL_BALANCED :
+                            EZVideoLevel.VIDEO_LEVEL_HD);
             LogUtil.debugLog(TAG, "rtspUrl:" + mRtspUrl);
 
             getRealPlaySquareInfo();
@@ -474,7 +506,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
             //mPortraitTitleBar.setBackgroundColor(getResources().getColor(R.color.black_bg));
         }
         mLandscapeTitleBar = (TitleBar) findViewById(R.id.title_bar_landscape);
-        mLandscapeTitleBar.setStyle(Color.rgb(0xff, 0xff, 0xff), getResources().getDrawable(R.color.black),
+        mLandscapeTitleBar.setStyle(Color.rgb(0xff, 0xff, 0xff), getResources().getDrawable(R.color.dark_gray),
                 getResources().getDrawable(R.drawable.message_back_selector));
         mLandscapeTitleBar.setOnTouchListener(this);
         mFullScreenTitleBarBackBtn = new CheckTextButton(this);
@@ -545,12 +577,12 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
                     // 出界判断
                     if (DRAG_LEFT == direction || DRAG_RIGHT == direction) {
                         // 左移/右移出界判断
-                        if (mStub.getSupportPtzLeftRight() == 1) {
+                        if (mDeviceInfo.isSupportPTZ()) {
                             return true;
                         }
                     } else if (DRAG_UP == direction || DRAG_DOWN == direction) {
                         // 上移/下移出界判断
-                        if (mStub.getSupportPtzTopBottom() == 1) {
+                        if (mDeviceInfo.isSupportPTZ()) {
                             return true;
                         }
                     }
@@ -570,7 +602,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
             @Override
             public void onZoom(float scale) {
                 LogUtil.debugLog(TAG, "onZoom:" + scale);
-                if (mEZPlayer != null && mStub.getSupportPtzZoom() == 1) {
+                if (mEZPlayer != null && mDeviceInfo.isSupportZoom()) {
                     startZoom(scale);
                 }
             }
@@ -590,7 +622,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
                 if (mEZPlayer != null) {
                     stopDrag(false);
                 }
-                if (mEZPlayer != null && mStub.getSupportPtzZoom() == 1) {
+                if (mEZPlayer != null && mDeviceInfo.isSupportZoom()) {
                     stopZoom();
                 }
             }
@@ -598,7 +630,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
             @Override
             public void onZoomChange(float scale, CustomRect oRect, CustomRect curRect) {
                 LogUtil.debugLog(TAG, "onZoomChange:" + scale);
-                if (mEZPlayer != null && mStub.getSupportPtzZoom() == 1) {
+                if (mEZPlayer != null && mDeviceInfo.isSupportZoom()) {
                     //采用云台调焦
                     return;
                 }
@@ -664,7 +696,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
         setRealPlaySvLayout();
         initCaptureUI();
         mScreenOrientationHelper = new ScreenOrientationHelper(this, mFullscreenButton, /*mFullscreenFullButton*/mFullScreenTitleBarBackBtn);
-//
+
         mWaitDialog = new WaitDialog(this, android.R.style.Theme_Translucent_NoTitleBar);
         mWaitDialog.setCancelable(false);
     }
@@ -801,7 +833,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
             return 0;
         }
 
-        if (mStub.getSupportPtzLeftRight() == 1 || mStub.getSupportPtzTopBottom() == 1) {
+        if (mDeviceInfo.isSupportPTZ() || mDeviceInfo.isSupportZoom()) {
             return 1;
         } else {
             return 0;
@@ -969,7 +1001,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
 
     private void updateOrientation() {
         if (mIsOnTalk) {
-            if (mEZPlayer != null && mStub.getSupportTalk() == EZRealPlayConstants.TALK_FULL_DUPLEX) {
+            if (mEZPlayer != null && mDeviceInfo.isSupportTalk() /*mStub.getSupportTalk() == EZRealPlayConstants.TALK_FULL_DUPLEX*/) {
                 setOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
             } else {
                 setForceOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -1000,7 +1032,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
                 mRealPlayOperateBar.setVisibility(View.VISIBLE);
                 mRealPlayFullOperateBar.setVisibility(View.GONE);
                 mFullscreenFullButton.setVisibility(View.GONE);
-                if (mRecordFilePath != null) {
+                if (mIsRecording) {
                     mRealPlayRecordBtn.setVisibility(View.GONE);
                     mRealPlayRecordStartBtn.setVisibility(View.VISIBLE);
                 } else {
@@ -1024,7 +1056,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
                 if (!mIsOnTalk && !mIsOnPtz) {
                     mFullscreenFullButton.setVisibility(View.GONE);
                 }
-                if (mRecordFilePath != null) {
+                if (mIsRecording) {
                     mRealPlayFullRecordBtn.setVisibility(View.GONE);
                     mRealPlayFullRecordStartBtn.setVisibility(View.VISIBLE);
                 } else {
@@ -1129,7 +1161,6 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
      */
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
     }
 
     /*
@@ -1412,7 +1443,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
      * @since V2.0
      */
     private void stopVoiceTalk(boolean startAnim) {
-        if (mCameraInfo == null) {
+        if (mCameraInfo == null || mEZPlayer == null) {
             return;
         }
         LogUtil.debugLog(TAG, "stopVoiceTalk");
@@ -1453,6 +1484,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
 
         @Override
         public boolean onTouch(View view, MotionEvent motionevent) {
+            int ptz_result = -1;
             int action = motionevent.getAction();
             final int speed = EZConstants.PTZ_SPEED_DEFAULT;
             switch (action) {
@@ -1465,27 +1497,31 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
                         case R.id.ptz_top_btn:
                             mPtzControlLy.setBackgroundResource(R.drawable.ptz_up_sel);
                             setPtzDirectionIv(RealPlayStatus.PTZ_UP);
-                            mEZOpenSDK.controlPTZ(mCameraInfo.getCameraId(), EZPTZCommand.EZPTZCommandUp,
+                            ptz_result = mEZOpenSDK.controlPTZ(mCameraInfo.getCameraId(),EZPTZCommand.EZPTZCommandUp,
                                             EZPTZAction.EZPTZActionSTART, speed);
 //                            mEZOpenSDK.controlDisplay(mCameraInfo.getCameraId(), EZPTZDisplayCommand.EZPTZDisplayCommandFlip);
+                            LogUtil.i(TAG, "controlPTZ ptzCtrl result: " + ptz_result);
                             break;
                         case R.id.ptz_bottom_btn:
                             mPtzControlLy.setBackgroundResource(R.drawable.ptz_bottom_sel);
                             setPtzDirectionIv(RealPlayStatus.PTZ_DOWN);
-                            mEZOpenSDK.controlPTZ(mCameraInfo.getCameraId(), EZPTZCommand.EZPTZCommandDown,
+                            ptz_result = mEZOpenSDK.controlPTZ(mCameraInfo.getCameraId(),EZPTZCommand.EZPTZCommandDown,
                                             EZPTZAction.EZPTZActionSTART, speed);
+                            LogUtil.i(TAG, "controlPTZ ptzCtrl result: " + ptz_result);
                             break;
                         case R.id.ptz_left_btn:
                             mPtzControlLy.setBackgroundResource(R.drawable.ptz_left_sel);
                             setPtzDirectionIv(RealPlayStatus.PTZ_LEFT);
-                            mEZOpenSDK.controlPTZ(mCameraInfo.getCameraId(), EZPTZCommand.EZPTZCommandLeft,
+                            ptz_result = mEZOpenSDK.controlPTZ(mCameraInfo.getCameraId(),EZPTZCommand.EZPTZCommandLeft,
                                             EZPTZAction.EZPTZActionSTART, speed);
+                            LogUtil.i(TAG, "controlPTZ ptzCtrl result: " + ptz_result);
                             break;
                         case R.id.ptz_right_btn:
                             mPtzControlLy.setBackgroundResource(R.drawable.ptz_right_sel);
                             setPtzDirectionIv(RealPlayStatus.PTZ_RIGHT);
-                            mEZOpenSDK.controlPTZ(mCameraInfo.getCameraId(), EZPTZCommand.EZPTZCommandRight,
+                            ptz_result = mEZOpenSDK.controlPTZ(mCameraInfo.getCameraId(),EZPTZCommand.EZPTZCommandRight,
                                             EZPTZAction.EZPTZActionSTART, speed);
+                            LogUtil.i(TAG, "controlPTZ ptzCtrl result: " + ptz_result);
                             break;
                         default:
                             break;
@@ -1499,23 +1535,27 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
                             break;
                         case R.id.ptz_top_btn:
                             mPtzControlLy.setBackgroundResource(R.drawable.ptz_bg);
-                            mEZOpenSDK.controlPTZ(mCameraInfo.getCameraId(), EZPTZCommand.EZPTZCommandUp,
+                            ptz_result = mEZOpenSDK.controlPTZ(mCameraInfo.getCameraId(),EZPTZCommand.EZPTZCommandUp,
                                             EZPTZAction.EZPTZActionSTOP, speed);
+                            LogUtil.i(TAG, "controlPTZ ptzCtrl result: " + ptz_result);
                             break;
                         case R.id.ptz_bottom_btn:
                             mPtzControlLy.setBackgroundResource(R.drawable.ptz_bg);
-                            mEZOpenSDK.controlPTZ(mCameraInfo.getCameraId(), EZPTZCommand.EZPTZCommandDown,
+                            ptz_result = mEZOpenSDK.controlPTZ(mCameraInfo.getCameraId(),EZPTZCommand.EZPTZCommandDown,
                                             EZPTZAction.EZPTZActionSTOP, speed);
+                            LogUtil.i(TAG, "controlPTZ ptzCtrl result: " + ptz_result);
                             break;
                         case R.id.ptz_left_btn:
                             mPtzControlLy.setBackgroundResource(R.drawable.ptz_bg);
-                            mEZOpenSDK.controlPTZ(mCameraInfo.getCameraId(), EZPTZCommand.EZPTZCommandLeft,
+                            ptz_result = mEZOpenSDK.controlPTZ(mCameraInfo.getCameraId(),EZPTZCommand.EZPTZCommandLeft,
                                             EZPTZAction.EZPTZActionSTOP, speed);
+                            LogUtil.i(TAG, "controlPTZ ptzCtrl result: " + ptz_result);
                             break;
                         case R.id.ptz_right_btn:
                             mPtzControlLy.setBackgroundResource(R.drawable.ptz_bg);
-                            mEZOpenSDK.controlPTZ(mCameraInfo.getCameraId(), EZPTZCommand.EZPTZCommandRight,
+                            ptz_result = mEZOpenSDK.controlPTZ(mCameraInfo.getCameraId(),EZPTZCommand.EZPTZCommandRight,
                                             EZPTZAction.EZPTZActionSTOP, speed);
+                            LogUtil.i(TAG, "controlPTZ ptzCtrl result: " + ptz_result);
                             break;
                         default:
                             break;
@@ -1604,7 +1644,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
         mTalkBackControlBtn = (Button) layoutView.findViewById(R.id.talkback_control_btn);
         mTalkBackControlBtn.setOnTouchListener(mOnTouchListener);
 
-        if (mStub.getSupportTalk() == EZRealPlayConstants.TALK_FULL_DUPLEX) {
+        if ( mDeviceInfo.isSupportTalk()/*mStub.getSupportTalk() == EZRealPlayConstants.TALK_FULL_DUPLEX*/) {
             mTalkRingView.setVisibility(View.VISIBLE);
             mTalkBackControlBtn.setEnabled(false);
             mTalkBackControlBtn.setText(R.string.talking);
@@ -1727,41 +1767,19 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
         qualityFlunetBtn.setOnClickListener(mOnPopWndClickListener);
 
         // 视频质量，2-高清，1-标清，0-流畅
-        if (mStub.getVideoLevel() == EZVideoLevel.VIDEO_LEVEL_FLUNET.getVideoLevel()) {
+        if (mCameraInfo.getVideoLevel() == EZVideoLevel.VIDEO_LEVEL_FLUNET.getVideoLevel()) {
             qualityFlunetBtn.setEnabled(false);
-        } else if (mStub.getVideoLevel() == EZVideoLevel.VIDEO_LEVEL_BALANCED.getVideoLevel()) {
+        } else if (mCameraInfo.getVideoLevel() == EZVideoLevel.VIDEO_LEVEL_BALANCED.getVideoLevel()) {
             qualityBalancedBtn.setEnabled(false);
-        } else if (mStub.getVideoLevel() == EZVideoLevel.VIDEO_LEVEL_HD.getVideoLevel()) {
+        } else if (mCameraInfo.getVideoLevel() == EZVideoLevel.VIDEO_LEVEL_HD.getVideoLevel()) {
             qualityHdBtn.setEnabled(false);
         }
 
         int height = 105;
-        // 2-2-1 支持低中高，低中为子码流，高为主码流；2-1-0 支持低中，不支持高品质，低为子码流，中为主码流
-        String capability = mStub.getCapability();
-        LogUtil.debugLog(TAG, "capability=" + capability);
-        String[] quality = capability.split("-");
-        try {
-            if (Integer.parseInt(quality[0]) == 0) {
-                qualityFlunetBtn.setVisibility(View.GONE);
-                height = height - 30;
-            } else {
-                qualityFlunetBtn.setVisibility(View.VISIBLE);
-            }
-            if (Integer.parseInt(quality[1]) == 0) {
-                qualityBalancedBtn.setVisibility(View.GONE);
-                height = height - 30;
-            } else {
-                qualityBalancedBtn.setVisibility(View.VISIBLE);
-            }
-            if (Integer.parseInt(quality[2]) == 0) {
-                qualityHdBtn.setVisibility(View.GONE);
-                height = height - 30;
-            } else {
-                qualityHdBtn.setVisibility(View.VISIBLE);
-            }
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
+
+        qualityFlunetBtn.setVisibility(View.VISIBLE);
+        qualityBalancedBtn.setVisibility(View.VISIBLE);
+        qualityHdBtn.setVisibility(View.VISIBLE);
 
         height = Utils.dip2px(this, height);
         mQualityPopupWindow = new PopupWindow(layoutView, LayoutParams.WRAP_CONTENT, height, true);
@@ -1799,7 +1817,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
      */
     private void onRecordBtnClick() {
         mControlDisplaySec = 0;
-        if (mRecordFilePath != null) {
+        if (mIsRecording) {
             stopRealPlayRecord();
             return;
         }
@@ -1855,7 +1873,8 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
             thr.start();
 
             mAudioPlayUtil.playAudioFile(AudioPlayUtil.RECORD_SOUND);
-            mEZPlayer.startLocalRecord(null);
+            mEZPlayer.startLocalRecord(mLocalRecordCb);
+//            mEZPlayer.startLocalRecord(null);
         }
     }
 
@@ -1866,7 +1885,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
      * @since V1.0
      */
     private void stopRealPlayRecord() {
-        if (mEZPlayer == null || mRecordFilePath == null) {
+        if (mEZPlayer == null || !mIsRecording) {
             return;
         }
         Toast.makeText(EZRealPlayActivity.this, getResources().getString(R.string.already_saved_to_volume), Toast.LENGTH_SHORT).show();
@@ -1901,21 +1920,17 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
         mRealPlayRecordLy.setVisibility(View.GONE);
 //        mRealPlayCaptureRl.setVisibility(View.VISIBLE);
         mCaptureDisplaySec = 0;
-        try {
-            mRealPlayCaptureIv.setImageURI(Uri.parse(mRecordFilePath));
-        } catch (OutOfMemoryError e) {
-            e.printStackTrace();
-        }
-        mRealPlayCaptureWatermarkIv.setTag(mRecordFilePath);
-        mRecordFilePath = null;
+//        try {
+//            mRealPlayCaptureIv.setImageURI(Uri.parse(mRecordFilePath));
+//        } catch (OutOfMemoryError e) {
+//            e.printStackTrace();
+//        }
+//        mRealPlayCaptureWatermarkIv.setTag(mRecordFilePath);
+        mIsRecording = false;
         updateCaptureUI();
     }
 
     private void onCaptureRlClick() {
-//        Intent intent = new Intent(this, ImagesManagerActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        startActivity(intent);
-//        initCaptureUI();
     }
 
     /**
@@ -1987,7 +2002,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
 
     private void onRealPlaySvClick() {
         if (mCameraInfo != null && mEZPlayer != null) {
-            if (mCameraInfo.getOnlineStatus() != 1 || mStub.getPrivacyStatus() == 1) {
+            if (mCameraInfo.getOnlineStatus() != 1) {
                 return;
             }
             if (mOrientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -2060,16 +2075,32 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
         setRealPlayLoadingUI();
 
         if (mCameraInfo != null) {
-            String cameraId = Utils.getCameraId(mCameraInfo.getCameraId());
-            mEZPlayer = mEZOpenSDK.createPlayer(this, cameraId);
-            mStub.setCameraId(mCameraInfo.getCameraId());////****  mj
-            if(mEZPlayer == null)
-                return;
-        	mEZPlayer.setHandler(mHandler);
-        	mEZPlayer.setSurfaceHold(mRealPlaySh);
+            final String cameraId = Utils.getCameraId(mCameraInfo.getCameraId());
+            Runnable run = new Runnable() {
+                @Override
+                public void run() {
+                    mEZPlayer = mEZOpenSDK.createPlayer(EZRealPlayActivity.this, cameraId);
+                    if (mDeviceInfo == null) {
+                        try {
+                            mDeviceInfo = mEZOpenSDK.getDeviceInfoBySerial(mCameraInfo.getDeviceSerial());
+                        } catch (BaseException e) {
+                            e.printStackTrace();
+                            return;
+                        }
+                    }
+                    if(mEZPlayer == null)
+                        return;
+                    mEZPlayer.setHandler(mHandler);
+                    mEZPlayer.setSurfaceHold(mRealPlaySh);
 
-        	mEZPlayer.startRealPlay();
+                    mEZPlayer.startRealPlay();
+                }
+            };
+            Thread thr = new Thread(run);
+            thr.start();
+
         } else if (mRtspUrl != null) {
+            // TODO 最好也改成跟上面一样，异步播放，避免ANR
             mEZPlayer = mEZOpenSDK.createPlayerWithUrl(this, mRtspUrl);
             //mStub.setCameraId(mCameraInfo.getCameraId());////****  mj
             if(mEZPlayer == null)
@@ -2097,13 +2128,8 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
             stopRealPlayRecord();
 
             mEZPlayer.stopRealPlay();
-            mTotalStreamFlow += mStub.getStreamFlow();
-        } /*else if (mDemoRealPlayer != null) {
-            mRealPlayerHelper.stopDemoRealPlayTask(mDemoRealPlayer);
-            mTotalStreamFlow += mDemoRealPlayer.getStreamFlow();
-        }*/
+        }
 
-        mStreamFlow = 0;
     }
 
     private void setRealPlayLoadingUI() {
@@ -2116,7 +2142,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
         if (mCameraInfo != null) {
             mRealPlayCaptureBtn.setEnabled(false);
             mRealPlayRecordBtn.setEnabled(false);
-            if (mCameraInfo.getOnlineStatus() == 1 && (mEZPlayer == null)) {
+            if (mCameraInfo.getOnlineStatus() == 1 ) {
                 mRealPlayQualityBtn.setEnabled(true);
             } else {
                 mRealPlayQualityBtn.setEnabled(false);
@@ -2160,13 +2186,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
         setRealPlaySvLayout();
 
         setStopLoading();
-//        if (mTotalStreamFlow > 0) {
-//            mRealPlayFlowTv.setVisibility(View.VISIBLE);
-//            mRealPlayFullFlowLy.setVisibility(View.VISIBLE);
-//        } else {
-//            mRealPlayFlowTv.setVisibility(View.GONE);
-//            mRealPlayFullFlowLy.setVisibility(View.GONE);
-//        }
+
         hideControlRlAndFullOperateBar(true);
         mRealPlayBtn.setBackgroundResource(R.drawable.play_play_selector);
 
@@ -2176,7 +2196,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
 
             mRealPlayCaptureBtn.setEnabled(false);
             mRealPlayRecordBtn.setEnabled(false);
-            if (mCameraInfo.getOnlineStatus() == 1 && (mEZPlayer == null || mStub.getPrivacyStatus() != 1)) {
+            if (mCameraInfo.getOnlineStatus() == 1) {
                 mRealPlayQualityBtn.setEnabled(true);
             } else {
                 mRealPlayQualityBtn.setEnabled(false);
@@ -2204,12 +2224,9 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
         stopUpdateTimer();
         updateOrientation();
 
-        if (mEZPlayer != null && mStub.getPrivacyStatus() == 1) {
-            setPrivacy();
-        } else {
+        {
             setLoadingFail(errorStr);
         }
-//        mRealPlayFlowTv.setVisibility(View.GONE);
         mRealPlayFullFlowLy.setVisibility(View.GONE);
         mRealPlayBtn.setBackgroundResource(R.drawable.play_play_selector);
 
@@ -2221,7 +2238,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
 
             mRealPlayCaptureBtn.setEnabled(false);
             mRealPlayRecordBtn.setEnabled(false);
-            if (mCameraInfo.getOnlineStatus() == 1 && (mEZPlayer == null || mStub.getPrivacyStatus() != 1)) {
+            if (mCameraInfo.getOnlineStatus() == 1 && (mEZPlayer == null)) {
                 mRealPlayQualityBtn.setEnabled(true);
             } else {
                 mRealPlayQualityBtn.setEnabled(false);
@@ -2255,7 +2272,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
         if (mCameraInfo != null) {
             mRealPlayCaptureBtn.setEnabled(true);
             mRealPlayRecordBtn.setEnabled(true);
-            if (mCameraInfo.getOnlineStatus() == 1 && (mEZPlayer == null || mStub.getPrivacyStatus() != 1)) {
+            if (mCameraInfo.getOnlineStatus() == 1) {
                 mRealPlayQualityBtn.setEnabled(true);
             } else {
                 mRealPlayQualityBtn.setEnabled(false);
@@ -2362,26 +2379,6 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
             case EZRealPlayConstants.MSG_SET_VEDIOMODE_FAIL:
                 handleSetVedioModeFail(msg.arg1);
                 break;
-            case EZRealPlayConstants.MSG_SWITCH_SET_SUCCESS:
-                switch (msg.arg2) {
-                    case EN_SWITCH_OPERATE_TYPE.CTRL_PRIVATE_PROTECT:
-//                        handleSetPrivacySuccess();
-                        break;
-                    case EN_SWITCH_OPERATE_TYPE.CTRL_POSITION_SOUNDSOURCE:
-//                        handleSetSoundLocalizationSuccess();
-                        break;
-                }
-                break;
-            case EZRealPlayConstants.MSG_SWITCH_SET_FAIL:
-                switch (msg.arg2) {
-                    case EN_SWITCH_OPERATE_TYPE.CTRL_PRIVATE_PROTECT:
-//                        handleSetPrivacyFail(msg);
-                        break;
-                    case EN_SWITCH_OPERATE_TYPE.CTRL_POSITION_SOUNDSOURCE:
-//                        handleSetSoundLocalizationFail(msg);
-                        break;
-                }
-                break;
             case EZRealPlayConstants.MSG_PTZ_SET_FAIL:
                 handlePtzControlFail(msg);
                 break;
@@ -2390,12 +2387,6 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
                 break;
             case EZRealPlayConstants.MSG_START_RECORD_FAIL:
                 handleRecordFail(msg.arg1);
-                break;
-            case EZRealPlayConstants.MSG_SET_COVER_SUCCESS:
-                // handleUploadSucceed();
-                break;
-            case EZRealPlayConstants.MSG_SET_COVER_FAIL:
-                // handleUploadFailed();
                 break;
             case EZRealPlayConstants.MSG_REALPLAY_VOICETALK_SUCCESS:
                 handleVoiceTalkSucceed();
@@ -2420,12 +2411,6 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
                 break;
             case MSG_HIDE_PAGE_ANIM:
                 hidePageAnim();
-                if (mEZPlayer != null && mStub.getPrivacyStatus() == 1) {
-                    if (mStatus != RealPlayStatus.STATUS_STOP) {
-                        stopRealPlay();
-                    }
-                    setRealPlayFailUI(null);
-                }
                 break;
             case MSG_PLAY_UI_REFRESH:
                 initUI();
@@ -2528,15 +2513,14 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
     }
 
     private void setRealPlayTalkUI() {
-        if (mEZPlayer != null && (mStub.getSupportTalk() == EZRealPlayConstants.TALK_HALF_DUPLEX
-                || mStub.getSupportTalk() == EZRealPlayConstants.TALK_FULL_DUPLEX)) {
+        if (mEZPlayer != null && (mDeviceInfo.isSupportTalk())) {
             mRealPlayTalkBtnLy.setVisibility(View.VISIBLE);
             if (mCameraInfo != null && mCameraInfo.getOnlineStatus() == 1) {
                 mRealPlayTalkBtn.setEnabled(true);
             } else {
                 mRealPlayTalkBtn.setEnabled(false);
             }
-            if (mStub.getSupportTalk() == EZRealPlayConstants.TALK_FULL_DUPLEX) {
+            if ( mDeviceInfo.isSupportTalk()/*mStub.getSupportTalk() == EZRealPlayConstants.TALK_FULL_DUPLEX*/) {
                 mRealPlayFullTalkBtn.setVisibility(View.VISIBLE);
             } else {
                 mRealPlayFullTalkBtn.setVisibility(View.GONE);
@@ -2550,36 +2534,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
     }
 
     private void updatePermissionUI() {
-//        mRealPlayPrivacyBtnLy.setVisibility(View.GONE);
         mRealPlayTalkBtnLy.setVisibility(View.VISIBLE);
-	/*
-        //通过分享权限设置
-        if(mCameraInfo == null || mRealPlayMgr == null || mCameraInfo.getShareStatus() != 1) {
-            return;
-        }
-        if (mRealPlayMgr.getCapturePermission() != 1) {
-            mRealPlayCaptureBtnLy.setVisibility(View.GONE);
-            mRealPlayFullCaptureBtn.setVisibility(View.GONE);
-        }
-        if (mRealPlayMgr.getRecordPermission() != 1) {
-            mRealPlayRecordContainerLy.setVisibility(View.GONE);
-            mRealPlayFullRecordContainer.setVisibility(View.GONE);
-        }
-        if (mRealPlayMgr.getTalkPermission() != 1) {
-            mRealPlayTalkBtnLy.setVisibility(View.GONE);
-            mRealPlayFullTalkBtn.setVisibility(View.GONE);
-        }
-        if (mRealPlayMgr.getSslPermission() != 1) {
-            mRealPlaySslBtnLy.setVisibility(View.GONE);
-        }
-        if (mRealPlayMgr.getQualityPermission() != 1) {
-            mRealPlayQualityBtn.setVisibility(View.GONE);
-        }
-        if (mRealPlayMgr.getPtzPermission() != 1) {
-            mRealPlayPtzBtnLy.setVisibility(View.GONE);
-            mRealPlayFullPtzBtn.setVisibility(View.GONE);
-        }
-		*/
     }
 
     private void updateUI() {
@@ -2603,9 +2558,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
 //        mRealPlayPrivacyBtnLy.setVisibility(View.GONE);
 //        setSoundLocalizationUI();
 
-        if (mEZPlayer != null && mStub.getSupportSsl() == 1) {
-            mRealPlaySslBtnLy.setVisibility(View.VISIBLE);
-        } else {
+        {
             mRealPlaySslBtnLy.setVisibility(View.GONE);
         }
 
@@ -2633,12 +2586,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
 
         //通过能力级设置
         updateUI();
-        if (mEZPlayer != null && mStub.getPrivacyStatus() == 1) {
-            if (mStatus != RealPlayStatus.STATUS_STOP) {
-                stopRealPlay();
-            }
-            setRealPlayFailUI(null);
-        }
+
     }
 
     private void handleVoiceTalkSucceed() {
@@ -2747,6 +2695,9 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
         if (mStatus == RealPlayStatus.STATUS_PLAY) {
             // 停止播放
             stopRealPlay();
+            //下面语句防止stopRealPlay线程还没释放surface, startRealPlay线程已经开始使用surface
+            //因此需要等待500ms
+            SystemClock.sleep(500);
             // 开始播放
             startRealPlay();
         }
@@ -2797,7 +2748,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
             mRealPlayRecordBtn.setVisibility(View.GONE);
             mRealPlayRecordStartBtn.setVisibility(View.VISIBLE);
         }
-        mRecordFilePath = recordFilePath;
+        mIsRecording = true;
         // 计时按钮可见
         mRealPlayRecordLy.setVisibility(View.VISIBLE);
         mRealPlayRecordTv.setText("00:00");
@@ -2806,7 +2757,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
 
     private void handleRecordFail(int errorCode) {
         Utils.showToast(EZRealPlayActivity.this, R.string.remoteplayback_record_fail, errorCode);
-        if (mRecordFilePath != null) {
+        if (mIsRecording) {
             stopRealPlayRecord();
         }
     }
@@ -2841,7 +2792,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
 
         updateCaptureUI();
 
-        if (mRecordFilePath != null) {
+        if (mIsRecording) {
             updateRecordTime();
         }
     }
@@ -3014,6 +2965,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
 
     private void updateRealPlayFailUI(int errorCode) {
         String txt = null;
+        LogUtil.i(TAG, "updateRealPlayFailUI: errorCode:" + errorCode);
         // 判断返回的错误码
         switch (errorCode) {
             case HCNetSDKException.NET_DVR_PASSWORD_ERROR:
@@ -3076,7 +3028,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
                 break;
             case ErrorCode.ERROR_WEB_CODE_ERROR:
                 //VerifySmsCodeUtil.openSmsVerifyDialog(Constant.SMS_VERIFY_LOGIN, this, this);
-//                OpenYSService.openYSServiceDialog(this, this);
+                OpenYSService.openYSServiceDialog(this, this);
                 //txt = Utils.getErrorTip(this, R.string.check_feature_code_fail, errorCode);
                 break;
             case ErrorCode.ERROR_WEB_HARDWARE_SIGNATURE_OP_ERROR:
@@ -3086,6 +3038,9 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
                 break;
             case ErrorCode.ERROR_INNER_DEVICE_PASSWORD_IS_NULL:
                 txt = getString(R.string.device_password_is_null);
+                break;
+            case EZConstants.EZOpenSDKError.ERROR_WEB_NEED_DISABLE_TERMINAL_BOUND:
+                txt = "请在萤石客户端关闭终端绑定";
                 break;
             case ErrorCode.ERROR_EXTRA_SQUARE_NO_SHARING:
             case ErrorCode.ERROR_RTSP_BIT_STREAM_NOT_SUPPORT:
@@ -3125,7 +3080,7 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
                 }
 
                 // 更新录像时间
-                if (mEZPlayer != null && mRecordFilePath != null) {
+                if (mEZPlayer != null && mIsRecording) {
                     // 更新录像时间
                     Calendar OSDTime = mEZPlayer.getOSDTime();
                     if (OSDTime != null) {
@@ -3360,101 +3315,36 @@ public class EZRealPlayActivity extends BaseActivity implements OnClickListener,
     /* (non-Javadoc)
      * @see com.videogo.ui.util.OpenYSService.OpenYSServiceListener#onOpenYSService(int)
      */
-//    @Override
-//    public void onOpenYSService(int result) {
-//        if(result == 0) {
-//            // 开始播放
-//            startRealPlay();
-//        }
-//    }
-    private class StubPlayer {
-        private DeviceInfoEx mDeviceInfoEx = null;
-        private CameraInfoEx mCameraInfoEx = null;
-        
-        public void setCameraId(final String cameId) {
-            final Object lock = new Object();
-            Runnable run = new Runnable() {
+    @Override
+    public void onOpenYSService(int result) {
+        if(result == 0) {
+            // 开始播放
+            startRealPlay();
+        }
+    }
 
-                @Override
-                public void run() {
-                    String cameraId = Utils.getCameraId(cameId);
-                    CameraInfoEx cameraInfoEx = CameraManager.getInstance().getAddedCameraById(cameraId);
-                    if (cameraInfoEx == null) {
-                        try {
-                            CameraMgtCtrl.getCameraDetail(cameraId);
-                            cameraInfoEx = CameraManager.getInstance().getAddedCameraById(cameraId);
-                        } catch (BaseException e) {
-                            e.printStackTrace();
-                            LogUtil.infoLog(TAG, "startRealPlayTask: " + " Thread exist!");
-                            return;
-                        }
-                    }
-
-                    setCameraInfo(cameraInfoEx);
-
-                    DeviceInfoEx deviceInfoEx = null;
-                    try {
-                        deviceInfoEx = DeviceManager.getInstance().getDeviceInfoExById(cameraInfoEx.getDeviceID());
-                    } catch (InnerException e) {
-                        e.printStackTrace();
-                    }
-                    setDeviceInfo(deviceInfoEx);
-
-                    synchronized (lock) {
-                        lock.notifyAll();
-                    }
-                }
-            };
-            Thread thread = new Thread(run);
-            thread.start();
-            
-            synchronized (lock) {
+    FileOutputStream mOs;
+    private StreamConvert.EZPlayerRecordDataCallback mLocalRecordCb = new StreamConvert.EZPlayerRecordDataCallback() {
+        @Override
+        public void onRecordData(byte[] bytes, int len) {
+            if (mOs == null) {
+                File f = new File("/sdcard/videogo.mp4");
                 try {
-                    lock.wait();
-                } catch (InterruptedException e) {
+                    mOs = new FileOutputStream(f);
+                } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
             }
-        }
+            {
+                try {
+//                    LogUtil.i(TAG, "onRecordData: write to file /sdcard/videogo.mp4 :" + " len:" + len);
+                    mOs.write(bytes, 0, len);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
 
-        public void setCameraInfo(CameraInfoEx cameraInfo) {
-            mCameraInfoEx = cameraInfo;
+                }
+            }
         }
-        public void setDeviceInfo(DeviceInfoEx deviceInfo) {
-            mDeviceInfoEx = deviceInfo;
-        }
-        public String getCapability() {
-            return mCameraInfoEx.getCapability();
-        }
-        public int getSupportTalk() {
-            return mDeviceInfoEx.getSupportTalk();
-        }
-        public long getStreamFlow() {
-            //return mEZMediaPlayerWrapper.getStreamFlow();
-            return 0l;
-        }
-        public int getSupportPtzLeftRight() {
-            return mDeviceInfoEx.getSupportPtzLeftRight();
-        }
-        public int getVideoLevel() {
-            return mCameraInfoEx.getVideoLevel();
-        }
-        // 云台上下
-        public int getSupportPtzTopBottom() {
-            return mDeviceInfoEx.getSupportPtzTopBottom();
-        }
-        // 云台Zoom
-        public int getSupportPtzZoom() {
-            return mDeviceInfoEx.getSupportPtzZoom();
-        }
-        public int getPrivacyStatus() {
-            return 0;
-        }
-        public int getSupportSsl() {
-            return 0;
-        }
-        public void switchOperateTask(final Handler handler, final int status, final int enType) {
-            
-        }
-    }
+    };
 }

@@ -77,7 +77,7 @@ public class FileUtils {
         BitmapFactory.decodeFile(filePath, options);
 
         // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, 480, 800);
+        options.inSampleSize = calculateInSampleSize(options, 240, 400);
 
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;

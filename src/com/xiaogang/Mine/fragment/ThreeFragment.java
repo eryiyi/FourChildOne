@@ -584,7 +584,7 @@ public class ThreeFragment extends BaseFragment implements View.OnClickListener,
                                         Favours favours = lists.get(tmpPosition).getFavours();//当前的所有收藏
                                         List<FavourObj>  favourObjs = favours.getList();
                                        for(FavourObj favourObj1:favourObjs){
-                                           if(favourObj1.getCover().equals(getGson().fromJson(getSp().getString("cover", ""), String.class))){
+                                           if(favourObj1.getName().equals(getGson().fromJson(getSp().getString("nick_name", ""), String.class))){
                                                favourObjs.remove(favourObj1);
                                            }
                                        }

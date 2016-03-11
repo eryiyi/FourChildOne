@@ -23,7 +23,7 @@
     <color name="opensdk_cameralist_bg">#f0f0f1</color>
     <color name="on_off_text_selector">#3ea6ef</color>
     <color name="grouplayout_item_bg_sel">#f3f4f5</color>
-
+    <color name="realplay_loading_text">#7d755d</color>
     <color name="common_sub_text">#888888</color>
     <color name="btn_login_normal">#00acff</color>
     <color name="btn_login_pressed">#46678d</color>

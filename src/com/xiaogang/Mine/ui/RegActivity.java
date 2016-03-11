@@ -24,6 +24,7 @@ import com.xiaogang.Mine.base.ActivityTack;
 import com.xiaogang.Mine.base.BaseActivity;
 import com.xiaogang.Mine.base.InternetURL;
 import com.xiaogang.Mine.data.EmpData;
+import com.xiaogang.Mine.data.SchoolObjData;
 import com.xiaogang.Mine.mobule.Emp;
 import com.xiaogang.Mine.util.StringUtil;
 import org.json.JSONException;
@@ -45,10 +46,15 @@ public class RegActivity extends BaseActivity implements View.OnClickListener {
     ProgressDialog pd = null;
     private boolean progressShow;
 
+    String school_id;
+    String class_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.reg_activity);
+        school_id = getIntent().getExtras().getString("school_id");
+        class_id = getIntent().getExtras().getString("class_id");
         res = getResources();
         initView();
 
@@ -257,8 +263,58 @@ public class RegActivity extends BaseActivity implements View.OnClickListener {
     }
 
 
+    void bangding(String access_token){
+        StringRequest request = new StringRequest(
+                Request.Method.GET,
+                InternetURL.BD_CLASSES_URL+"?access_token=" + access_token+"&school_id="+school_id+"&class_id="+class_id,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        if (StringUtil.isJson(s)) {
+                            try {
+                                JSONObject jo = new JSONObject(s);
+                                String code =  jo.getString("code");
+                                if(Integer.parseInt(code) == 200) {
+
+                                }else {
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                        }
+                        if (pd != null && pd.isShowing()) {
+                            pd.dismiss();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        if (pd != null && pd.isShowing()) {
+                            pd.dismiss();
+                        }
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+        getRequestQueue().add(request);
+    }
+
+
     public void saveAccount(Emp emp) {
-        // 登陆成功，保存用户名密码
         save("uid", emp.getUid());
         save("mobile", emp.getMobile());
         save("address", emp.getAddress());
@@ -270,6 +326,7 @@ public class RegActivity extends BaseActivity implements View.OnClickListener {
         save("lat", emp.getLat());
         save("password", password.getText().toString());
         save("password_hx", emp.getPassword());
+        bangding(emp.getAccess_token());
     }
 
     /**

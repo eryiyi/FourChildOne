@@ -124,15 +124,18 @@ public class UniversityApplication extends FrontiaApplication {
 //        mLocationClient.registerLocationListener(mMyLocationListener);
 //        mVibrator =(Vibrator)getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
 
-//        Config.LOGGING = true;
-//        EZOpenSDK.initLib(this, APP_KEY, "");
-//        // EZOpenSDK.getInstance().setAccessToken("at.dmtlxyp47nejsckiai1pdwzsdvxmo7jp-8ofxo9vacz-1s48ov1-p3r36v0vj");
-//        Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(this));
-
         Config.LOGGING = true;
         EZOpenSDK.initLib(this, APP_KEY, "");
         // EZOpenSDK.getInstance().setAccessToken("at.dmtlxyp47nejsckiai1pdwzsdvxmo7jp-8ofxo9vacz-1s48ov1-p3r36v0vj");
-        Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(this));
+//        Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(this));
+
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread thread, Throwable throwable) {
+                throwable.printStackTrace();
+            }
+        });
+
     }
 
 
@@ -206,9 +209,9 @@ public class UniversityApplication extends FrontiaApplication {
                 .build();                                       // 创建配置过得DisplayImageOption对象
 
         txOptions = new DisplayImageOptions.Builder()//头像
-                .showImageOnLoading(R.drawable.ic_launcher)
-                .showImageForEmptyUri(R.drawable.ic_launcher)    // 设置图片Uri为空或是错误的时候显示的图片
-                .showImageOnFail(R.drawable.ic_launcher)        // 设置图片加载或解码过程中发生错误显示的图片
+                .showImageOnLoading(R.drawable.head)
+                .showImageForEmptyUri(R.drawable.head)    // 设置图片Uri为空或是错误的时候显示的图片
+                .showImageOnFail(R.drawable.head)        // 设置图片加载或解码过程中发生错误显示的图片
                 .cacheInMemory(true)                           // 设置下载的图片是否缓存在内存中
                 .cacheOnDisc(true)                             // 设置下载的图片是否缓存在内存卡中
                 .imageScaleType(ImageScaleType.EXACTLY)

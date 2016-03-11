@@ -2,10 +2,9 @@ package com.xiaogang.Mine.yingshi;
 
 import android.text.TextUtils;
 import com.hik.streamconvert.StreamConvert;
-import com.videogo.openapi.EZPlayer.EZPlayerRecordDataCallback;
 import com.videogo.util.LogUtil;
 
-public class EZRecordDataImpl implements EZPlayerRecordDataCallback {
+public class EZRecordDataImpl implements StreamConvert.EZPlayerRecordDataCallback {
     private static final String TAG = "EZRecordDataImpl";
     private int mTransHandle = -1;
     private StreamConvert mStreamConvert = null;

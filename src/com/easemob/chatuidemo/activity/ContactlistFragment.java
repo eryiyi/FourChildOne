@@ -30,6 +30,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.easemob.applib.controller.HXSDKHelper;
 import com.easemob.applib.controller.HXSDKHelper.HXSyncListener;
 import com.easemob.chat.EMContactManager;
@@ -43,6 +48,14 @@ import com.easemob.chatuidemo.widget.Sidebar;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
 import com.xiaogang.Mine.R;
+import com.xiaogang.Mine.base.BaseFragment;
+import com.xiaogang.Mine.base.InternetURL;
+import com.xiaogang.Mine.data.EmpDatas;
+import com.xiaogang.Mine.data.IndexData;
+import com.xiaogang.Mine.mobule.Emp;
+import com.xiaogang.Mine.util.StringUtil;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -51,7 +64,7 @@ import java.util.Map.Entry;
  * 联系人列表页
  * 
  */
-public class ContactlistFragment extends Fragment implements View.OnClickListener {
+public class ContactlistFragment extends BaseFragment implements View.OnClickListener {
 	public static final String TAG = "ContactlistFragment";
 	private ContactAdapter adapter;
 	private List<User> contactList;
@@ -438,42 +451,100 @@ public class ContactlistFragment extends Fragment implements View.OnClickListene
 	 */
 	private void getContactList() {
 		contactList.clear();
-		//获取本地好友列表
-		Map<String, User> users = ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList();
-		Iterator<Entry<String, User>> iterator = users.entrySet().iterator();
-		while (iterator.hasNext()) {
-			Entry<String, User> entry = iterator.next();
-			if (!entry.getKey().equals(Constant.NEW_FRIENDS_USERNAME)
-			        && !entry.getKey().equals(Constant.GROUP_USERNAME)
-			        && !entry.getKey().equals(Constant.CHAT_ROOM)
-//					&& !entry.getKey().equals(Constant.CHAT_ROBOT)
-					&& !blackList.contains(entry.getKey()))
-				contactList.add(entry.getValue());
-		}
-		// 排序
-		Collections.sort(contactList, new Comparator<User>() {
+		getFriends();
 
-			@Override
-			public int compare(User lhs, User rhs) {
-				return lhs.getUsername().compareTo(rhs.getUsername());
-			}
-		});
-
-//		if(users.get(Constant.CHAT_ROBOT)!=null){
-//			contactList.add(0, users.get(Constant.CHAT_ROBOT));
-//		}
-		// 加入"群聊"和"聊天室"
-        if(users.get(Constant.CHAT_ROOM) != null)
-            contactList.add(0, users.get(Constant.CHAT_ROOM));
-        if(users.get(Constant.GROUP_USERNAME) != null)
-            contactList.add(0, users.get(Constant.GROUP_USERNAME));
-        
-		// 把"申请与通知"添加到首位
-		if(users.get(Constant.NEW_FRIENDS_USERNAME) != null)
-		    contactList.add(0, users.get(Constant.NEW_FRIENDS_USERNAME));
 		
 	}
-	
+
+
+	void getFriends(){
+		String uri = InternetURL.GET_STUDENTS_URL
+				+"?access_token="+getGson().fromJson(getSp().getString("access_token", ""), String.class)
+				+"&school_id="+ getGson().fromJson(getSp().getString("school_id", ""), String.class)
+				+"&class_id="+ getGson().fromJson(getSp().getString("class_id", ""), String.class);
+		StringRequest request = new StringRequest(
+				Request.Method.GET,
+				uri,
+				new Response.Listener<String>() {
+					@Override
+					public void onResponse(String s) {
+						if (StringUtil.isJson(s)) {
+							try {
+								JSONObject jo = new JSONObject(s);
+								String code =  jo.getString("code");
+								if(Integer.parseInt(code) == 200){
+									EmpDatas data = getGson().fromJson(s, EmpDatas.class);
+									List<Emp> list = data.getData();
+									contactList.clear();
+									if(list != null){
+										for(Emp emp:list){
+											User user = new User();
+											user.setAvatar(emp.getCover()==null?"":emp.getCover());
+											user.setHeader(StringUtil.getSpells(emp.getNick_name()));
+//											user.setUnreadMsgCount(0);
+											user.setEid(emp.getHx_id());
+											user.setNick(emp.getNick_name());
+											user.setUsername(emp.getUser_name());
+											contactList.add(user);
+										}
+									}
+									// 排序
+									Collections.sort(contactList, new Comparator<User>() {
+
+										@Override
+										public int compare(User lhs, User rhs) {
+											return lhs.getUsername().compareTo(rhs.getUsername());
+										}
+									});
+
+								}
+								else{
+									Toast.makeText(getActivity(), jo.getString("msg"), Toast.LENGTH_SHORT).show();
+								}
+							} catch (JSONException e) {
+								e.printStackTrace();
+							}
+						}
+
+						//获取本地好友列表
+						Map<String, User> users = ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList();
+//
+						// 加入"群聊"和"聊天室"
+						if(users.get(Constant.CHAT_ROOM) != null)
+							contactList.add(0, users.get(Constant.CHAT_ROOM));
+						if(users.get(Constant.GROUP_USERNAME) != null)
+							contactList.add(0, users.get(Constant.GROUP_USERNAME));
+
+						// 把"申请与通知"添加到首位
+						if(users.get(Constant.NEW_FRIENDS_USERNAME) != null)
+							contactList.add(0, users.get(Constant.NEW_FRIENDS_USERNAME));
+
+						adapter.notifyDataSetChanged();
+					}
+				},
+				new Response.ErrorListener() {
+					@Override
+					public void onErrorResponse(VolleyError volleyError) {
+						Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
+					}
+				}
+		) {
+			@Override
+			protected Map<String, String> getParams() throws AuthFailureError {
+				Map<String, String> params = new HashMap<String, String>();
+				return params;
+			}
+
+			@Override
+			public Map<String, String> getHeaders() throws AuthFailureError {
+				Map<String, String> params = new HashMap<String, String>();
+				params.put("Content-Type", "application/x-www-form-urlencoded");
+				return params;
+			}
+		};
+		getRequestQueue().add(request);
+	}
+
 	void hideSoftKeyboard() {
         if (getActivity().getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
             if (getActivity().getCurrentFocus() != null)

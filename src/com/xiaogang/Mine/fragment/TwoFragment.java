@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import com.videogo.constant.Constant;
@@ -28,7 +29,8 @@ import com.xiaogang.Mine.library.PullToRefreshBase;
 import com.xiaogang.Mine.library.PullToRefreshListView;
 import com.xiaogang.Mine.library.internal.LoadingLayout;
 import com.xiaogang.Mine.mobule.VideosObj;
-import com.xiaogang.Mine.ui.EZRealPlayActivity;
+import com.xiaogang.Mine.ui.LoginActivity;
+import com.xiaogang.Mine.ui.play.EZRealPlayActivity;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -191,7 +193,8 @@ public class TwoFragment extends BaseFragment implements View.OnClickListener {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                //
+                Intent nv= new Intent(getActivity(), LoginActivity.class);
             }
         });
 

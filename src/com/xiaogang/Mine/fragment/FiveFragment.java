@@ -218,7 +218,7 @@ public class FiveFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.quite:
                 AlertDialog dialog = new AlertDialog.Builder(getActivity())
-                        .setIcon(R.drawable.logo)
+                        .setIcon(R.drawable.ic_launcher)
                         .setTitle("确定退出吗？")
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {

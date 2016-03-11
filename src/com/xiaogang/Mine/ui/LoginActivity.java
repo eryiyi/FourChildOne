@@ -23,8 +23,7 @@ import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuidemo.domain.User;
 import com.easemob.chatuidemo.utils.CommonUtils;
-import com.videogo.openapi.EZOpenSDK;
-import com.videogo.openapi.bean.EZAccessToken;
+
 import com.videogo.util.LogUtil;
 import com.xiaogang.Mine.MainActivity;
 import com.xiaogang.Mine.R;
@@ -33,7 +32,9 @@ import com.xiaogang.Mine.base.BaseActivity;
 import com.xiaogang.Mine.base.InternetURL;
 import com.xiaogang.Mine.data.AccessTokenData;
 import com.xiaogang.Mine.data.EmpData;
+import com.xiaogang.Mine.data.STokenObjData;
 import com.xiaogang.Mine.mobule.Emp;
+import com.xiaogang.Mine.mobule.STokenObj;
 import com.xiaogang.Mine.util.HttpUtils;
 import com.xiaogang.Mine.util.StringUtil;
 import org.json.JSONException;
@@ -56,10 +57,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     boolean isMobileNet, isWifiNet;
     ProgressDialog pd = null;
 
+//    UMSocialService mController = UMShareListener.getUMSocialService("com.umeng.login");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
+
         initView();
         if(!StringUtil.isNullOrEmpty(getGson().fromJson(getSp().getString("mobile", ""), String.class))){
             mobile.setText(getGson().fromJson(getSp().getString("mobile", ""), String.class));
@@ -116,7 +120,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 break;
             case R.id.reg:
                 //注册
-                Intent reg = new Intent(LoginActivity.this ,RegActivity.class);
+                Intent reg = new Intent(LoginActivity.this ,SelectSchoolActivity.class);
                 startActivity(reg);
                 break;
         }
@@ -224,7 +228,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         save("password_hx", emp.getPassword());
 
         //yingshi  login
-        EZOpenSDK.getInstance().openLoginPage();
+//        EZOpenSDK.getInstance().openLoginPage();
+        yslogin();
     }
 
     void getAccessToken(){
@@ -448,4 +453,106 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 //        getRequestQueue().add(request);
 //    }
 
+    private static final String TAG = "LoginActivity";
+    void yslogin(){
+        StringRequest request = new StringRequest(
+                Request.Method.GET,
+                InternetURL.GET_TOKEN_YS_URL+
+                        "?access_token=" + getGson().fromJson(getSp().getString("access_token", ""), String.class),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        if (StringUtil.isJson(s)) {
+                            try {
+                                JSONObject jo = new JSONObject(s);
+                                String code =  jo.getString("code");
+                                if(Integer.parseInt(code) == 200){
+                                    STokenObjData data = getGson().fromJson(s, STokenObjData.class);
+                                    STokenObj sTokenObj = data.getData();
+                                    save("ys_token", sTokenObj.getYs_token());
+                                    save("token_expires_time", sTokenObj.getToken_expires_time());
+                                    if(!StringUtil.isNullOrEmpty(sTokenObj.getYs_token())){
+                                        LogUtil.infoLog(TAG, "t:" + sTokenObj.getYs_token().substring(0, 5) + " expire:" + sTokenObj.getToken_expires_time());
+                                    }
+
+                                }
+                                else{
+                                    Toast.makeText(LoginActivity.this, jo.getString("msg"), Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+
+                        Toast.makeText(LoginActivity.this, "登陆失败", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+        getRequestQueue().add(request);
+    }
+
+
+//    void Qq(){
+//        // 添加微信平台
+//        UMWXHandler wxHandler = new UMWXHandler(LoginActivity.this,appId,appSecret);
+//        wxHandler.addToSocialSDK();
+//
+//        mController.doOauthVerify(mContext, SHARE_MEDIA.WEIXIN, new UMAuthListener() {
+//            @Override
+//            public void onStart(SHARE_MEDIA platform) {
+//                Toast.makeText(mContext, "授权开始", Toast.LENGTH_SHORT).show();
+//            }
+//            @Override
+//            public void onError(SocializeException e, SHARE_MEDIA platform) {
+//                Toast.makeText(mContext, "授权错误", Toast.LENGTH_SHORT).show();
+//            }
+//            @Override
+//            public void onComplete(Bundle value, SHARE_MEDIA platform) {
+//                Toast.makeText(mContext, "授权完成", Toast.LENGTH_SHORT).show();
+//                //获取相关授权信息
+//                mController.getPlatformInfo(MainActivity.this, SHARE_MEDIA.WEIXIN, new UMDataListener() {
+//                    @Override
+//                    public void onStart() {
+//                        Toast.makeText(MainActivity.this, "获取平台数据开始...", Toast.LENGTH_SHORT).show();
+//                    }
+//                    @Override
+//                    public void onComplete(int status, Map<String, Object> info) {
+//                        if(status == 200 && info != null){
+//                            StringBuilder sb = new StringBuilder();
+//                            Set<String> keys = info.keySet();
+//                            for(String key : keys){
+//                                sb.append(key+"="+info.get(key).toString()+"\r\n");
+//                            }
+//                            Log.d("TestData",sb.toString());
+//                        }else{
+//                            Log.d("TestData","发生错误："+status);
+//                        }
+//                    }
+//                });
+//            }
+//            @Override
+//            public void onCancel(SHARE_MEDIA platform) {
+//                Toast.makeText(mContext, "授权取消", Toast.LENGTH_SHORT).show();
+//            }
+//        } );
+//    }
 }

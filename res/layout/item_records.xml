@@ -5,10 +5,10 @@
               android:padding="8dp"
               android:layout_height="wrap_content">
 
-      <ImageView android:layout_width="50dp"
+      <com.xiaogang.Mine.widget.CircleImageView
+              android:layout_width="50dp"
                  android:id="@+id/head"
                  android:src="@drawable/head"
-                 android:scaleType="centerCrop"
                  android:layout_height="50dp"/>
         <TextView android:layout_width="wrap_content"
                   android:text="宝宝"
@@ -122,12 +122,15 @@
                   android:layout_toRightOf="@+id/head"
                   android:layout_below="@+id/detail_like_liner_layout"
                   android:layout_height="wrap_content">
-        <GridView android:layout_width="match_parent"
-                  android:numColumns="1"
-                  android:id="@+id/gridView2"
-                  android:horizontalSpacing="2dp"
-                  android:layout_height="wrap_content">
-        </GridView>
+        <!--<com.xiaogang.Mine.widget.SourcePanel-->
+                  <!--android:layout_width="match_parent"-->
+                  <!--android:numColumns="1"-->
+                  <!--android:visibility="gone"-->
+                  <!--android:layout_toRightOf="@+id/head"-->
+                  <!--android:layout_below="@+id/detail_like_liner_layout"-->
+                  <!--android:id="@+id/gridView2"-->
+                  <!--android:layout_height="match_parent">-->
+        <!--</com.xiaogang.Mine.widget.SourcePanel>-->
     </LinearLayout>
 
 </RelativeLayout>

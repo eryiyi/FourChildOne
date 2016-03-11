@@ -191,32 +191,32 @@ public class AddContactActivity extends BaseActivity implements OnClickContentIt
 		progressDialog.setMessage(stri);
 		progressDialog.setCanceledOnTouchOutside(false);
 		progressDialog.show();
-
-		new Thread(new Runnable() {
-			public void run() {
-
-				try {
-					//demo写死了个reason，实际应该让用户手动填入
-					String s = getResources().getString(R.string.Add_a_friend);
-					EMContactManager.getInstance().addContact(member.getHx_id(), s);
-					runOnUiThread(new Runnable() {
-						public void run() {
-							progressDialog.dismiss();
-							String s1 = getResources().getString(R.string.send_successful);
-							Toast.makeText(getApplicationContext(), s1, Toast.LENGTH_SHORT).show();
-						}
-					});
-				} catch (final Exception e) {
-					runOnUiThread(new Runnable() {
-						public void run() {
-							progressDialog.dismiss();
-							String s2 = getResources().getString(R.string.Request_add_buddy_failure);
-							Toast.makeText(getApplicationContext(), s2 + e.getMessage(), Toast.LENGTH_SHORT).show();
-						}
-					});
-				}
-			}
-		}).start();
+		AddFriends(member.getUser_name());
+//		new Thread(new Runnable() {
+//			public void run() {
+//
+//				try {
+//					//demo写死了个reason，实际应该让用户手动填入
+//					String s = getResources().getString(R.string.Add_a_friend);
+//					EMContactManager.getInstance().addContact(member.getUser_name(), s);
+//					runOnUiThread(new Runnable() {
+//						public void run() {
+//							progressDialog.dismiss();
+//							String s1 = getResources().getString(R.string.send_successful);
+//							Toast.makeText(getApplicationContext(), s1, Toast.LENGTH_SHORT).show();
+//						}
+//					});
+//				} catch (final Exception e) {
+//					runOnUiThread(new Runnable() {
+//						public void run() {
+//							progressDialog.dismiss();
+//							String s2 = getResources().getString(R.string.Request_add_buddy_failure);
+//							Toast.makeText(getApplicationContext(), s2 + e.getMessage(), Toast.LENGTH_SHORT).show();
+//						}
+//					});
+//				}
+//			}
+//		}).start();
 	}
 
 	public void back(View v) {
@@ -243,6 +243,61 @@ public class AddContactActivity extends BaseActivity implements OnClickContentIt
 	}
 
 
+
+	void AddFriends(final String username){
+		String uri = InternetURL.ADD_FRIENDS_URL
+				+"?access_token="+getGson().fromJson(getSp().getString("access_token", ""), String.class)
+				+"&username=" + username;
+		StringRequest request = new StringRequest(
+				Request.Method.GET,
+				uri,
+				new Response.Listener<String>() {
+					@Override
+					public void onResponse(String s) {
+						if (StringUtil.isJson(s)) {
+							try {
+								JSONObject jo = new JSONObject(s);
+								String code =  jo.getString("code");
+								if(Integer.parseInt(code) == 200){
+									Toast.makeText(AddContactActivity.this, jo.getString("msg"), Toast.LENGTH_SHORT).show();
+								}
+								else{
+									Toast.makeText(AddContactActivity.this, jo.getString("msg"), Toast.LENGTH_SHORT).show();
+								}
+							} catch (JSONException e) {
+								e.printStackTrace();
+							}
+						}
+						if (progressDialog != null) {
+							progressDialog.dismiss();
+						}
+					}
+				},
+				new Response.ErrorListener() {
+					@Override
+					public void onErrorResponse(VolleyError volleyError) {
+						if (progressDialog != null) {
+							progressDialog.dismiss();
+						}
+						Toast.makeText(AddContactActivity.this, R.string.get_data_error, Toast.LENGTH_SHORT).show();
+					}
+				}
+		) {
+			@Override
+			protected Map<String, String> getParams() throws AuthFailureError {
+				Map<String, String> params = new HashMap<String, String>();
+				return params;
+			}
+
+			@Override
+			public Map<String, String> getHeaders() throws AuthFailureError {
+				Map<String, String> params = new HashMap<String, String>();
+				params.put("Content-Type", "application/x-www-form-urlencoded");
+				return params;
+			}
+		};
+		getRequestQueue().add(request);
+	}
 
 
 

@@ -54,7 +54,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
     private FragmentManager fm;
 
     private OneFragment oneFragment;
-    private TwoFragment twoFragment;
+    private CamerMineFragment twoFragment;
     private ThreeFragment threeFragment;
     private ChatAllHistoryFragment fourFragment;
     private FiveFragment fiveFragment;
@@ -91,7 +91,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         UmengUpdateAgent.update(this);
-
+        registerBoradcastReceiver();
         res = getResources();
         fm = getSupportFragmentManager();
         initView();
@@ -142,7 +142,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
                 break;
             case R.id.foot_two:
                 if (twoFragment == null) {
-                    twoFragment = new TwoFragment();
+                    twoFragment = new CamerMineFragment();
                     fragmentTransaction.add(R.id.content_frame, twoFragment);
                 } else {
                     fragmentTransaction.show(twoFragment);
@@ -436,10 +436,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
         }
 
         try {
-            unregisterReceiver(internalDebugReceiver);
+            if(internalDebugReceiver != null){
+                unregisterReceiver(internalDebugReceiver);
+            }
+
         } catch (Exception e) {
         }
-        this.unregisterReceiver(mBroadcastReceiver);
+        if(mBroadcastReceiver != null){
+            this.unregisterReceiver(mBroadcastReceiver);
+        }
+
     }
 
     //广播接收动作
@@ -456,6 +462,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
 
         }
     };
+
+    //注册广播
+    public void registerBoradcastReceiver() {
+        IntentFilter myIntentFilter = new IntentFilter();
+        myIntentFilter.addAction("login_success");//
+        //注册广播
+        this.registerReceiver(mBroadcastReceiver, myIntentFilter);
+    }
+
     private void init() {
         // setContactListener监听联系人的变化等
         EMContactManager.getInstance().setContactListener(new MyContactListener());

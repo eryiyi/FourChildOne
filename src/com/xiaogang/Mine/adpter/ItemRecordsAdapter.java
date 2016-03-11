@@ -82,10 +82,10 @@ public class ItemRecordsAdapter extends BaseAdapter {
             holder.content = (TextView) convertView.findViewById(R.id.content);
             holder.dateline = (TextView) convertView.findViewById(R.id.dateline);
             holder.name = (TextView) convertView.findViewById(R.id.name);
-            holder.comment_liner = (LinearLayout) convertView.findViewById(R.id.comment_liner);
             holder.comment_lin = (LinearLayout) convertView.findViewById(R.id.comment_lin);
+            holder.comment_liner = (LinearLayout) convertView.findViewById(R.id.comment_liner);
             holder.gridView = (GridView) convertView.findViewById(R.id.gridView);
-            holder.gridView2 = (GridView) convertView.findViewById(R.id.gridView2);
+//            holder.gridView2 = (GridView) convertView.findViewById(R.id.gridView2);
             holder.detail_like_liner_layout = (RelativeLayout) convertView.findViewById(R.id.detail_like_liner_layout);
 
             convertView.setTag(holder);
@@ -99,7 +99,7 @@ public class ItemRecordsAdapter extends BaseAdapter {
             holder.name.setText(cell.getPublisher() == null ? "" : cell.getPublisher());
             holder.dateline.setText(cell.getTime() == null ? "未知" : cell.getTime());
             holder.content.setText(cell.getDept()==null?"":cell.getDept());
-            imageLoader.displayImage(InternetURL.INTERNAL + cell.getPublisher_cover(), holder.head, UniversityApplication.options, animateFirstListener);
+            imageLoader.displayImage(InternetURL.INTERNAL + cell.getPublisher_cover(), holder.head, UniversityApplication.txOptions, animateFirstListener);
             switch (Integer.parseInt(cell.getType()==null?"0":cell.getType())){
                 case 0:
                     //文字
@@ -183,18 +183,23 @@ public class ItemRecordsAdapter extends BaseAdapter {
             List<CommentObj> itemListtwoComment = new ArrayList<CommentObj>();//赞列表用
             itemListtwoComment.clear();
             itemListtwoComment.addAll(cell.getComments());
-
+            holder.comment_lin.removeAllViews();
             if (itemListtwoComment.size() > 0) {//当存在赞数据的时候
                 holder.comment_lin.setVisibility(View.VISIBLE);
+                for(CommentObj commentObj:itemListtwoComment){
+                    View viewV = LayoutInflater.from(mContect).inflate(R.layout.comment_item, null);
+                    TextView title = (TextView) viewV.findViewById(R.id.title);
+                    TextView comment = (TextView) viewV.findViewById(R.id.comment);
+                    title.setText(commentObj.getName()+":");
+                    comment.setText(commentObj.getContent());
+                    holder.comment_lin.addView(viewV);
+                }
             }
 
-            adapterComment = new CommentAdapter(itemListtwoComment, mContect , itemListtwoComment.size());
-            holder.gridView2.setAdapter(adapterComment);
-            holder.gridView2.setSelector(new ColorDrawable(Color.TRANSPARENT));
-            if (itemListC.size() > 0) {//当存在赞数据的时候
-                holder.comment_lin.setVisibility(View.VISIBLE);
-            }
-            adapterComment.notifyDataSetChanged();
+//            adapterComment = new CommentAdapter(itemListtwoComment, mContect , itemListtwoComment.size());
+//            holder.gridView2.setAdapter(adapterComment);
+//            holder.gridView2.setSelector(new ColorDrawable(Color.TRANSPARENT));
+//            adapterComment.notifyDataSetChanged();
 
         }
 
@@ -239,6 +244,6 @@ public class ItemRecordsAdapter extends BaseAdapter {
         LinearLayout comment_liner;
         RelativeLayout detail_like_liner_layout;//赞区域
         GridView gridView;
-        GridView gridView2;
+//        GridView gridView2;
     }
 }

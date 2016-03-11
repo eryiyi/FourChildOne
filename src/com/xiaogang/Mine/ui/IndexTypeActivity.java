@@ -1,8 +1,7 @@
 package com.xiaogang.Mine.ui;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.*;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -18,12 +17,18 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.easemob.applib.controller.HXSDKHelper;
+import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMGroupManager;
+import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.adpter.AnimateFirstDisplayListener;
 import com.xiaogang.Mine.base.BaseActivity;
 import com.xiaogang.Mine.base.InternetURL;
+import com.xiaogang.Mine.dao.DBHelper;
+import com.xiaogang.Mine.dao.ShoppingCart;
 import com.xiaogang.Mine.data.CategoryObjData;
 import com.xiaogang.Mine.fragment.Fragment_pro_type;
 import com.xiaogang.Mine.mobule.CategoryObj;
@@ -61,10 +66,13 @@ public class IndexTypeActivity extends BaseActivity implements View.OnClickListe
     private String id;
     ProgressDialog pd = null;
     private boolean progressShow;
+    private TextView number;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.index_type_activity);
+
+        registerBoradcastReceiver();
         scrollView=(ScrollView) this.findViewById(R.id.tools_scrlllview);
         shopAdapter=new ShopAdapter(getSupportFragmentManager());
         inflaters=LayoutInflater.from(this);
@@ -85,10 +93,43 @@ public class IndexTypeActivity extends BaseActivity implements View.OnClickListe
 
         getBigType();
 
+        List<ShoppingCart> lists = DBHelper.getInstance(IndexTypeActivity.this).getShoppingList();
+        number.setText(String.valueOf(lists.size()));
     }
     public void back(View view){finish();}
 
+    //广播接收动作
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals("cart_success")) {
+                //
+                List<ShoppingCart> lists = DBHelper.getInstance(IndexTypeActivity.this).getShoppingList();
+                number.setText(lists.size());
+            }
+
+        }
+    };
+
+    //注册广播
+    public void registerBoradcastReceiver() {
+        IntentFilter myIntentFilter = new IntentFilter();
+        myIntentFilter.addAction("cart_success");//
+        //注册广播
+        this.registerReceiver(mBroadcastReceiver, myIntentFilter);
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if(mBroadcastReceiver != null){
+            this.unregisterReceiver(mBroadcastReceiver);
+        }
+
+    }
     private void initView() {
+        number = (TextView) this.findViewById(R.id.number);
         mine_cart = (ImageView) this.findViewById(R.id.mine_cart);
         mine_cart.setOnClickListener(this);
         search_editext = (EditText) this.findViewById(R.id.search_editext);

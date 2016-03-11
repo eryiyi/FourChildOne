@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:background="@drawable/back_main"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <RelativeLayout android:layout_width="match_parent"
+                    android:background="@color/red"
+                    android:layout_height="@dimen/height_top_bar">
+        <TextView android:layout_width="wrap_content"
+                  android:text="视频"
+                  android:textSize="18sp"
+                  android:textColor="@color/white"
+                  android:layout_centerInParent="true"
+                  android:layout_height="wrap_content"/>
+        <ImageView android:layout_width="wrap_content"
+                   android:src="@drawable/shexiang"
+                   android:padding="15dp"
+                   android:visibility="gone"
+                   android:layout_centerVertical="true"
+                   android:layout_alignParentRight="true"
+                   android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+
+        <ListView
+                android:id="@+id/camera_listview"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_above="@+id/camera_list_gc_ly"
+                android:cacheColorHint="@color/transparent"
+                android:divider="@color/transparent"
+                android:drawingCacheQuality="high"
+                android:fadingEdge="none"
+                android:fastScrollEnabled="false"
+                android:listSelector="@null"
+                android:layout_marginBottom="60dp"
+                android:overScrollFooter="@null"
+                android:scrollingCache="true" />
+
+
+
+</LinearLayout>

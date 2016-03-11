@@ -23,7 +23,7 @@
 	   	   android:layout_height="fill_parent"
 	   	   android:background="@color/transparent" >
 	   	
-	       <com.videogo.widget.PagesGallery
+	       <com.xiaogang.Mine.widget.PagesGallery
 	           android:id="@+id/realplay_pages_gallery"
 	           android:layout_width="fill_parent"
 	           android:layout_height="fill_parent"
