@@ -24,6 +24,8 @@ import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuidemo.domain.User;
 import com.easemob.chatuidemo.utils.CommonUtils;
 
+import com.videogo.openapi.EZOpenSDK;
+import com.videogo.openapi.bean.EZAccessToken;
 import com.videogo.util.LogUtil;
 import com.xiaogang.Mine.MainActivity;
 import com.xiaogang.Mine.R;
@@ -473,7 +475,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                     save("token_expires_time", sTokenObj.getToken_expires_time());
                                     if(!StringUtil.isNullOrEmpty(sTokenObj.getYs_token())){
                                         LogUtil.infoLog(TAG, "t:" + sTokenObj.getYs_token().substring(0, 5) + " expire:" + sTokenObj.getToken_expires_time());
+//                                        LogUtil.infoLog(TAG, "t:" + sTokenObj.getYs_token() + " expire:" + sTokenObj.getToken_expires_time());
                                     }
+
+
+                                    //保存token及token超时时间
+//                                    EZOpenSDK openSdk = EZOpenSDK.getInstance();
+//                                    if(openSdk != null) {
+//                                        EZAccessToken token = openSdk.getEZAccessToken();
+//                                        //保存token，获取超时时间，在token过期时重新获取
+////                                        LogUtil.infoLog(TAG, "t:" + token.getAccessToken().substring(0, 5) + " expire:" + token.getExpire());
+//                                        LogUtil.infoLog(TAG, "t:" + token.getAccessToken() + " expire:" + token.getExpire());
+//                                    }
 
                                 }
                                 else{

@@ -10,6 +10,11 @@ import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.videogo.constant.Constant;
 import com.videogo.constant.IntentConsts;
 import com.videogo.exception.BaseException;
@@ -25,16 +30,19 @@ import com.xiaogang.Mine.R;
 import com.xiaogang.Mine.adpter.EZCameraListAdapter;
 import com.xiaogang.Mine.adpter.ItemVideosAdapter;
 import com.xiaogang.Mine.base.BaseFragment;
+import com.xiaogang.Mine.base.InternetURL;
+import com.xiaogang.Mine.data.CanSeeObjData;
 import com.xiaogang.Mine.library.PullToRefreshBase;
 import com.xiaogang.Mine.library.PullToRefreshListView;
 import com.xiaogang.Mine.library.internal.LoadingLayout;
+import com.xiaogang.Mine.mobule.CanSeeObj;
 import com.xiaogang.Mine.mobule.VideosObj;
 import com.xiaogang.Mine.ui.LoginActivity;
 import com.xiaogang.Mine.ui.play.EZRealPlayActivity;
+import com.xiaogang.Mine.util.StringUtil;
+import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  */
@@ -73,10 +81,70 @@ public class TwoFragment extends BaseFragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.two_fragment, null);
         initData();
         initView(view);
-
         Utils.clearAllNotification(getActivity());
-        getCameraInfoList(IS_REFRESH);
+        getCanSee();
+
         return view;
+    }
+
+
+    private void getCanSee() {
+        StringRequest request = new StringRequest(
+                Request.Method.GET,
+                InternetURL.CAN_SEE_URL
+                        +"?access_token=" + getGson().fromJson(getSp().getString("access_token", ""), String.class),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        if (StringUtil.isJson(s)) {
+                            try {
+                                JSONObject jo = new JSONObject(s);
+                                String code1 =  jo.getString("code");
+                                if(Integer.parseInt(code1) == 200){
+                                    CanSeeObjData data = getGson().fromJson(s, CanSeeObjData.class);
+                                    CanSeeObj canSeeObj = data.getData();
+                                    if("1".equals(canSeeObj.getState())){
+                                        //chegngong
+                                        getCameraInfoList(IS_REFRESH);
+                                    }else {
+                                        Toast.makeText(getActivity(),canSeeObj.getMsg() ,Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }else{
+                                    Toast.makeText(getActivity(), jo.getString("msg") ,Toast.LENGTH_SHORT).show();
+                                }
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        } else {
+                            Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+
+                        Toast.makeText(getActivity(), R.string.get_data_error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("action", "show");
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+        getRequestQueue().add(request);
     }
 
     private void initView(View view) {
@@ -206,6 +274,7 @@ public class TwoFragment extends BaseFragment implements View.OnClickListener {
 
     private void initData() {
         mEZOpenSDK = EZOpenSDK.getInstance();
+        mEZOpenSDK.setAccessToken(getGson().fromJson(getSp().getString("ys_token", ""), String.class));
         mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {

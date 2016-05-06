@@ -54,7 +54,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
     private FragmentManager fm;
 
     private OneFragment oneFragment;
-    private CamerMineFragment twoFragment;
+    private TwoFragment twoFragment;
     private ThreeFragment threeFragment;
     private ChatAllHistoryFragment fourFragment;
     private FiveFragment fiveFragment;
@@ -142,7 +142,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
                 break;
             case R.id.foot_two:
                 if (twoFragment == null) {
-                    twoFragment = new CamerMineFragment();
+                    twoFragment = new TwoFragment();
                     fragmentTransaction.add(R.id.content_frame, twoFragment);
                 } else {
                     fragmentTransaction.show(twoFragment);
